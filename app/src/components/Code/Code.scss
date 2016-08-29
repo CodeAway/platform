@@ -1,0 +1,61 @@
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+
+.container {
+  height: calc(100vh - 50px);
+  overflow: auto;
+}
+
+.sidebar {
+  float: left;
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 200px;
+  height: 100%;
+  background: $navbar-inverse-bg;
+  color: $navbar-inverse-color;
+  overflow-y: auto;
+  background: #444;
+  color: $navbar-inverse-color;
+  hr {
+    margin: 0;
+    border-color: $navbar-inverse-color;
+  }
+  ul {
+    list-style-type: none;
+    padding-top: 10px;
+    padding-left: 7px;
+    li {
+      padding: 7px 0;
+      transition: color 0.5s;
+      a,a:visited {
+        color: $navbar-inverse-link-color;
+      }
+      a:hover {
+        color: $navbar-inverse-link-hover-color;
+      }
+    }
+    .file {
+      font-family: monospace;
+    }
+    li:hover {
+      padding: 7px 0;
+      color: $navbar-inverse-link-hover-color;
+      transition: color 0.5s;
+      pointer: cursor;
+    }
+   }
+}
+
+.title {
+  padding: 20px 0;
+  line-height: 26px;
+}
+
+
+.main {
+  padding-left: 20px;
+  float: left;
+  width: calc(100% - 200px);
+  height: 100%;
+  overflow: scroll;
+}

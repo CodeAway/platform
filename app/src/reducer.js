@@ -1,18 +1,10 @@
 import {combineReducers} from 'redux';
-import {routerReducer} from 'react-router-redux';
-
-// Load component reducers
-import enternameReducer from './components/EnterName/Actions';
-import sosearchReducer from './components/SOSearch/Actions';
-import sohotReducer from './components/SOHot/Actions';
-import sohqReducer from './components/SOQHighlightable/Actions';
+import {routerReducer} from 'react-router-redux'; // eslint-disable-line no-unused-vars
+import fileReducer from './components/Files/Actions';
 
 const reducer = combineReducers({
-  entername: enternameReducer,
-  sosearch: sosearchReducer,
-  sohot: sohotReducer,
-  soqh: sohqReducer,
-  routing: routerReducer
+  routing: routerReducer,
+  files: fileReducer
 });
 
 export default reducer;

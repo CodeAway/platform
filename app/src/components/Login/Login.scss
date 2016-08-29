@@ -1,0 +1,20 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.centerBox {
+    display: block;
+    max-height: 300px;
+    text-align: center;
+    img {
+        display: block;
+        height: 150px;
+    }
+    .icon {
+        margin-right: 10px;
+        padding-right: 10px;
+    }
+}
