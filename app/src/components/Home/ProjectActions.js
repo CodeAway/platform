@@ -27,7 +27,7 @@ const createProject = () => {
     const createUrl = 'https://api.github.com/user/repos';
     const options = {
       method: 'POST',
-      body: JSON.stringify({name: 'imad-2016-base', description: 'My source code repository for the IMAD course app!'}),
+      body: JSON.stringify({name: 'imad-2016-base', description: 'My source code repository for the IMAD course app!', gitignore_template: 'Node'}),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'token ' + user.table.github_token
@@ -65,20 +65,20 @@ const createProject = () => {
             Promise.all([
               createTimeoutPromise(dispatch,
                 0,
-                baseFileUrl + 'ui%2Findex.html',
-                {...baseOptions, body: JSON.stringify({message: 'Adds ui/index.html', content: window.btoa(html)})}),
+                baseFileUrl + 'src%2Fui%2Findex.html',
+                {...baseOptions, body: JSON.stringify({message: 'Adds src/ui/index.html', content: window.btoa(html)})}),
               createTimeoutPromise(dispatch,
                 500,
-                baseFileUrl + 'ui%2Fmain.js',
-                {...baseOptions, body: JSON.stringify({message: 'Adds ui/main.js', content: window.btoa(js)})}),
+                baseFileUrl + 'src%2Fui%2Fmain.js',
+                {...baseOptions, body: JSON.stringify({message: 'Adds src/ui/main.js', content: window.btoa(js)})}),
               createTimeoutPromise(dispatch,
                 1000,
-                baseFileUrl + 'ui%2Fstyle.css',
-                {...baseOptions, body: JSON.stringify({message: 'Adds ui/style.css', content: window.btoa(css)})}),
+                baseFileUrl + 'src%2Fui%2Fstyle.css',
+                {...baseOptions, body: JSON.stringify({message: 'Adds src/ui/style.css', content: window.btoa(css)})}),
               createTimeoutPromise(dispatch,
                 1500,
-                baseFileUrl + 'server.js',
-                {...baseOptions, body: JSON.stringify({message: 'Adds server.js', content: window.btoa(serverjs)})}),
+                baseFileUrl + 'src%2Fserver.js',
+                {...baseOptions, body: JSON.stringify({message: 'Adds src/server.js', content: window.btoa(serverjs)})}),
               createTimeoutPromise(dispatch,
                 2000,
                 baseFileUrl + 'package.json',
