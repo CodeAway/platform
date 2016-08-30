@@ -46,8 +46,7 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "PORT": 3000,
-        "NAMESPACE": "api",
-        "BASE_DOMAIN": "stackexchange.com",
+        "BASE_DOMAIN": "imad-stg.hasura-app.io",
         "SCHEME": "http"
       }
     },

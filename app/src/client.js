@@ -8,14 +8,14 @@ import ReactDOM from 'react-dom';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
-import { Router, match, browserHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import { routerMiddleware, syncHistoryWithStore} from 'react-router-redux';
 import {compose, createStore, applyMiddleware} from 'redux';
 
 import ApiClient from './helpers/ApiClient';
 import createMiddleware from './utils/createMiddleware';
 import reducer from './reducer';
-import routes from './routes';
+import createRoutes from './routes';
 
 /* ****************************************************************** */
 
@@ -37,6 +37,7 @@ if (__DEVELOPMENT__) {
 
 const store = _finalCreateStore(reducer, window.__data);
 const history = syncHistoryWithStore(browserHistory, store);
+const routes = createRoutes(store);
 
 /* ****************************************************************** */
 
@@ -52,18 +53,15 @@ if (__DEVELOPMENT__ && module.hot) {
 /* ****************************************************************** */
 
 const dest = document.getElementById('content');
-match({ history, routes: routes(history) }, (error, redirectLocation, renderProps) => {
-  ReactDOM.render(
-    <Provider store={store} key="provider">
-      <Router {...renderProps} />
-    </Provider>
-    , dest);
-});
+ReactDOM.render(
+  <Provider store={store} key="provider">
+    {routes(history)}
+  </Provider>,
+  dest);
 
 /* ****************************************************************** */
 
 // FIXME: No idea what the hell seems to be going on here.
-
 if (process.env.NODE_ENV !== 'production') {
   window.React = React; // enable debugger
 
