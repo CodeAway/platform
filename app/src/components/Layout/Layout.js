@@ -7,10 +7,10 @@ const Layout = ({logoutRequest, dispatch, children}) => {
   const styles = require('./Layout.scss');
   const madi = require('./madi.png');
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.header}>
         <div>
-          <Link to="/">
+          <Link to="/home">
             <img className="img img-responsive" src={madi} />
           </Link>
         </div>

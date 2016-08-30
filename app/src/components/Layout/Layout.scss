@@ -2,11 +2,16 @@
 
 .container {
   position: relative;
+  padding-top: 50px;
 }
 
 .header {
   background: $navbar-inverse-bg;
   color: $navbar-inverse-color;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 50px;
   text-align: right;
   padding: 0;

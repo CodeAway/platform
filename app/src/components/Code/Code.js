@@ -22,7 +22,7 @@ const Code = ({children}) => {
           </ul>
           <hr/>
           <ul>
-            <li><button className="btn btn-primary" role="button">Save & Restart</button></li>
+            <li><button className="btn btn-primary" role="button">Apply changes & Restart</button></li>
             <li><button className="btn btn-primary" role="button">Commit to github</button></li>
           </ul>
           <hr/>

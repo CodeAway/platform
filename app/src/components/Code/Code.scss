@@ -2,14 +2,15 @@
 
 .container {
   height: calc(100vh - 50px);
-  overflow: auto;
+  overflow-x: auto;
+  min-width: 640px;
 }
 
 .sidebar {
   float: left;
   padding-left: 20px;
   padding-right: 20px;
-  width: 200px;
+  width: 240px;
   height: 100%;
   background: $navbar-inverse-bg;
   color: $navbar-inverse-color;
@@ -55,7 +56,8 @@
 .main {
   padding-left: 20px;
   float: left;
-  width: calc(100% - 200px);
+  width: calc(100% - 240px);
   height: 100%;
-  overflow: scroll;
+  overflow-y: auto;
+  min-width: 400px;
 }
