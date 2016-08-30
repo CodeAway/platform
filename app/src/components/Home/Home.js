@@ -24,9 +24,10 @@ const Home = ({dispatch, project, user}) => {
       <div className="container">
         <br/><br/>
         {projectStatus}
-        <button className="btn btn-success" onClick={() => (dispatch(createProject()))}>
-          Create project
-        </button>
+        {user.table.github_project ? null :
+          (<button className="btn btn-success" onClick={() => (dispatch(createProject()))}>
+            Create project
+          </button>)}
       </div>
   );
 };

@@ -6,6 +6,18 @@ const CREATE_REQUEST = 'Project/CREATE_REQUEST';
 const CREATE_ERROR = 'Project/CREATE_ERROR';
 const SET_PROJECT = 'Project/SET_PROJECT';
 
+const createTimeoutPromise = (dispatch, timeout, url, options) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(
+      () => {
+        dispatch(requestAction(url, options)).then(
+          () => { resolve(); },
+          (error) => { reject(error); }
+        );
+      },
+      timeout);
+  });
+};
 const createProject = () => {
   return (dispatch, getState) => {
     dispatch({type: CREATE_REQUEST});
@@ -24,8 +36,6 @@ const createProject = () => {
     };
     dispatch(requestAction(createUrl, options)).then(
       (data) => {
-        console.log(data);
-        dispatch({type: SET_PROJECT, data: data});
         const saveUrl = Endpoints.dataUrl + '/api/1/table/user/update';
         const saveOptions = {
           method: 'POST',
@@ -36,7 +46,51 @@ const createProject = () => {
           credentials: globalCookiePolicy
         };
         dispatch(requestAction(saveUrl, saveOptions)).then(
-          () => {},
+          () => {
+            const serverjs = require('raw!./templates/server.js');
+            const packageJson = require('raw!./templates/package.json');
+            const html = require('raw!./templates/ui/index.html');
+            const js = require('raw!./templates/ui/main.js');
+            const css = require('raw!./templates/ui/style.css');
+
+            const baseFileUrl = 'https://api.github.com/repos/coco98/imad-2016-base/contents/';
+            const baseOptions = {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'token ' + user.table.github_token
+              },
+              credentials: 'omit'
+            };
+            Promise.all([
+              createTimeoutPromise(dispatch,
+                0,
+                baseFileUrl + 'ui%2Findex.html',
+                {...baseOptions, body: JSON.stringify({message: 'Adds ui/index.html', content: window.btoa(html)})}),
+              createTimeoutPromise(dispatch,
+                500,
+                baseFileUrl + 'ui%2Fmain.js',
+                {...baseOptions, body: JSON.stringify({message: 'Adds ui/main.js', content: window.btoa(js)})}),
+              createTimeoutPromise(dispatch,
+                1000,
+                baseFileUrl + 'ui%2Fstyle.css',
+                {...baseOptions, body: JSON.stringify({message: 'Adds ui/style.css', content: window.btoa(css)})}),
+              createTimeoutPromise(dispatch,
+                1500,
+                baseFileUrl + 'server.js',
+                {...baseOptions, body: JSON.stringify({message: 'Adds server.js', content: window.btoa(serverjs)})}),
+              createTimeoutPromise(dispatch,
+                2000,
+                baseFileUrl + 'package.json',
+                {...baseOptions, body: JSON.stringify({message: 'Adds package.json', content: window.btoa(packageJson)})})
+            ]).then(
+              () => {
+                dispatch({type: SET_PROJECT, data: data});
+              },
+              (error) => {
+                dispatch({type: CREATE_ERROR, data: error});
+              });
+          },
           (error) => {
             dispatch({type: CREATE_ERROR, data: error});
           });
