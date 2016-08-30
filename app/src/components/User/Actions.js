@@ -78,7 +78,7 @@ const userReducer = (state = null, action) => {
     case SETAUTH:
       return {...state, auth: {...action.data}};
     case SETUSER:
-      return {...state, table: {...action.data[0]}};
+      return {...state, table: {...action.data}};
     default:
       return state;
   }
