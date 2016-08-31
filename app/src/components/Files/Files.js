@@ -7,7 +7,7 @@ import 'brace/mode/css';
 import 'brace/mode/html';
 import 'brace/ext/language_tools';
 
-const Files = ({contents, fileName}) => {
+const Files = ({baseFiles, fileName}) => {
   const styles = require('./Files.scss');
   const ftMap = {
     js: 'javascript',
@@ -32,7 +32,7 @@ const Files = ({contents, fileName}) => {
           setOptions={{
             wrap: true
           }}
-          value={contents[fileName]} />
+          value={baseFiles[decodeURIComponent(fileName)]} />
       </div>
   );
 };
@@ -40,7 +40,7 @@ const Files = ({contents, fileName}) => {
 const mapStateToProps = (state, ownProps) => {
   return {
     fileName: ownProps.params.fileName,
-    ...state.files
+    ...state.code
   };
 };
 

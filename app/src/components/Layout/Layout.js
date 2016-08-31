@@ -17,7 +17,7 @@ const Layout = ({logoutRequest, dispatch, children}) => {
 
         <div className={styles.headerItem}>
           <Link to="/code">
-            <a target="_blank" href="https://github.com/hasura/support/issues">Code</a>
+            Code
           </Link>
         </div>
         <div className={styles.headerItem}>

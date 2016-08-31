@@ -6,8 +6,10 @@ import Login from './components/Login/Login';
 import Layout from './components/Layout/Layout';
 import Home from './components/Home/Home';
 import Code from './components/Code/Code';
+import CodeHome from './components/Code/Home';
 import Files from './components/Files/Files';
 import {loadUser} from './components/User/Actions';
+import {loadRepo} from './components/Code/Actions';
 
 const createRoutes = (store) => {
   const requireUser = (nextState, replaceState, cb) => {
@@ -27,6 +29,23 @@ const createRoutes = (store) => {
     }
   };
 
+  const requireFiles = (nextState, replaceState, cb) => {
+    const state = store.getState();
+    if (!state.code || !state.code.gitTree || !state.code.baseFiles) {
+      const dispatch = store.dispatch;
+      dispatch(loadRepo()).then(
+        () => {
+          cb();
+        },
+        () => {
+          replaceState('/home');
+          cb();
+        });
+    } else {
+      cb();
+    }
+  };
+
   // Main routes
   const routes = (history) => {
     return (
@@ -35,7 +54,9 @@ const createRoutes = (store) => {
         <Route path="/" component={Layout} onEnter={requireUser}>
           <IndexRedirect to="home" />
           <Route path="home" component={Home} />
-          <Route path="code" component={Code}>
+          <Route path="code" component={Code} onEnter={requireFiles}>
+            <IndexRedirect to="home" />
+            <Route path="home" component={CodeHome} />
             <Route path="files/:fileName" component={Files} />
           </Route>
         </Route>

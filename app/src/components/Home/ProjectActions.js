@@ -1,6 +1,7 @@
 import defaultState from './ProjectState';
 import requestAction from 'utils/requestAction';
 import Endpoints, {globalCookiePolicy} from 'Endpoints';
+import Globals from 'Globals';
 
 const CREATE_REQUEST = 'Project/CREATE_REQUEST';
 const CREATE_ERROR = 'Project/CREATE_ERROR';
@@ -27,7 +28,7 @@ const createProject = () => {
     const createUrl = 'https://api.github.com/user/repos';
     const options = {
       method: 'POST',
-      body: JSON.stringify({name: 'imad-2016-base', description: 'My source code repository for the IMAD course app!', gitignore_template: 'Node'}),
+      body: JSON.stringify({name: Globals.repoName, description: 'My source code repository for the IMAD course app!', gitignore_template: 'Node'}),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'token ' + user.table.github_token
@@ -47,13 +48,13 @@ const createProject = () => {
         };
         dispatch(requestAction(saveUrl, saveOptions)).then(
           () => {
-            const serverjs = require('raw!./templates/server.js');
+            const serverjs = require('raw!./templates/src/server.js');
             const packageJson = require('raw!./templates/package.json');
-            const html = require('raw!./templates/ui/index.html');
-            const js = require('raw!./templates/ui/main.js');
-            const css = require('raw!./templates/ui/style.css');
+            const html = require('raw!./templates/src/ui/index.html');
+            const js = require('raw!./templates/src/ui/main.js');
+            const css = require('raw!./templates/src/ui/style.css');
 
-            const baseFileUrl = 'https://api.github.com/repos/coco98/imad-2016-base/contents/';
+            const baseFileUrl = `https://api.github.com/repos/coco98/${Globals.repoName}/contents/`;
             const baseOptions = {
               method: 'PUT',
               headers: {

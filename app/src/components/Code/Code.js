@@ -3,9 +3,20 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import Helmet from 'react-helmet';
 
-const Code = ({children}) => {
+const Code = ({baseFiles, children}) => {
   const styles = require('./Code.scss');
   const appPrefix = '';
+  const fileList = [];
+  if (baseFiles) {
+    const fileNames = Object.keys(baseFiles).sort();
+    fileNames.map(f => {
+      fileList.push((<li className={styles.file}>
+        <Link to={appPrefix + '/code/files/' + encodeURIComponent(f)}> {f} </Link>
+      </li>));
+    });
+  } else {
+    fileList.push((<li className={styles.file}> <i>Loading...</i></li>));
+  }
   return (
       <div className={styles.container}>
         <Helmet title="Code | IMAD console" />
@@ -30,9 +41,7 @@ const Code = ({children}) => {
             <li>
               Files
               <ul>
-                <li className={styles.file}> <Link to={appPrefix + '/code/files/server.js'}> server.js </Link> </li>
-                <li className={styles.file}> <Link to={appPrefix + '/code/files/index.html'}> index.html</Link> </li>
-                <li className={styles.file}> <Link to={appPrefix + '/code/files/style.css'}> style.css</Link> </li>
+                {fileList}
               </ul>
             </li>
           </ul>
@@ -44,5 +53,7 @@ const Code = ({children}) => {
       </div>
   );
 };
-
-export default connect()(Code);
+const mapStateToProps = (state) => {
+  return {...state.code};
+};
+export default connect(mapStateToProps)(Code);

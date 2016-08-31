@@ -1,4 +1,5 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
 import {createProject} from './ProjectActions';
 
@@ -22,6 +23,7 @@ const Home = ({dispatch, project, user}) => {
 
   return (
       <div className="container">
+        <Helmet title="Home | IMAD console" />
         <br/><br/>
         {projectStatus}
         {user.table.github_project ? null :
