@@ -1,9 +1,9 @@
 import Express from 'express';
 import path from 'path';
 import PrettyError from 'pretty-error';
+import bodyParser from 'body-parser';
 import http from 'http';
 import morgan from 'morgan';
-
 import config from './config';
 import routes from './routes';
 
@@ -20,6 +20,7 @@ else
   app.use(morgan('[:date[clf]]: :method :url :status :res[content-length] - :response-time ms'));
 
 app.use('/static', Express.static(path.join(__dirname, '..', 'static')));
+app.use(bodyParser.json());
 
 app.use((req, res) => {
   if (req.originalUrl === '/404') {
