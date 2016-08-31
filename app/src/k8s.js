@@ -27,10 +27,32 @@ const k8s = {
       makeK8sReq('putConfigmap', user, 'PUT', k8sBody.configmap(user, configmap)).then(
           (data) => {
             console.log('success', data);
-            resolve(data);
+            return makeK8sReq('getPods', user, 'GET');
           },
           (error) => {
             console.log('error', error);
+            reject(error);
+          }
+        ).then(
+          (data) => {
+            let podName = '';
+            if (data.items.length > 0) {
+              podName = data.items[0].metadata.name;
+            } else {
+              reject(data);
+            }
+            return makeK8sReq('deletePod', podName, 'DELETE');
+          },
+          (error) => {
+            console.log(error);
+            reject(error);
+          }
+        ).then(
+          (data) => {
+            resolve(data);
+          },
+          (error) => {
+            console.log(error);
             reject(error);
           }
         );
@@ -83,8 +105,10 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
     const resourceToUrl = {
       getDepl: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments/${user}`,
       getConfigmap: `api/v1/namespaces/${globals.k8s.userspace}/configmaps/${user}`,
+      deletePod: `api/v1/namespaces/${globals.k8s.userspace}/pods/${user}`,
+      getPods: `api/v1/namespaces/${globals.k8s.userspace}/pods?labelSelector=app%3D${user}`,
       putConfigmap: `api/v1/namespaces/${globals.k8s.userspace}/configmaps/${user}`,
-      postDeployment: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments`,
+      postDepl: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments`,
       postConfigmap: `api/v1/namespaces/${globals.k8s.userspace}/configmaps`,
       postService: `api/v1/namespaces/${globals.k8s.userspace}/services`
     };
