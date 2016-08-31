@@ -9,7 +9,6 @@ const routes = (app) => {
   });
 
   app.post('/restart/:user', jsonParser, (req, res) => {
-    console.log(req.body);
     const configmapData = req.body;
     const user = req.params.user;
     // get status
@@ -28,9 +27,23 @@ const routes = (app) => {
             res.send(data);
           },
           (error) => {
+            res.status(500);
             res.send(error);
           }
           );
+  });
+
+  app.post('/stop/:user', jsonParser, (req, res) => {
+    const user = req.params.user;
+    k8s.stop(user).then(
+      (data) => {
+        res.send(data);
+      },
+      (error) => {
+        res.status(500);
+        res.send(error);
+      }
+    );
   });
 };
 

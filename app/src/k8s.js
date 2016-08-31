@@ -59,6 +59,35 @@ const k8s = {
     });
     return promise;
   },
+  stop: (user) => {
+    const promise = new Promise((resolve, reject) => {
+      makeK8sReq('getConfigmap', user, 'DELETE').then(
+        (data) => {
+          console.log(data);
+          return makeK8sReq('getService', user, 'DELETE');
+        },
+        (error) => {
+          reject(error);
+        }
+      ).then(
+        (data) => {
+          console.log(data);
+          return makeK8sReq('getDepl', user, 'DELETE');
+        },
+        (error) => {
+          reject(error);
+        }
+      ).then(
+        (data) => {
+          resolve(data);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+    return promise;
+  },
   start: (user, configmap) => {
     const promise = new Promise((resolve, reject) => {
       makeK8sReq('postConfigmap', user, 'POST', k8sBody.configmap(user, configmap)).then(
@@ -110,7 +139,8 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
       putConfigmap: `api/v1/namespaces/${globals.k8s.userspace}/configmaps/${user}`,
       postDepl: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments`,
       postConfigmap: `api/v1/namespaces/${globals.k8s.userspace}/configmaps`,
-      postService: `api/v1/namespaces/${globals.k8s.userspace}/services`
+      postService: `api/v1/namespaces/${globals.k8s.userspace}/services`,
+      getService: `api/v1/namespaces/${globals.k8s.userspace}/services/${user}`
     };
     fetch(`${globals.k8s.url}/${resourceToUrl[resource]}`,
       { method: reqMethod,
