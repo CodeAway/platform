@@ -1,7 +1,9 @@
 import defaultState from './ProjectState';
 import requestAction from 'utils/requestAction';
 import Endpoints, {globalCookiePolicy} from 'Endpoints';
+import {push} from 'react-router-redux';
 import Globals from 'Globals';
+import {SET_USERPROJECT} from '../User/Actions';
 
 const CREATE_REQUEST = 'Project/CREATE_REQUEST';
 const CREATE_ERROR = 'Project/CREATE_ERROR';
@@ -48,13 +50,13 @@ const createProject = () => {
         };
         dispatch(requestAction(saveUrl, saveOptions)).then(
           () => {
-            const serverjs = require('raw!./templates/src/server.js');
+            const serverjs = require('raw!./templates/server.js');
             const packageJson = require('raw!./templates/package.json');
-            const html = require('raw!./templates/src/ui/index.html');
-            const js = require('raw!./templates/src/ui/main.js');
-            const css = require('raw!./templates/src/ui/style.css');
+            const html = require('raw!./templates/index.html');
+            const js = require('raw!./templates/main.js');
+            const css = require('raw!./templates/style.css');
 
-            const baseFileUrl = `https://api.github.com/repos/coco98/${Globals.repoName}/contents/`;
+            const baseFileUrl = `https://api.github.com/repos/${user.table.username}/${Globals.repoName}/contents/`;
             const baseOptions = {
               method: 'PUT',
               headers: {
@@ -66,27 +68,30 @@ const createProject = () => {
             Promise.all([
               createTimeoutPromise(dispatch,
                 0,
-                baseFileUrl + 'src%2Fui%2Findex.html',
-                {...baseOptions, body: JSON.stringify({message: 'Adds src/ui/index.html', content: window.btoa(html)})}),
+                baseFileUrl + 'index.html',
+                {...baseOptions, body: JSON.stringify({message: 'Adds index.html', content: window.btoa(html)})}),
               createTimeoutPromise(dispatch,
                 500,
-                baseFileUrl + 'src%2Fui%2Fmain.js',
-                {...baseOptions, body: JSON.stringify({message: 'Adds src/ui/main.js', content: window.btoa(js)})}),
+                baseFileUrl + 'main.js',
+                {...baseOptions, body: JSON.stringify({message: 'Adds main.js', content: window.btoa(js)})}),
               createTimeoutPromise(dispatch,
                 1000,
-                baseFileUrl + 'src%2Fui%2Fstyle.css',
-                {...baseOptions, body: JSON.stringify({message: 'Adds src/ui/style.css', content: window.btoa(css)})}),
+                baseFileUrl + 'style.css',
+                {...baseOptions, body: JSON.stringify({message: 'Adds style.css', content: window.btoa(css)})}),
               createTimeoutPromise(dispatch,
                 1500,
-                baseFileUrl + 'src%2Fserver.js',
-                {...baseOptions, body: JSON.stringify({message: 'Adds src/server.js', content: window.btoa(serverjs)})}),
+                baseFileUrl + 'server.js',
+                {...baseOptions, body: JSON.stringify({message: 'Adds server.js', content: window.btoa(serverjs)})}),
               createTimeoutPromise(dispatch,
                 2000,
                 baseFileUrl + 'package.json',
                 {...baseOptions, body: JSON.stringify({message: 'Adds package.json', content: window.btoa(packageJson)})})
             ]).then(
               () => {
-                dispatch({type: SET_PROJECT, data: data});
+                // Update the user's project state
+                dispatch({type: SET_USERPROJECT, data});
+                dispatch({type: SET_PROJECT});
+                dispatch(push('/code'));
               },
               (error) => {
                 dispatch({type: CREATE_ERROR, data: error});
@@ -110,7 +115,7 @@ const projectReducer = (state = defaultState, action) => {
     case CREATE_ERROR:
       return {...state, create: {status: 'error', error: action.data}};
     case SET_PROJECT:
-      return {...state, create: {status: '', error: null}, data: action.data};
+      return {...state, create: {status: '', error: null}};
     default:
       return state;
   }

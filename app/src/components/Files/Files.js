@@ -1,13 +1,14 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import AceEditor from 'react-ace';
+import {EDIT_FILE} from '../Code/Actions';
 import 'brace/theme/solarized_light';
 import 'brace/mode/javascript';
 import 'brace/mode/css';
 import 'brace/mode/html';
 import 'brace/ext/language_tools';
 
-const Files = ({baseFiles, fileName}) => {
+const Files = ({editFiles, fileName, dispatch}) => {
   const styles = require('./Files.scss');
   const ftMap = {
     js: 'javascript',
@@ -19,9 +20,10 @@ const Files = ({baseFiles, fileName}) => {
   const extension = _ext[_ext.length - 1];
   console.log(ftMap[extension]);
 
+  const content = editFiles[decodeURIComponent(fileName)].content;
   return (
       <div className={styles.fileContainer}>
-        <h3><code>{fileName}</code></h3>
+        <h3><code>{fileName}{editFiles[fileName].dirty ? '*' : ''}</code></h3>
         <AceEditor
           mode={ftMap[extension]}
           theme="solarized_light"
@@ -32,7 +34,10 @@ const Files = ({baseFiles, fileName}) => {
           setOptions={{
             wrap: true
           }}
-          value={baseFiles[decodeURIComponent(fileName)]} />
+          value={content}
+          onChange={(newContent) => {
+            dispatch({type: EDIT_FILE, data: {fileName, content: newContent}});
+          }}/>
       </div>
   );
 };

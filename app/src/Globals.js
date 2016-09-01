@@ -9,7 +9,7 @@ if (global.__SERVER__) {
   _globals = {
     projectDomain: window.__env.baseDomain,
     scheme: window.__env.scheme,
-    repoName: 'imad-2016-base'
+    repoName: 'imad-2016-app'
   };
 }
 const globals = _globals;

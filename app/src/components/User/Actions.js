@@ -3,6 +3,7 @@ import requestAction from 'utils/requestAction';
 
 const SETUSER = 'User/SETUSER';
 const SETAUTH = 'User/SETAUTH';
+const SET_USERPROJECT = 'User/SET_USERPROJECT';
 
 const defaultOptions = {
   credentials: globalCookiePolicy,
@@ -79,10 +80,14 @@ const userReducer = (state = null, action) => {
       return {...state, auth: {...action.data}};
     case SETUSER:
       return {...state, table: {...action.data}};
+
+    case SET_USERPROJECT:
+      return {...state, table: {...state.table, github_project: action.data}};
+
     default:
       return state;
   }
 };
 
 export default userReducer;
-export {loadUser};
+export {loadUser, SET_USERPROJECT};

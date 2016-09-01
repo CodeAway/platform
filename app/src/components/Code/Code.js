@@ -2,21 +2,23 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import Helmet from 'react-helmet';
+import {startApp, commitFiles} from './Actions';
 
-const Code = ({baseFiles, children}) => {
+const Code = ({files, children, dispatch, editFiles, user}) => {
   const styles = require('./Code.scss');
   const appPrefix = '';
   const fileList = [];
-  if (baseFiles) {
-    const fileNames = Object.keys(baseFiles).sort();
-    fileNames.map(f => {
+  const fileNames = Object.keys(files).sort();
+  if (files) {
+    fileNames.map((f, i) => {
       fileList.push((<li className={styles.file}>
-        <Link to={appPrefix + '/code/files/' + encodeURIComponent(f)}> {f} </Link>
+        <Link key={i} to={appPrefix + '/code/files/' + encodeURIComponent(f)}> {f}{editFiles[f].dirty ? '*' : ''} </Link>
       </li>));
     });
   } else {
-    fileList.push((<li className={styles.file}> <i>Loading...</i></li>));
+    fileList.push((<li key={0} className={styles.file}> <i>Loading...</i></li>));
   }
+  const anyDirty = fileNames.some(f => (editFiles[f].dirty));
   return (
       <div className={styles.container}>
         <Helmet title="Code | IMAD console" />
@@ -29,12 +31,16 @@ const Code = ({baseFiles, children}) => {
           <hr/>
           <ul>
             <li><Link to={appPrefix + '/code/logs'}>Logs</Link></li>
-            <li><a href="https://tanmaig.imad.hasura.io" target="_blank">Go to app</a></li>
+            <li><a href={`https://${user.table.username}.imad.hasura-app.io`} target="_blank">Go to app</a></li>
           </ul>
           <hr/>
           <ul>
-            <li><button className="btn btn-primary" role="button">Apply changes & Restart</button></li>
-            <li><button className="btn btn-primary" role="button">Commit to github</button></li>
+            <li><button className="btn btn-primary" role="button" onClick={() => {
+              dispatch(startApp());
+            }}>Apply changes & Restart</button></li>
+            <li><button className="btn btn-primary" role="button" disabled={anyDirty ? null : 'disabled'} onClick={() => {
+              dispatch(commitFiles());
+            }}>Commit to github</button></li>
           </ul>
           <hr/>
           <ul>
@@ -54,6 +60,6 @@ const Code = ({baseFiles, children}) => {
   );
 };
 const mapStateToProps = (state) => {
-  return {...state.code};
+  return {...state.code, user: state.user};
 };
 export default connect(mapStateToProps)(Code);

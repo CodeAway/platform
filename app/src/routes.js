@@ -31,7 +31,7 @@ const createRoutes = (store) => {
 
   const requireFiles = (nextState, replaceState, cb) => {
     const state = store.getState();
-    if (!state.code || !state.code.gitTree || !state.code.baseFiles) {
+    if (!state.code || !state.code.gitTree || !state.code.files) {
       const dispatch = store.dispatch;
       dispatch(loadRepo()).then(
         () => {
