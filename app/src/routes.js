@@ -14,6 +14,8 @@ const headers = {
 if (__DEVELOPMENT__) {
   dbUrl = 'http://data.imad-stg.hasura-app.io';
   headers.Authorization = 'Bearer ' + process.env.TOKEN;
+  headers['X-Hasura-User-Id'] = 1;
+  headers['X-Hasura-Role'] = 'admin';
 } else {
   dbUrl = 'http://data.default';
 }
