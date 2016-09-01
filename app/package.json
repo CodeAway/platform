@@ -30,6 +30,8 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
+        "BASEDOMAIN": "imad-stg.hasura-app.io",
+        "REDIRECT_URI": "http://localhost:3000/home",
         "PORT": 8080
       }
     },
