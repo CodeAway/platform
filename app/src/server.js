@@ -14,10 +14,11 @@ const server = new http.Server(app);
 routes(app);
 
 // Express Logging Middleware
-if (global.__DEVELOPMENT__)
+if (global.__DEVELOPMENT__) {
   app.use(morgan('combined'));
-else
+} else {
   app.use(morgan('[:date[clf]]: :method :url :status :res[content-length] - :response-time ms'));
+}
 
 app.use('/static', Express.static(path.join(__dirname, '..', 'static')));
 app.use(bodyParser.json());
@@ -25,8 +26,9 @@ app.use(bodyParser.json());
 app.use((req, res) => {
   if (req.originalUrl === '/404') {
     res.status(404).send('Not Found');
-    if (global.__DEVELOPMENT__)
+    if (global.__DEVELOPMENT__) {
       console.error(pretty.render(new Error('Ooh no! /404 asked.')));
+    }
   } else {
     res.status(200).send('Works');
   }

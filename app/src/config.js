@@ -17,9 +17,5 @@ const environment = {
 module.exports = Object.assign({
   host,
   port,
-  apiHost: process.env.APIHOST || 'localhost',
-  apiPort: process.env.APIPORT,
-  app: {
-    title: 'Express Server Example'
-  }
+  app: {title: 'IMAD API server'}
 }, environment);

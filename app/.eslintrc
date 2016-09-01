@@ -1,31 +1,35 @@
-{
-  "extends": "airbnb-base",
-  "root": true,
-  "rules": {
-    "object-curly-spacing": ["error", "always"],
-    "strict": 0,
-    "no-underscore-dangle": 0,
-    "curly": 0,
-    "no-multi-spaces": 0,
-    "key-spacing": 0,
-    "no-return-assign": 0,
-    "consistent-return": 0,
-    "no-shadow": 0,
-    "comma-dangle": 0,
-    "no-use-before-define": 0,
-    "no-empty": 0,
-    "new-parens": 0,
-    "no-console": 0,
-    "no-cond-assign": 0,
-    "no-fallthrough": 0,
-    "new-cap": 0,
-    "no-loop-func": 0,
-    "no-unreachable": 0,
-    "no-process-exit": 0,
-    "quotes": [1, "single", "avoid-escape"]
-  },
+{ "extends": "eslint-config-airbnb",
   "env": {
+    "browser": true,
     "node": true,
-    "es6": true
+    "mocha": true
+  },
+  "rules": {
+    "import/default": 0,
+    "import/no-duplicates": 0,
+    "import/named": 0,
+    "import/namespace": 0,
+    "import/no-unresolved": 0,
+    "import/no-named-as-default": 2,
+    "comma-dangle": 0,  // not sure why airbnb turned this on. gross!
+    'id-length': [1, {'min': 1, 'properties': 'never'}],
+    "indent": [2, 2, {"SwitchCase": 1}],
+    "no-console": 0,
+    "no-alert": 0,
+    "max-len": 0,
+    "prefer-template": 0,
+    "object-curly-spacing": 0,
+    "no-underscore-dangle": 0
+  },
+  "settings": {
+    "import/parser": "babel-eslint",
+    "import/resolve": {
+      moduleDirectory: ["node_modules", "src"]
+    }
+  },
+  "globals": {
+    "__DEVELOPMENT__": true,
+    "__SERVER__": true,
+    "socket": true
   }
 }

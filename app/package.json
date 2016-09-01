@@ -38,16 +38,17 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
-        "PORT": 3000,
-        "NAMESPACE": "api",
-        "BASE_DOMAIN": "stackexchange.com",
-        "SCHEME": "http"
+        "PORT": 8000,
+        "BASEDOMAIN": "imad-stg.hasura-app.io",
+        "SCHEME": "http",
+        "REDIRECT_URI": "http://localhost:3000/home"
       }
     }
   },
   "dependencies": {
     "babel-polyfill": "^6.3.14",
     "body-parser": "^1.15.2",
+    "cookie": "^0.3.1",
     "express": "^4.13.3",
     "isomorphic-fetch": "^2.2.1",
     "morgan": "^1.7.0",
@@ -67,9 +68,12 @@
     "babel-runtime": "^6.3.19",
     "better-npm-run": "^0.0.8",
     "eslint": "^3.1.0",
+    "eslint-config-airbnb": "^10.0.1",
     "eslint-config-airbnb-base": "^5.0.0",
     "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-import": "^1.0.0"
+    "eslint-plugin-import": "^1.0.0",
+    "eslint-plugin-jsx-a11y": "^2.2.1",
+    "eslint-plugin-react": "^6.2.0"
   },
   "engines": {
     "node": "4.4.7"
