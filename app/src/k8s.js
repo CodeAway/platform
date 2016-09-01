@@ -99,7 +99,7 @@ const k8sBody = {
               image: 'hasura/simple-node-web-app:0.1',
               volumeMounts: [
                 {
-                  mountPath: '/app/src',
+                  mountPath: '/app',
                   name: 'file-volume'
                 }
               ],
