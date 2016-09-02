@@ -48,6 +48,29 @@ const request = (url, options, res, cb) => {
     });
 };
 
+const getUserInfo = (req) => ({
+  id: req.get('X-Hasura-User-Id'),
+  role: req.get('X-Hasura-Role')
+});
+
+const getUserDetails = (req, res, cb) => {
+  const selectUrl = dbUrl + '/api/1/table/user/select';
+  const selectOptions = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      columns: ['name', 'email', 'username'],
+      where: {
+        hasura_id: getUserInfo(req).id
+      }
+    })
+  };
+  request(selectUrl, selectOptions, res, (data) => {
+    cb(data[0].username, data);
+    return;
+  });
+};
+
 const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line arrow-body-style
   return (ghData) => {
     let upsertUrl = dbUrl + '/api/1/table/user/';
@@ -119,42 +142,41 @@ const routes = (app) => {
     });
   });
 
-  app.post('/restart/:user', jsonParser, (req, res) => {
+  app.post('/restart', jsonParser, (req, res) => {
     const configmapData = req.body;
-    const user = req.params.user;
-    // get status
-    k8s.getStatus(user).then(
-        (data) => {
-          console.log(data);
-          // if running, updateconfigmap
-          return k8s.updateConfigmap(user, configmapData);
-        },
-        (error) => {
-          console.log(error);
-          // if not running, start
-          return k8s.start(user, configmapData);
-        }).then(
+    getUserDetails(req, res, (user) => {
+      k8s.getStatus(user).then(
           (data) => {
-            res.send(data);
+            console.log(data);
+            // if running, updateconfigmap
+            return k8s.updateConfigmap(user, configmapData);
           },
           (error) => {
-            res.status(500);
-            res.send(error);
-          }
-          );
+            console.log(error);
+            // if not running, start
+            return k8s.start(user, configmapData);
+          }).then(
+            (data) => {
+              res.send(data);
+            },
+            (error) => {
+              res.status(500).send(error);
+            }
+            );
+    });
   });
 
-  app.post('/stop/:user', jsonParser, (req, res) => {
-    const user = req.params.user;
-    k8s.stop(user).then(
-      (data) => {
-        res.send(data);
-      },
-      (error) => {
-        res.status(500);
-        res.send(error);
-      }
-    );
+  app.post('/stop', jsonParser, (req, res) => {
+    getUserDetails(req, res, (user) => {
+      k8s.stop(user).then(
+        (data) => {
+          res.send(data);
+        },
+        (error) => {
+          res.status(500).send(error);
+        }
+      );
+    });
   });
 };
 
