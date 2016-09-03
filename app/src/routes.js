@@ -59,7 +59,7 @@ const getUserDetails = (req, res, cb) => {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      columns: ['name', 'email', 'username'],
+      columns: ['name', 'email', 'username', 'hasura_id'],
       where: {
         hasura_id: getUserInfo(req).id
       }
@@ -150,6 +150,7 @@ const routes = (app) => {
         user = req.query.user;
         if (!user) {
           res.status(400).send('query param user not found');
+          return;
         }
       }
       k8s.getStatus(user).then(
@@ -180,6 +181,7 @@ const routes = (app) => {
         user = req.query.user;
         if (!user) {
           res.status(400).send('query param user not found');
+          return;
         }
       }
       k8s.stop(user).then(

@@ -112,7 +112,7 @@ const k8sBody = {
         spec: {
           containers: [
             {
-              image: 'hasura/simple-node-web-app:0.1',
+              image: globals.imad.simpleNodeAppImage,
               volumeMounts: [
                 {
                   mountPath: '/app',
