@@ -24,7 +24,7 @@ const Layout = ({logoutRequest, dispatch, children}) => {
           </Link>
         </div>
         <div className={styles.headerItem}>
-          <a target="_blank" href="https://slack.hasura.io">Forum &nbsp;<i className="fa fa-comments-o" aria-hidden="true"></i></a>
+          <a target="_blank" href="https://discourse.imad.hasura.io">Forum &nbsp;<i className="fa fa-comments-o" aria-hidden="true"></i></a>
         </div>
         <div className={styles.headerItem}>
           <span onClick={(e) => {
@@ -38,7 +38,13 @@ const Layout = ({logoutRequest, dispatch, children}) => {
         </div>
 
       </div>
-      {children}
+      <div className="container">
+        <hr/>
+        {children}
+      </div>
+      <div className={styles.footer}>
+        Made with &hearts; by <a href="https://hasura.io">Hasura</a>
+      </div>
     </div>
   );
 };
