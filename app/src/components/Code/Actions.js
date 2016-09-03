@@ -2,6 +2,7 @@ import defaultState from './State';
 import requestAction from 'utils/requestAction';
 import Globals from 'Globals';
 import Endpoints, {globalCookiePolicy} from 'Endpoints';
+import {loadingOn, loadingOff} from '../Layout/Actions';
 
 const SET_TREE = 'Code/SET_TREE';
 const SET_FILE = 'Code/SET_FILE';
@@ -18,6 +19,7 @@ const isValid = (path) => {
 
 const loadRepo = () => {
   return (dispatch, getState) => {
+    dispatch(loadingOn());
     const user = getState().user;
     const treeUrl = `https://api.github.com/repos/${user.table.username}/${Globals.repoName}/git/trees/master?recursive=1`;
     const options = {
@@ -54,6 +56,7 @@ const loadRepo = () => {
           });
           if (noBaseFiles !== 4) {
             alert('Could not find one of (server.js, index.html, style.css, main.js) in the repo. Please contact support for help.');
+            dispatch(loadingOff());
             reject();
             return;
           }
@@ -66,16 +69,19 @@ const loadRepo = () => {
           })).then(
             () => {
               dispatch({type: INITIALISED});
+              dispatch(loadingOff());
               resolve();
             },
             (error) => {
               alert(`Could not fetch a file from github. Please try refreshing the page, or contact support if the problem persists.\n
                 Error: ${JSON.stringify(error)}`);
+              dispatch(loadingOff());
               reject();
             });
         },
         () => {
           alert('Could not fetch files from github. Try again or contact support if this problem persists');
+          dispatch(loadingOff());
           reject();
         }
       );

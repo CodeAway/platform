@@ -25,7 +25,7 @@ const Code = ({files, children, dispatch, editFiles, user}) => {
         <div className={styles.sidebar}>
           <div className={styles.title}>
             <h4>
-              <i title="Code" className="fa fa-code" aria-hidden="true"></i> &nbsp; <Link to="/home"><u>Home</u></Link> / Code
+              <i title="Code" className="fa fa-code" aria-hidden="true"></i> &nbsp; <Link to="/home"><u>Home</u></Link> / <Link to="/code/home">Code</Link>
             </h4>
           </div>
           <hr/>
