@@ -37,7 +37,8 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
-        "PORT": 8080
+        "PORT": 8080,
+        "BASE_DOMAIN": "imad-stg.hasura-app.io"
       }
     },
     "start-dev": {
