@@ -5,7 +5,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: calc(100vh - 50px);
+    min-height: 200px;
     width: 100%;
     // background-image: url('./madi-mountain.png');
 }
@@ -21,5 +22,8 @@
     .icon {
         margin-right: 10px;
         padding-right: 10px;
+    }
+    :global(a.btn) {
+        padding: 20px 26px;
     }
 }
