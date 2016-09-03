@@ -1,44 +1,33 @@
 import defaultState from './ProjectState';
 import requestAction from 'utils/requestAction';
 import Endpoints, {globalCookiePolicy} from 'Endpoints';
-import {push} from 'react-router-redux';
-import Globals from 'Globals';
+// import {push} from 'react-router-redux';
+// import Globals from 'Globals';
 import {SET_USERPROJECT} from '../User/Actions';
 
 const CREATE_REQUEST = 'Project/CREATE_REQUEST';
 const CREATE_ERROR = 'Project/CREATE_ERROR';
 const SET_PROJECT = 'Project/SET_PROJECT';
+const WAIT_NOTIFICATION = 'Project/WAIT_NOTIFICATION';
 
-const createTimeoutPromise = (dispatch, timeout, url, options) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(
-      () => {
-        dispatch(requestAction(url, options)).then(
-          () => { resolve(); },
-          (error) => { reject(error); }
-        );
-      },
-      timeout);
-  });
-};
 const createProject = () => {
   return (dispatch, getState) => {
     dispatch({type: CREATE_REQUEST});
 
     // make a request to create the project
     const user = getState().user;
-    const createUrl = 'https://api.github.com/user/repos';
+    const forkUrl = `https://api.github.com/repos/hasura-imad/imad-2016-app/forks`;
     const options = {
       method: 'POST',
-      body: JSON.stringify({name: Globals.repoName, description: 'My source code repository for the IMAD course app!', gitignore_template: 'Node'}),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'token ' + user.table.github_token
       },
       credentials: 'omit'
     };
-    dispatch(requestAction(createUrl, options)).then(
+    dispatch(requestAction(forkUrl, options)).then(
       (data) => {
+        // Make a request to save this to the user's table
         const saveUrl = Endpoints.dataUrl + '/api/1/table/user/update';
         const saveOptions = {
           method: 'POST',
@@ -50,52 +39,12 @@ const createProject = () => {
         };
         dispatch(requestAction(saveUrl, saveOptions)).then(
           () => {
-            const serverjs = require('raw!./templates/server.js');
-            const packageJson = require('raw!./templates/package.json');
-            const html = require('raw!./templates/index.html');
-            const js = require('raw!./templates/main.js');
-            const css = require('raw!./templates/style.css');
-
-            const baseFileUrl = `https://api.github.com/repos/${user.table.username}/${Globals.repoName}/contents/`;
-            const baseOptions = {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'token ' + user.table.github_token
-              },
-              credentials: 'omit'
-            };
-            Promise.all([
-              createTimeoutPromise(dispatch,
-                0,
-                baseFileUrl + 'index.html',
-                {...baseOptions, body: JSON.stringify({message: 'Adds index.html', content: window.btoa(html)})}),
-              createTimeoutPromise(dispatch,
-                500,
-                baseFileUrl + 'main.js',
-                {...baseOptions, body: JSON.stringify({message: 'Adds main.js', content: window.btoa(js)})}),
-              createTimeoutPromise(dispatch,
-                1000,
-                baseFileUrl + 'style.css',
-                {...baseOptions, body: JSON.stringify({message: 'Adds style.css', content: window.btoa(css)})}),
-              createTimeoutPromise(dispatch,
-                1500,
-                baseFileUrl + 'server.js',
-                {...baseOptions, body: JSON.stringify({message: 'Adds server.js', content: window.btoa(serverjs)})}),
-              createTimeoutPromise(dispatch,
-                2000,
-                baseFileUrl + 'package.json',
-                {...baseOptions, body: JSON.stringify({message: 'Adds package.json', content: window.btoa(packageJson)})})
-            ]).then(
-              () => {
-                // Update the user's project state
-                dispatch({type: SET_USERPROJECT, data});
-                dispatch({type: SET_PROJECT});
-                dispatch(push('/code'));
-              },
-              (error) => {
-                dispatch({type: CREATE_ERROR, data: error});
-              });
+            // Update the user's project state
+            dispatch({type: WAIT_NOTIFICATION, data: true});
+            setTimeout(() => (dispatch({type: WAIT_NOTIFICATION, data: false})), 10000);
+            dispatch({type: SET_USERPROJECT, data: data});
+            dispatch({type: SET_PROJECT});
+            // dispatch(push('/code'));
           },
           (error) => {
             dispatch({type: CREATE_ERROR, data: error});
@@ -116,6 +65,8 @@ const projectReducer = (state = defaultState, action) => {
       return {...state, create: {status: 'error', error: action.data}};
     case SET_PROJECT:
       return {...state, create: {status: '', error: null}};
+    case WAIT_NOTIFICATION:
+      return {...state, pleaseWait: action.data};
     default:
       return state;
   }

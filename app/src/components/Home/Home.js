@@ -22,6 +22,14 @@ const Home = ({dispatch, project, user}) => {
           Error: {JSON.stringify(project.create.error)}
         </div>);
     }
+  } else {
+    if (project.pleaseWait) {
+      projectStatus = (
+        <div className="alert alert-warning" role="alert">
+          Please wait for up to 5 minutes for your project files to get ready.
+          (Clicking on your console link may not work for 5mins!)
+        </div>);
+    }
   }
 
   return (
