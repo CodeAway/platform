@@ -17,7 +17,9 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
       postDepl: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments`,
       postConfigmap: `api/v1/namespaces/${globals.k8s.userspace}/configmaps`,
       postService: `api/v1/namespaces/${globals.k8s.userspace}/services`,
-      getService: `api/v1/namespaces/${globals.k8s.userspace}/services/${user}`
+      getService: `api/v1/namespaces/${globals.k8s.userspace}/services/${user}`,
+      putScale: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments/${user}/scale`,
+      getRs: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/replicasets?labelSelector=app%3D${user}`
     };
     fetch(`${globals.k8s.url}/${resourceToUrl[resource]}`,
       { method: reqMethod,
@@ -45,7 +47,7 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
               ${response.status.toString()} : ${response.statusText}`);
         },
         (error) => {
-          reject(`${resourceToUrl[resource]} :: ${user} :: 
+          reject(`${resourceToUrl[resource]} :: ${user} ::
               failed to fetch from k8s: ${error.message}`);
         }
       );
@@ -87,6 +89,20 @@ const k8sBody = {
       selector: {
         app: user
       }
+    }
+  }),
+  scale: (user, replicas) => ({
+    kind: 'Scale',
+    apiVersion: 'extensions/v1beta1',
+    metadata: {
+      name: user,
+      namespace: globals.k8s.userspace,
+      labels: {
+        app: user
+      }
+    },
+    spec: {
+      replicas
     }
   }),
   deployment: (user) => ({
@@ -207,17 +223,34 @@ const k8s = {
         },
         (error) => {
           reject(error);
-        }
-      ).then(
+        })
+      .then(
+        (data) => {
+          console.log(data);
+          return makeK8sReq('putScale', user, 'PUT', k8sBody.scale(user, 0));
+        },
+        (error) => {
+          reject(error);
+        })
+      .then(
         (data) => {
           console.log(data);
           return makeK8sReq('getDepl', user, 'DELETE');
         },
         (error) => {
           reject(error);
-        }
-      ).then(
+        })
+      .then(
         (data) => {
+          console.log(data);
+          return makeK8sReq('getRs', user, 'DELETE');
+        },
+        (error) => {
+          reject(error);
+        })
+      .then(
+        (data) => {
+          console.log(data);
           resolve(data);
         },
         (error) => {

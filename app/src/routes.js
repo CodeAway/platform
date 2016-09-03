@@ -49,7 +49,7 @@ const request = (url, options, res, cb) => {
 };
 
 const getUserInfo = (req) => ({
-  id: parseInt(req.get('X-Hasura-User-Id')),
+  id: parseInt(req.get('X-Hasura-User-Id'), 10),
   role: req.get('X-Hasura-Role')
 });
 
