@@ -60,7 +60,7 @@ export default class Html extends Component {
 
           <script dangerouslySetInnerHTML={{__html: `window.__data=${serialize(initialStore)};`}} charSet="UTF-8"/>
           <script dangerouslySetInnerHTML={{__html:
-            `window.__env={ namespace: '${process.env.NAMESPACE}', scheme: '${process.env.SCHEME}', baseDomain: '${process.env.BASE_DOMAIN}' };` }} />
+            `window.__env={ namespace: '${process.env.NAMESPACE}', scheme: '${(process.env.SCHEME) ? process.env.SCHEME : ''}', baseDomain: '${process.env.BASE_DOMAIN}' };` }} />
         </head>
         <body>
           <div id="content" dangerouslySetInnerHTML={{__html: component}}/>
