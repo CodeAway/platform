@@ -66,7 +66,7 @@ const getUserDetails = (req, res, cb) => {
     })
   };
   request(selectUrl, selectOptions, res, (data) => {
-    cb(data[0].username, data);
+    cb(data[0].username, data[0].hasura_id, data);
     return;
   });
 };
@@ -144,7 +144,11 @@ const routes = (app) => {
 
   app.post('/restart', jsonParser, (req, res) => {
     const configmapData = req.body;
-    getUserDetails(req, res, (user) => {
+    getUserDetails(req, res, (username, hasuraId) => {
+      let user = username;
+      if (hasuraId === 1) {
+        user = req.query.user;
+      }
       k8s.getStatus(user).then(
           (data) => {
             console.log(data);
@@ -167,7 +171,11 @@ const routes = (app) => {
   });
 
   app.post('/stop', jsonParser, (req, res) => {
-    getUserDetails(req, res, (user) => {
+    getUserDetails(req, res, (username, hasuraId) => {
+      let user = username;
+      if (hasuraId === 1) {
+        user = req.query.user;
+      }
       k8s.stop(user).then(
         (data) => {
           res.send(data);
