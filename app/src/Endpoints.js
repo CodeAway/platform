@@ -1,6 +1,6 @@
 import globals from './Globals';
 
-const scheme = globals.scheme + ':';
+const scheme = (globals.scheme && globals.scheme.trim() !== '') ? (globals.scheme + ':') : '';
 const domain = globals.projectDomain;
 
 const Endpoints = {
