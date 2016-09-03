@@ -54,6 +54,11 @@ const getUserInfo = (req) => ({
 });
 
 const getUserDetails = (req, res, cb) => {
+  const userInfo = getUserInfo(req);
+  if (userInfo.role === 'anonymous') {
+    res.status(401).send('Unauthorized');
+    return;
+  }
   const selectUrl = dbUrl + '/api/1/table/user/select';
   const selectOptions = {
     method: 'POST',
@@ -61,7 +66,7 @@ const getUserDetails = (req, res, cb) => {
     body: JSON.stringify({
       columns: ['name', 'email', 'username', 'hasura_id'],
       where: {
-        hasura_id: getUserInfo(req).id
+        hasura_id: userInfo.id
       }
     })
   };
