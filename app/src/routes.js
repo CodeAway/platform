@@ -4,7 +4,9 @@ import {Router, Route, IndexRedirect} from 'react-router';
 // Load components
 import Login from './components/Login/Login';
 import Layout from './components/Layout/Layout';
+import LayoutNoNav from './components/LayoutNoNav/Layout';
 import Home from './components/Home/Home';
+import Docs from './components/Docs/Docs';
 import Code from './components/Code/Code';
 import CodeHome from './components/Code/Home';
 import Files from './components/Files/Files';
@@ -54,6 +56,9 @@ const createRoutes = (store) => {
         <Route path="/" component={Layout} onEnter={requireUser}>
           <IndexRedirect to="home" />
           <Route path="home" component={Home} />
+          <Route path="docs" component={Docs} />
+        </Route>
+        <Route path="/" component={LayoutNoNav} onEnter={requireUser}>
           <Route path="code" component={Code} onEnter={requireFiles}>
             <IndexRedirect to="home" />
             <Route path="home" component={CodeHome} />

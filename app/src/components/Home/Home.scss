@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    height: calc(100vh - 100px);
+    align-items: center;
+}
+.card {
+    background: #f0f0f0;
+    border: 1px solid #aaa;
+    margin-bottom: 20px;
+    border-radius: 3px;
+    max-width: 350px;
+    padding: 30px;
+}
+
+.card:hover {
+    border: 1px solid #517a8b;
+}
+
+.rightCol, .leftImg {
+    width: 50%;
+}
+
+@media only screen and (max-width: 992px) {
+    .rightCol {
+        width: 90%;
+    }
+}

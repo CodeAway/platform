@@ -5,19 +5,22 @@ import {Link} from 'react-router';
 
 const Layout = ({logoutRequest, dispatch, children}) => {
   const styles = require('./Layout.scss');
-  const madi = require('./madi.png');
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div>
+        <div className={styles.headerItem}>
           <Link to="/home">
-            <img className="img img-responsive" src={madi} />
+            Home
           </Link>
         </div>
-
         <div className={styles.headerItem}>
           <Link to="/code">
             Code
+          </Link>
+        </div>
+        <div className={styles.headerItem}>
+          <Link to="/docs">
+            Help
           </Link>
         </div>
         <div className={styles.headerItem}>

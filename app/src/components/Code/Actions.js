@@ -147,7 +147,7 @@ const startApp = () => {
   return (dispatch, getState) => {
     // Create the configmap & make an API request
     const state = getState().code;
-    const user = getState().user;
+    // const user = getState().user;
 
     const configmap = {};
     const files = Object.keys(state.editFiles);
@@ -155,7 +155,7 @@ const startApp = () => {
       configmap[f] = state.editFiles[f].content;
     });
 
-    const url = Endpoints.apiUrl + '/restart/' + user.table.username;
+    const url = Endpoints.apiUrl + '/restart'; // + user.table.username;
     const options = {
       method: 'POST',
       body: JSON.stringify(configmap),

@@ -1,7 +1,8 @@
 @import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
 
 .container {
-  height: calc(100vh - 50px);
+  height: 100vh;
+  min-height: 500px;
   overflow-x: auto;
   min-width: 640px;
 }
@@ -17,6 +18,12 @@
   overflow-y: auto;
   background: #444;
   color: $navbar-inverse-color;
+  a,a:visited {
+    color: $navbar-inverse-link-color;
+  }
+  a:hover {
+    color: $navbar-inverse-link-hover-color;
+  }
   hr {
     margin: 0;
     border-color: $navbar-inverse-color;

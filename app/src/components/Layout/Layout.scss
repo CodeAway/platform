@@ -6,14 +6,14 @@
 }
 
 .header {
-  background: $navbar-inverse-bg;
-  color: $navbar-inverse-color;
+  background: none;
+  // color: $navbar-inverse-color;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 50px;
-  text-align: right;
+  height: 70px;
+  text-align: center;
   padding: 0;
   padding-right: 15px;
   img {
@@ -22,22 +22,22 @@
   }
   .headerItem {
     display: inline-block;
-    color: $navbar-inverse-color;
+    // color: $navbar-inverse-color;
     line-height: 15px;
     font-size: 15px;
-    padding: 17.5px 15px;
+    padding: 27.5px 25px;
     cursor: pointer;
   }
   .headerItem:hover {
     display: inline-block;
-    color: $navbar-inverse-link-hover-color;
-    transition: color 0.5s;
+    // color: $navbar-inverse-link-hover-color;
+    transition: 0.5s;
   }
   .headerItem:hover * {
-    color: $navbar-inverse-link-hover-color;
-    transition: color 0.5s;
+    // color: $navbar-inverse-link-hover-color;
+    transition: 0.5s;
   }
   .headerItem * {
-    color: $navbar-inverse-color;
+    // color: $navbar-inverse-color;
   }
 }

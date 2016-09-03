@@ -25,13 +25,13 @@ const Code = ({files, children, dispatch, editFiles, user}) => {
         <div className={styles.sidebar}>
           <div className={styles.title}>
             <h4>
-              <i title="Code" className="fa fa-code" aria-hidden="true"></i> &nbsp; Code
+              <i title="Code" className="fa fa-code" aria-hidden="true"></i> &nbsp; <Link to="/home"><u>Home</u></Link> / Code
             </h4>
           </div>
           <hr/>
           <ul>
             <li><Link to={appPrefix + '/code/logs'}>Logs</Link></li>
-            <li><a href={`https://${user.table.username}.imad.hasura-app.io`} target="_blank">Go to app</a></li>
+            <li><a href={`http://${user.table.username}.imad.hasura-app.io`} target="_blank">Go to app</a></li>
           </ul>
           <hr/>
           <ul>
