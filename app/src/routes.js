@@ -148,6 +148,9 @@ const routes = (app) => {
       let user = username;
       if (hasuraId === 1) {
         user = req.query.user;
+        if (!user) {
+          res.status(400).send('query param user not found');
+        }
       }
       k8s.getStatus(user).then(
           (data) => {
@@ -175,6 +178,9 @@ const routes = (app) => {
       let user = username;
       if (hasuraId === 1) {
         user = req.query.user;
+        if (!user) {
+          res.status(400).send('query param user not found');
+        }
       }
       k8s.stop(user).then(
         (data) => {
