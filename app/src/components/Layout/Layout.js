@@ -42,7 +42,7 @@ const Layout = ({logoutRequest, loading, dispatch, children}) => {
 
       </div>
       <div className="container">
-        <hr/>
+        <hr className={styles.noTop}/>
         {children}
       </div>
       <div className={styles.footer}>

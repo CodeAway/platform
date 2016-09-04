@@ -2,24 +2,26 @@
 
 .container {
   position: relative;
-  padding-top: 50px;
+}
+
+.noTop {
+  margin-top: 0;
 }
 
 .heightContainer {
     display: flex;
-    height: calc(100vh - 140px);
-    min-height: 570px;
+    min-height: calc(100vh - 140px);
     align-items: center;
+    justify-content: center;
 }
 
 .header {
   background: none;
   // color: $navbar-inverse-color;
-  position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  min-height: 70px;
   text-align: center;
   padding: 0;
   padding-right: 15px;
@@ -52,7 +54,7 @@
 .footer {
   background: #333;
   color: #aaa;
-  height: 50px;
+  min-height: 50px;
   line-height: 15px;
   font-size: 15px;
   padding: 17.5px 25px;

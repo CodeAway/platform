@@ -1,14 +1,19 @@
 import defaultState from './ProjectState';
 import requestAction from 'utils/requestAction';
 import Endpoints, {globalCookiePolicy} from 'Endpoints';
-// import {push} from 'react-router-redux';
-// import Globals from 'Globals';
-import {SET_USERPROJECT} from '../User/Actions';
+import {SET_USERPROJECT, SET_DBPASS, SET_SSHPASS} from '../User/Actions';
 
 const CREATE_REQUEST = 'Project/CREATE_REQUEST';
 const CREATE_ERROR = 'Project/CREATE_ERROR';
 const SET_PROJECT = 'Project/SET_PROJECT';
 const WAIT_NOTIFICATION = 'Project/WAIT_NOTIFICATION';
+
+const CREATE_DB_REQUEST = 'Project/CREATE_DB_REQUEST';
+const CREATE_DB_ERROR = 'Project/CREATE_DB_ERROR';
+const SET_DB = 'Project/SET_DB';
+const CREATE_SSH_REQUEST = 'Project/CREATE_SSH_REQUEST';
+const CREATE_SSH_ERROR = 'Project/CREATE_SSH_ERROR';
+const SET_SSH = 'Project/SET_SSH';
 
 const createProject = () => {
   return (dispatch, getState) => {
@@ -54,6 +59,53 @@ const createProject = () => {
         dispatch({type: CREATE_ERROR, data: error});
       });
     // make a request to load all the files
+    //
+  };
+};
+
+const createDB = () => {
+  return (dispatch) => {
+    dispatch({type: CREATE_DB_REQUEST});
+    const url = Endpoints.apiUrl + '/create-db';
+    const opts = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: globalCookiePolicy
+    };
+    dispatch(requestAction(url, opts)).then(
+      (data) => {
+        dispatch({type: SET_DBPASS, data: data.password});
+        dispatch({type: SET_DB});
+      },
+      (error) => {
+        console.error(error);
+        dispatch({type: CREATE_DB_ERROR, data: error});
+      });
+  };
+};
+
+const createSSH = () => {
+  return (dispatch) => {
+    dispatch({type: CREATE_SSH_REQUEST});
+    const url = Endpoints.apiUrl + '/create-ssh';
+    const opts = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: globalCookiePolicy
+    };
+    dispatch(requestAction(url, opts)).then(
+      (data) => {
+        dispatch({type: SET_SSHPASS, data: data.password});
+        dispatch({type: SET_SSH});
+      },
+      (error) => {
+        console.error(error);
+        dispatch({type: CREATE_SSH_ERROR, data: error});
+      });
   };
 };
 
@@ -65,6 +117,21 @@ const projectReducer = (state = defaultState, action) => {
       return {...state, create: {status: 'error', error: action.data}};
     case SET_PROJECT:
       return {...state, create: {status: '', error: null}};
+
+    case CREATE_DB_REQUEST:
+      return {...state, db: {...state.db, create: {status: 'ongoing', error: null}}};
+    case CREATE_DB_ERROR:
+      return {...state, db: {...state.db, create: {status: 'error', error: action.data}}};
+    case SET_DB:
+      return {...state, db: {...state.db, create: {status: '', error: null}}};
+
+    case CREATE_SSH_REQUEST:
+      return {...state, ssh: {...state.ssh, create: {status: 'ongoing', error: null}}};
+    case CREATE_SSH_ERROR:
+      return {...state, ssh: {...state.ssh, create: {status: 'error', error: action.data}}};
+    case SET_SSH:
+      return {...state, ssh: {...state.ssh, create: {status: '', error: null}}};
+
     case WAIT_NOTIFICATION:
       return {...state, pleaseWait: action.data};
     default:
@@ -73,4 +140,4 @@ const projectReducer = (state = defaultState, action) => {
 };
 
 export default projectReducer;
-export {createProject};
+export {createProject, createDB, createSSH};
