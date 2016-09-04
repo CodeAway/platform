@@ -199,6 +199,28 @@ const routes = (app) => {
       );
     });
   });
+
+  app.get('/logs', (req, res) => {
+    getUserDetails(req, res, (username, hasuraId) => {
+      let user = username;
+      if (hasuraId === 1) {
+        user = req.query.user;
+        if (!user) {
+          res.status(400).send('query param user not found');
+          return;
+        }
+      }
+      const tail = 100 || req.query.tail;
+      k8s.getLogs(user, tail).then(
+        (data) => {
+          res.send(data);
+        },
+        (error) => {
+          res.status(500).send(error);
+        }
+      );
+    });
+  });
 };
 
 export default routes;

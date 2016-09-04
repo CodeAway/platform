@@ -12,6 +12,7 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
       getDepl: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments/${user}`,
       getConfigmap: `api/v1/namespaces/${globals.k8s.userspace}/configmaps/${user}`,
       deletePod: `api/v1/namespaces/${globals.k8s.userspace}/pods/${user}`,
+      getLogs: `api/v1/namespaces/${globals.k8s.userspace}/pods/${user.podName}/log?tailLines=${user.tail}`,
       getPods: `api/v1/namespaces/${globals.k8s.userspace}/pods?labelSelector=app%3D${user}`,
       putConfigmap: `api/v1/namespaces/${globals.k8s.userspace}/configmaps/${user}`,
       postDepl: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments`,
@@ -21,6 +22,7 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
       putScale: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments/${user}/scale`,
       getRs: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/replicasets?labelSelector=app%3D${user}`
     };
+    console.log(`request url ---> ${globals.k8s.url}/${resourceToUrl[resource]} via ${reqMethod} using paramns ${user}`);
     fetch(`${globals.k8s.url}/${resourceToUrl[resource]}`,
       { method: reqMethod,
         headers: {
@@ -31,16 +33,26 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
         body: JSON.stringify(body)
       }).then(
         (response) => {
-          console.log(body);
           if (response.status >= 200 && response.status < 300) {
-            response.json().then((data) => {
-              try {
-                resolve(data);
-              } catch (err) {
-                console.log(err.stack);
-                reject(err.toString());
-              }
-            });
+            if (resource === 'getLogs') {
+              response.text().then((data) => {
+                try {
+                  resolve(data);
+                } catch (err) {
+                  console.log(err.stack);
+                  reject(err.toString());
+                }
+              });
+            } else {
+              response.json().then((data) => {
+                try {
+                  resolve(data);
+                } catch (err) {
+                  console.log(err.stack);
+                  reject(err.toString());
+                }
+              });
+            }
             return;
           }
           reject(`${resourceToUrl[resource]} :: ${user} ::
@@ -174,6 +186,34 @@ const k8s = {
             reject(error);
           }
         );
+    });
+    return promise;
+  },
+  getLogs: (user, tail) => {
+    const promise = new Promise((resolve, reject) => {
+      makeK8sReq('getPods', user).then(
+        (data) => {
+          let podName = '';
+          if (data.items.length > 0) {
+            podName = data.items[0].metadata.name;
+          } else {
+            reject(data);
+          }
+          return makeK8sReq('getLogs', {podName, tail});
+        },
+        (error) => {
+          console.log(error);
+          reject(error);
+        }
+      ).then(
+        (data) => {
+          resolve(data);
+        },
+        (error) => {
+          console.log(error);
+          reject(error);
+        }
+      );
     });
     return promise;
   },
