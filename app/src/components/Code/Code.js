@@ -3,8 +3,9 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import Helmet from 'react-helmet';
 import {startApp, commitFiles} from './Actions';
+import Loading from '../Loading/Loading';
 
-const Code = ({files, children, dispatch, editFiles, user}) => {
+const Code = ({files, children, dispatch, editFiles, user, loading}) => {
   const styles = require('./Code.scss');
   const appPrefix = '';
   const fileList = [];
@@ -56,6 +57,7 @@ const Code = ({files, children, dispatch, editFiles, user}) => {
         <div className={styles.main}>
           {children}
         </div>
+        <Loading loading={loading} />
       </div>
   );
 };

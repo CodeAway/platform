@@ -8,6 +8,7 @@ import LayoutNoNav from './components/LayoutNoNav/Layout';
 import Home from './components/Home/Home';
 import Docs from './components/Docs/Docs';
 import Code from './components/Code/Code';
+import Logs from './components/Logs/Logs';
 import CodeHome from './components/Code/Home';
 import Files from './components/Files/Files';
 import {loadUser} from './components/User/Actions';
@@ -61,6 +62,7 @@ const createRoutes = (store) => {
         <Route path="/" component={LayoutNoNav} onEnter={requireUser}>
           <Route path="code" component={Code} onEnter={requireFiles}>
             <IndexRedirect to="home" />
+            <Route path="logs" component={Logs} />
             <Route path="home" component={CodeHome} />
             <Route path="files/:fileName" component={Files} />
           </Route>

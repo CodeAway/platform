@@ -2,7 +2,8 @@ const defaultState = {
   gitTree: null,
   files: null,
   editFiles: null,
-  status: 'loading'
+  status: 'loading',
+  loading: false
 };
 
 export default defaultState;

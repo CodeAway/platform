@@ -7,7 +7,7 @@ import {loadingOn, loadingOff} from '../Layout/Actions';
 const SET_TREE = 'Code/SET_TREE';
 const SET_FILE = 'Code/SET_FILE';
 const INITIALISED = 'Code/INITIALISED';
-
+const SET_CODELOADING = 'Code/LOADING';
 const EDIT_FILE = 'Code/EDIT_FILE';
 
 const isValid = (path) => {
@@ -151,6 +151,7 @@ const commitFiles = () => {
 
 const startApp = () => {
   return (dispatch, getState) => {
+    dispatch({type: SET_CODELOADING, loading: true});
     // Create the configmap & make an API request
     const state = getState().code;
     // const user = getState().user;
@@ -171,7 +172,14 @@ const startApp = () => {
       credentials: globalCookiePolicy
     };
 
-    return dispatch(requestAction(url, options));
+    return dispatch(requestAction(url, options)).then(
+      () => {
+        setTimeout(() => { dispatch({type: SET_CODELOADING, loading: false}); }, 1000);
+      },
+      (error) => {
+        console.error(error);
+        dispatch({type: SET_CODELOADING, loading: false});
+      });
   };
 };
 
@@ -202,6 +210,10 @@ const codeReducer = (state = defaultState, action) => {
         ...state.editFiles,
         [fileName]: {content: action.data.content, dirty}}
       };
+
+    case SET_CODELOADING:
+      return {...state, loading: action.loading};
+
     default:
       return state;
   }
