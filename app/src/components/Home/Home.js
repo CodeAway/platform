@@ -88,7 +88,7 @@ const Home = ({dispatch, project, user}) => {
           <tbody>
             <tr>
               <td>username@hostname</td>
-              <td>coco98@imad-dev-ssh.hasura-app.io</td>
+              <td>{user.table.username}@imad-dev-ssh.hasura-app.io</td>
             </tr>
             <tr>
               <td>password</td>
