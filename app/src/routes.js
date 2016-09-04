@@ -289,7 +289,8 @@ const routes = (app) => {
       const tail = 100 || req.query.tail;
       k8s.getLogs(user, tail).then(
         (data) => {
-          res.send(data);
+          res.set('Content-Type', 'application/json');
+          res.send(JSON.stringify({data}));
         },
         (error) => {
           res.status(500).send(error);
