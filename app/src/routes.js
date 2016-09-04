@@ -286,7 +286,7 @@ const routes = (app) => {
           return;
         }
       }
-      const tail = 100 || req.query.tail;
+      const tail = parseInt(req.query.tail, 10) || 100;
       k8s.getLogs(user, tail).then(
         (data) => {
           res.set('Content-Type', 'application/json');
