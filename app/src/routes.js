@@ -64,14 +64,14 @@ const getUserDetails = (req, res, cb) => {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      columns: ['name', 'email', 'username', 'hasura_id'],
+      columns: ['*'],
       where: {
         hasura_id: userInfo.id
       }
     })
   };
   request(selectUrl, selectOptions, res, (data) => {
-    cb(data[0].username, data[0].hasura_id, data);
+    cb(data[0].username, data[0].hasura_id, data[0]);
     return;
   });
 };
@@ -116,6 +116,82 @@ const routes = (app) => {
     // res.send('Hello World');
     res.redirect('/asdf');
   });
+
+  app.get('/create-db', (req, res) => {
+    // Get the current user
+    getUserDetails(req, res, (username, id, data) => {
+      if (data.db_pass && data.db_pass.trim() !== '') {
+        res.status(400).send('db-already-created');
+        return;
+      }
+
+      console.log('Creating for', username);
+      const password = 'db-' + username + '-' + Math.ceil(Math.random() * 100000);
+      const url = Endpoints.ubuntu + '/create-database';
+      const opts = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + process.env.UBUNTU
+        },
+        body: JSON.stringify({username, password})
+      };
+      request(url, opts, res, () => {
+        const updateUrl = dbUrl + '/api/1/table/user/update';
+        const updateOpts = {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            $set: {db_pass: password},
+            where: {hasura_id: id}
+          })
+        };
+        request(updateUrl, updateOpts, res, () => {
+          console.log('Database created for user: ' + username);
+          res.set('Content-Type', 'application/json');
+          res.send(JSON.stringify({password}));
+        });
+      });
+    });
+  });
+
+  app.get('/create-ssh', (req, res) => {
+    // Get the current user
+    getUserDetails(req, res, (username, id, data) => {
+      if (data.ssh_pass && data.ssh_pass.trim !== '') {
+        res.status(400).send('ssh-already-created');
+        return;
+      }
+
+      const password = 'ssh-' + username + '-' + Math.ceil(Math.random() * 100000);
+      const url = Endpoints.ubuntu + '/create-ssh-user';
+      const opts = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + process.env.UBUNTU
+        },
+        body: JSON.stringify({username, password})
+      };
+      request(url, opts, res, () => {
+        const updateUrl = dbUrl + '/api/1/table/user/update';
+        const updateOpts = {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            $set: {ssh_pass: password},
+            where: {hasura_id: id}
+          })
+        };
+        request(updateUrl, updateOpts, res, () => {
+          console.log('SSH user created for user: ' + username);
+          res.set('Content-Type', 'application/json');
+          res.send(JSON.stringify({password}));
+        });
+      });
+    });
+  });
+
 
   app.get('/github/authenticate', (req, res) => {
     const code = req.query.code;
