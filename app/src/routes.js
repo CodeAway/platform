@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import cookie from 'cookie';
 import bodyParser from 'body-parser';
-import k8s from './k8s';
+import {k8s, msgFormat} from './k8s';
 import Endpoints from './Endpoints';
 
 const jsonParser = bodyParser.json();
@@ -19,7 +19,6 @@ if (__DEVELOPMENT__) {
   headers['X-Hasura-User-Id'] = 1;
   headers['X-Hasura-Role'] = 'admin';
 }
-
 
 const request = (url, options, res, cb) => {
   fetch(url, options).then(
@@ -192,7 +191,6 @@ const routes = (app) => {
     });
   });
 
-
   app.get('/github/authenticate', (req, res) => {
     const code = req.query.code;
     const options = {
@@ -225,43 +223,56 @@ const routes = (app) => {
 
   app.post('/restart', jsonParser, (req, res) => {
     const configmapData = req.body;
+    const returnData = {
+      success: false,
+      message: []
+    };
     getUserDetails(req, res, (username, hasuraId) => {
       let user = username;
       if (hasuraId === 1) {
         user = req.query.user;
         if (!user) {
-          res.status(400).send('query param user not found');
+          returnData.message.push(msgFormat('getUserParam', false, 'query param user not found'));
+          res.status(400).send(returnData);
           return;
         }
       }
       k8s.getStatus(user).then(
           (data) => {
-            console.log(data);
+            returnData.message.push(msgFormat('getDeployment', true, data));
             // if running, updateconfigmap
             return k8s.updateConfigmap(user, configmapData);
           },
           (error) => {
-            console.log(error);
+            returnData.message.push(msgFormat('getDeployment', false, error));
             // if not running, start
             return k8s.start(user, configmapData);
           }).then(
             (data) => {
-              res.send(data);
+              returnData.success = true;
+              returnData.message.push(...data);
+              res.send(returnData);
             },
             (error) => {
-              res.status(500).send(error);
+              returnData.message.push.apply(...error);
+              res.status(500).send(returnData);
             }
-            );
+          );
     });
   });
 
   app.post('/stop', jsonParser, (req, res) => {
     getUserDetails(req, res, (username, hasuraId) => {
+      const returnData = {
+        success: false,
+        message: []
+      };
       let user = username;
       if (hasuraId === 1) {
         user = req.query.user;
         if (!user) {
-          res.status(400).send('query param user not found');
+          returnData.message.push(msgFormat('getUserParam', false, 'query param user not found'));
+          res.status(400).send(returnData);
           return;
         }
       }
@@ -278,22 +289,26 @@ const routes = (app) => {
 
   app.get('/logs', (req, res) => {
     getUserDetails(req, res, (username, hasuraId) => {
+      const returnData = {
+        success: false,
+        message: []
+      };
       let user = username;
       if (hasuraId === 1) {
         user = req.query.user;
         if (!user) {
-          res.status(400).send('query param user not found');
+          returnData.message.push(msgFormat('getUserParam', false, 'query param user not found'));
+          res.status(400).send(returnData);
           return;
         }
       }
       const tail = parseInt(req.query.tail, 10) || 100;
       k8s.getLogs(user, tail).then(
         (data) => {
-          res.set('Content-Type', 'application/json');
-          res.send(JSON.stringify({data}));
+          res.type('json').send({success: true, data});
         },
         (error) => {
-          res.status(500).send(error);
+          res.status(500).send({success: false, error});
         }
       );
     });
