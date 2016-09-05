@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>app not running | IMAD Hasura</title>
+    </head>
+    <body>
+        <center>
+            <h1><span id="app-name"></span>'s app is not running</h1>
+            <p>Hello, your app is not running at the moment. It has either not been started or has been suspended due to inactivity. Please login to the <a href="https://console.imad.hasura.io" target="_blank">IMAD console</a> and start the app again to view it here.</p>
+            <hr/>
+            <p>If this message persists even after trying multiple times, please contact us at <a id="imad-mail-link" href="mailto:imad@hasura.io?subject=[IMAD app issue] <include your username here>" target="_blank">imad [at] hasura.io</a>. Don't forget to include your username in the subject line itself.</p>
+            <br/>
+            <span style="font-size: 0.7em;">by folks at <a href="https://hasura.io">Hasura</a></span>
+        </center>
+    </body>
+    <script>
+        (function() {
+            var url = window.location.hostname;
+            var app = url.split('.')[0];
+            document.getElementById('app-name').innerHTML = app;
+            document.getElementById('imad-mail-link').href = "mailto:imad@hasura.io?subject=[IMAD app] " + app + " is not running";
+        })();
+    </script>
+</html>
