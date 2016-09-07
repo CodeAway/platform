@@ -107,6 +107,29 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
       const redirect = process.env.REDIRECT_URI;
       res.cookie('dinoisses', _cookie.dinoisses, {domain: _cookie.Domain});
       res.redirect(redirect);
+
+      // Also insert a value in the database
+      const loggerOpts = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          objects: [{
+            username: ghData.login,
+            last_seen: (new Date()).toISOString()
+          }]
+        }),
+      };
+
+      fetch(dbUrl + '/api/1/table/logger/insert', loggerOpts).then(
+        (response) => {
+          console.log(response.status);
+          response.text().then(t => {
+            console.log(t);
+          });
+        },
+        (error) => {
+          console.error(error);
+        });
     });
   };
 };
@@ -274,6 +297,38 @@ const routes = (app) => {
         }
       );
     });
+  });
+
+  app.get('/gateway-req', (req, res) => {
+    if (req.query.token !== 'imad-gateway-password-very-secret') {
+      res.status(403).send('invalid token');
+      return;
+    }
+    // Save the thing in a log
+    res.send('received');
+    const url = dbUrl + '/api/1/table/logger/update';
+    const username = req.query.username;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({
+        $set: {
+          last_seen: (new Date()).toISOString()
+        },
+        where: {username}
+      }),
+      headers
+    };
+    fetch(url, options).then(
+      (response) => {
+        console.log(response.status);
+        response.text().then(t => {
+          console.log(t);
+        });
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   });
 
   app.get('/logs', (req, res) => {
