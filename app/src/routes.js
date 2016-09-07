@@ -120,6 +120,7 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
         }),
       };
 
+      console.log('inserting to the logger2', loggerOpts);
       fetch(dbUrl + '/api/1/table/logger/insert', loggerOpts).then(
         (response) => {
           console.log(response.status);
@@ -132,6 +133,7 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
         }).catch(e => {
           console.error(e);
         });
+      console.log('inserting to the logger3');
     });
   };
 };
