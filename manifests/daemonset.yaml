@@ -1,10 +1,9 @@
 apiVersion: extensions/v1beta1
-kind: Deployment
+kind: DaemonSet 
 metadata:
     name: nginx
     namespace: imad-system
 spec:
-    replicas: 1
     template:
         metadata:
             labels:
@@ -15,9 +14,15 @@ spec:
                 image: hasura/imad-nginx:latest 
                 env:
                 -   name: LOGGER_URL
-                    value: $URL 
-                -   name: LOGGER_TOKEN        
-                    value: $TOKEN 
+                    valueFrom:
+                        configMapKeyRef:
+                            name: nginx 
+                            key: logger.url
+                -   name: LOGGER_TOKEN
+                    valueFrom:
+                        configMapKeyRef:
+                            name: nginx 
+                            key: logger.token
                 ports:
                 -   containerPort: 80
                 volumeMounts:

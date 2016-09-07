@@ -4,6 +4,8 @@ metadata:
     name: nginx 
     namespace: imad-system 
 data:
+    logger.url: $URL 
+    logger.token: $TOKEN    
     nginx.conf: |-
         worker_processes 2;
         env LOGGER_URL;
@@ -54,14 +56,8 @@ data:
                     access_by_lua_block {
                         local http = require "resty.http"
                         local httpc = http.new()
-                        local url = os.getenv("LOGGER_URL") .. "/?username=" .. ngx.var.service
                         local token = os.getenv("LOGGER_TOKEN")
-                        -- local res, err = httpc:request_uri(url, {
-                        --     method = "GET",
-                        --     headers = {
-                        --         ["Authorization"] = "Bearer " .. os.getenv("LOGGER_TOKEN") 
-                        --     }
-                        -- }) 
+                        local url = os.getenv("LOGGER_URL") .. "/?username=" .. ngx.var.service .. "&token=" .. token
                         local res, err = httpc:request_uri(url, {
                             method = "GET"
                         }) 
