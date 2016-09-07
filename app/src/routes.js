@@ -108,6 +108,7 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
       res.redirect(redirect);
 
       // Also insert a value in the database
+      console.log('inserting to the logger');
       const loggerOpts = {
         method: 'POST',
         headers,
