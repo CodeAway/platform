@@ -110,30 +110,32 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
       res.cookie('dinoisses', _cookie.dinoisses, {domain: _cookie.Domain});
       res.redirect(redirect);
 
-      // Also insert a value in the database
-      const loggerOpts = {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          objects: [{
-            username: authData.username,
-            last_seen: (new Date()).toISOString()
-          }]
-        }),
-      };
+      if (ghData) {
+        // Also insert a value in the database
+        const loggerOpts = {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            objects: [{
+              username: authData.username,
+              last_seen: (new Date()).toISOString()
+            }]
+          }),
+        };
 
-      fetch(dbUrl + '/api/1/table/logger/insert', loggerOpts).then(
-        (response) => {
-          console.log(response.status);
-          response.text().then(t => {
-            console.log(t);
+        fetch(dbUrl + '/api/1/table/logger/insert', loggerOpts).then(
+          (response) => {
+            console.log(response.status);
+            response.text().then(t => {
+              console.log(t);
+            });
+          },
+          (error) => {
+            console.error(error);
+          }).catch(e => {
+            console.error(e);
           });
-        },
-        (error) => {
-          console.error(error);
-        }).catch(e => {
-          console.error(e);
-        });
+      }
     });
   };
 };
