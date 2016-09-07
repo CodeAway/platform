@@ -6,6 +6,12 @@ const httpsAgent = new https.Agent({
   rejectUnauthorized: false
 });
 
+const msgFormat = (type, success, data) => ({
+  type,
+  success,
+  data
+});
+
 const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
   const promise = new Promise((resolve, reject) => {
     const resourceToUrl = {
@@ -55,12 +61,10 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
             }
             return;
           }
-          reject(`${resourceToUrl[resource]} :: ${user} ::
-              ${response.status.toString()} : ${response.statusText}`);
+          reject(`${resourceToUrl[resource]} :: ${user} :: ${response.status.toString()} : ${response.statusText}`);
         },
         (error) => {
-          reject(`${resourceToUrl[resource]} :: ${user} ::
-              failed to fetch from k8s: ${error.message}`);
+          reject(`${resourceToUrl[resource]} :: ${user} :: failed to fetch from k8s: ${error.message}`);
         }
       );
   });
@@ -178,11 +182,9 @@ const k8s = {
     const promise = new Promise((resolve, reject) => {
       makeK8sReq('getDepl', name).then(
           (data) => {
-            console.log('success', data);
             resolve(data);
           },
           (error) => {
-            console.log('error', error);
             reject(error);
           }
         );
@@ -219,14 +221,15 @@ const k8s = {
   },
   updateConfigmap: (user, configmap) => {
     const promise = new Promise((resolve, reject) => {
+      const messages = [];
       makeK8sReq('putConfigmap', user, 'PUT', k8sBody.configmap(user, configmap)).then(
           (data) => {
-            console.log('success', data);
+            messages.push(msgFormat('putConfigMap', true, data));
             return makeK8sReq('getPods', user, 'GET');
           },
           (error) => {
-            console.log('error', error);
-            reject(error);
+            messages.push(msgFormat('putConfigMap', false, error));
+            reject(messages);
           }
         ).then(
           (data) => {
@@ -236,19 +239,21 @@ const k8s = {
             } else {
               reject(data);
             }
+            messages.push(msgFormat('getPodName', true, podName));
             return makeK8sReq('deletePod', podName, 'DELETE');
           },
           (error) => {
-            console.log(error);
-            reject(error);
+            messages.push(msgFormat('getPodName', false, error));
+            reject(messages);
           }
         ).then(
           (data) => {
-            resolve(data);
+            messages.push(msgFormat('deletePod', true, data));
+            resolve(messages);
           },
           (error) => {
-            console.log(error);
-            reject(error);
+            messages.push(msgFormat('deletePod', false, error));
+            reject(messages);
           }
         );
     });
@@ -256,45 +261,55 @@ const k8s = {
   },
   stop: (user) => {
     const promise = new Promise((resolve, reject) => {
+      const returnData = {
+        success: false,
+        message: []
+      };
       makeK8sReq('getConfigmap', user, 'DELETE').then(
         (data) => {
-          console.log(data);
+          returnData.message.push(msgFormat('deleteConfigMap', true, data));
           return makeK8sReq('getService', user, 'DELETE');
         },
         (error) => {
-          reject(error);
+          returnData.message.push(msgFormat('deleteConfigMap', false, error));
+          reject(returnData);
         })
       .then(
         (data) => {
-          console.log(data);
+          returnData.message.push(msgFormat('deleteService', true, data));
           return makeK8sReq('putScale', user, 'PUT', k8sBody.scale(user, 0));
         },
         (error) => {
-          reject(error);
+          returnData.message.push(msgFormat('deleteService', false, error));
+          reject(returnData);
         })
       .then(
         (data) => {
-          console.log(data);
+          returnData.message.push(msgFormat('putScale0', true, data));
           return makeK8sReq('getDepl', user, 'DELETE');
         },
         (error) => {
-          reject(error);
+          returnData.message.push(msgFormat('putScale0', false, error));
+          reject(returnData);
         })
       .then(
         (data) => {
-          console.log(data);
+          returnData.message.push(msgFormat('deleteDeployment', true, data));
           return makeK8sReq('getRs', user, 'DELETE');
         },
         (error) => {
-          reject(error);
+          returnData.message.push(msgFormat('deleteDeployment', false, error));
+          reject(returnData);
         })
       .then(
         (data) => {
-          console.log(data);
-          resolve(data);
+          returnData.message.push(msgFormat('deleteReplcaSet', true, data));
+          returnData.success = true;
+          resolve(returnData);
         },
         (error) => {
-          reject(error);
+          returnData.message.push(msgFormat('deleteReplcaSet', false, error));
+          reject(returnData);
         }
       );
     });
@@ -302,38 +317,35 @@ const k8s = {
   },
   start: (user, configmap) => {
     const promise = new Promise((resolve, reject) => {
+      const messages = [];
       makeK8sReq('postConfigmap', user, 'POST', k8sBody.configmap(user, configmap)).then(
           (data) => {
-            console.log('success', data);
+            messages.push(msgFormat('postConfigMap', true, data));
             return makeK8sReq('postDepl', user, 'POST', k8sBody.deployment(user));
           },
           (error) => {
-            console.log('error', error);
-            reject(error);
+            messages.push(msgFormat('postConfigMap', false, error));
+            reject(messages);
           }
         ).then(
           (data) => {
-            console.log('success', data);
+            messages.push(msgFormat('postDeployment', true, data));
             return makeK8sReq('postService', user, 'POST', k8sBody.service(user));
           },
           (error) => {
             // revert configmap
-            console.log('error', error);
-            reject(error);
+            messages.push(msgFormat('postDeployment', false, error));
+            reject(messages);
           }
         ).then(
           (data) => {
-            console.log('success', data);
-            const returnData = {
-              success: true,
-              message: 'started'
-            };
-            resolve(returnData);
+            messages.push(msgFormat('postService', true, data));
+            resolve(messages);
           },
           (error) => {
             // revert deployment
-            console.log('error', error);
-            reject(error);
+            messages.push(msgFormat('postService', false, error));
+            reject(messages);
           }
         );
     });
@@ -341,4 +353,4 @@ const k8s = {
   }
 };
 
-export default k8s ;
+export default {k8s, msgFormat} ;
