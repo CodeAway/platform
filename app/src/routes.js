@@ -24,7 +24,10 @@ const request = (url, options, res, cb) => {
   fetch(url, options).then(
     (response) => {
       if (response.ok) {
-        response.json().then(d => (cb(d, response)));
+        response.json().then(d => (cb(d, response))).catch(e => {
+          console.error(e);
+          console.log(e.stack);
+        });
         return;
       }
       console.error(url, response.status, response.statusText);
@@ -108,19 +111,17 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
       res.redirect(redirect);
 
       // Also insert a value in the database
-      console.log('inserting to the logger');
       const loggerOpts = {
         method: 'POST',
         headers,
         body: JSON.stringify({
           objects: [{
-            username: ghData.login,
+            username: authData.username,
             last_seen: (new Date()).toISOString()
           }]
         }),
       };
 
-      console.log('inserting to the logger2', loggerOpts);
       fetch(dbUrl + '/api/1/table/logger/insert', loggerOpts).then(
         (response) => {
           console.log(response.status);
@@ -133,10 +134,10 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
         }).catch(e => {
           console.error(e);
         });
-      console.log('inserting to the logger3');
     });
   };
 };
+
 
 const routes = (app) => {
   app.get('/hello', (req, res) => {
