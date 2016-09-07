@@ -129,6 +129,8 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
         },
         (error) => {
           console.error(error);
+        }).catch(e => {
+          console.error(e);
         });
     });
   };
