@@ -3,6 +3,7 @@ import {Router, Route, IndexRedirect} from 'react-router';
 
 // Load components
 import Login from './components/Login/Login';
+import Email from './components/Email/Email';
 import Layout from './components/Layout/Layout';
 import LayoutNoNav from './components/LayoutNoNav/Layout';
 import Home from './components/Home/Home';
@@ -32,6 +33,33 @@ const createRoutes = (store) => {
     }
   };
 
+  const requireUserEmail = (nextState, replaceState, cb) => {
+    const state = store.getState();
+    if (!state.user || !state.user.auth || !state.user.table) {
+      const dispatch = store.dispatch;
+      dispatch(loadUser()).then(
+        () => {
+          if (!store.getState().user.table.email) {
+            replaceState('/email');
+            cb();
+          } else {
+            cb();
+          }
+        },
+        () => {
+          replaceState('/login');
+          cb();
+        });
+    } else {
+      if (!state.user.table.email) {
+        replaceState('/email');
+        cb();
+      } else {
+        cb();
+      }
+    }
+  };
+
   const requireFiles = (nextState, replaceState, cb) => {
     const state = store.getState();
     if (!state.code || !state.code.gitTree || !state.code.files) {
@@ -54,12 +82,13 @@ const createRoutes = (store) => {
     return (
       <Router history={history}>
         <Route path="/login" component={Login} />
-        <Route path="/" component={Layout} onEnter={requireUser}>
+        <Route path="/email" component={Email} onEnter={requireUser} />
+        <Route path="/" component={Layout} onEnter={requireUserEmail}>
           <IndexRedirect to="home" />
           <Route path="home" component={Home} />
           <Route path="docs" component={Docs} />
         </Route>
-        <Route path="/" component={LayoutNoNav} onEnter={requireUser}>
+        <Route path="/" component={LayoutNoNav} onEnter={requireUserEmail}>
           <Route path="code" component={Code} onEnter={requireFiles}>
             <IndexRedirect to="home" />
             <Route path="logs" component={Logs} />

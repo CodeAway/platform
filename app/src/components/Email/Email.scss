@@ -1,0 +1,33 @@
+#content {
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 50px);
+    min-height: 200px;
+    width: 100%;
+    // background-image: url('./madi-mountain.png');
+}
+
+.centerBox {
+    display: block;
+    max-height: 300px;
+    min-width: 350px;
+    text-align: left;
+    img {
+        display: block;
+        height: 150px;
+    }
+    .icon {
+        margin-right: 10px;
+        padding-right: 10px;
+    }
+    :global(.btn) {
+        padding: 10px 18px;
+    }
+    :global(.alert) {
+        max-width: 100%;
+    }
+}

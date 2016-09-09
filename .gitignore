@@ -1,3 +1,4 @@
 npm-debug.log
 *.sw*
 .DS_STORE
+temp/
