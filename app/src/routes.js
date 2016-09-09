@@ -7,17 +7,20 @@ import Endpoints from './Endpoints';
 const jsonParser = bodyParser.json();
 
 let dbUrl;
+let selfUrl;
 const headers = {
   'Content-Type': 'application/json'
 };
 
 if (__DEVELOPMENT__) {
   dbUrl = 'http://data.imad-stg.hasura-app.io';
+  selfUrl = 'http://localhost:8000';
   headers.Authorization = 'Bearer ' + process.env.TOKEN;
 } else {
   dbUrl = 'http://data.default';
   headers['X-Hasura-User-Id'] = 1;
   headers['X-Hasura-Role'] = 'admin';
+  selfUrl = 'http://api.default';
 }
 
 const request = (url, options, res, cb) => {
@@ -139,7 +142,6 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
     });
   };
 };
-
 
 const routes = (app) => {
   app.get('/hello', (req, res) => {
@@ -378,4 +380,66 @@ const routes = (app) => {
   });
 };
 
+
+const simpleFetch = (url, opts, cb) => {
+  fetch(url, opts)
+    .then(
+      (response) => {
+        if (response.ok) {
+          response.text()
+            .then(t => {
+              const data = JSON.parse(t);
+              cb(data);
+            })
+            .catch(e => {
+              console.error(url, e);
+            });
+          return;
+        }
+        response.text().then(t => {
+          console.error(url, t);
+        });
+      },
+      (error) => {
+        console.error(url, error);
+      })
+    .catch(e => {
+      console.error(url, e);
+      console.log(e.stack);
+    });
+};
+
+const reap = () => {
+  // Fetch everything from the db
+  const fiveMinsAgo = (new Date()).toISOString();
+  const url = dbUrl + '/api/1/table/logger/select';
+  const opts = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      columns: ['*'],
+      where: {last_seen: {$lt: fiveMinsAgo}}
+    })
+  };
+
+  simpleFetch(url, opts, (apps) => {
+    console.log(apps);
+    apps.map((app, i) => { // eslint-disable-line array-callback-return
+      const selfOpts = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Hasura-User-Id': 1,
+          'X-Hasura-Role': 'admin'
+        }};
+      setTimeout(() => {
+        simpleFetch(selfUrl + '/stop?user=' + app.username, selfOpts, (result) => {
+          console.log(result);
+        });
+      }, (100 * i));
+    });
+  });
+};
+
 export default routes;
+export {reap};

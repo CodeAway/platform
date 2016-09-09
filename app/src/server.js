@@ -4,8 +4,9 @@ import PrettyError from 'pretty-error';
 import bodyParser from 'body-parser';
 import http from 'http';
 import morgan from 'morgan';
+// import schedule from 'node-schedule';
 import config from './config';
-import routes from './routes';
+import routes, {reap} from './routes';
 
 const pretty = new PrettyError();
 const app = new Express();
@@ -46,3 +47,5 @@ if (config.port) {
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');
 }
+
+schedule.scheduleJob('*/5 * * * *', reap);
