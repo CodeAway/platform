@@ -6,7 +6,8 @@ const globals = {
     userspace: process.env.K8S_USERSPACE
   },
   imad: {
-    simpleNodeAppImage: process.env.SIMPLE_NODE_WEB_APP || 'hasura/simple-node-web-app:latest'
+    simpleNodeAppImage: process.env.SIMPLE_NODE_WEB_APP || 'hasura/simple-node-web-app:latest',
+    namespace: process.env.NAMESPACE || 'default'
   }
 };
 
