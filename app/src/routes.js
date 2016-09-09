@@ -329,6 +329,9 @@ const routes = (app) => {
     res.send('received');
     const url = dbUrl + '/api/1/table/logger/update';
     const username = req.query.username;
+    if (!username) {
+      console.log('No username found. Updating log entries for all users!');
+    }
     const options = {
       method: 'POST',
       body: JSON.stringify({
@@ -435,6 +438,17 @@ const reap = () => {
       setTimeout(() => {
         simpleFetch(selfUrl + '/stop?user=' + app.username, selfOpts, (result) => {
           console.log(result);
+        });
+        const updateOpts = {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            $set: {last_seen: null},
+            where: {username: app.username}
+          })
+        };
+        simpleFetch(dbUrl + '/api/1/table/logger/update', updateOpts, (result) => {
+          console.log('Deleted entry for: ', app.username, JSON.stringify(result));
         });
       }, (100 * i));
     });
