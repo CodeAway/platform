@@ -6,3 +6,5 @@
 # Usage
 * For development environment, run the commands `npm run start-dev`.
 * For production environment, run the command `npm run start-prod`.
+
+Secret tokens in rundevserver.sh. Never anything in package.json!
