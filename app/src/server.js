@@ -4,7 +4,7 @@ import PrettyError from 'pretty-error';
 import bodyParser from 'body-parser';
 import http from 'http';
 import morgan from 'morgan';
-// import schedule from 'node-schedule';
+import schedule from 'node-schedule';
 import config from './config';
 import routes, {reap} from './routes';
 

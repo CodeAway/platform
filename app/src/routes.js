@@ -321,7 +321,7 @@ const routes = (app) => {
   });
 
   app.get('/gateway-req', (req, res) => {
-    if (req.query.token !== 'imad-gateway-password-very-secret') {
+    if (req.query.token !== process.env.IMAD_GATEWAY_PASSWORD) {
       res.status(403).send('invalid token');
       return;
     }
