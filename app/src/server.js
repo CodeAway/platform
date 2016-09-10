@@ -35,4 +35,4 @@ if (config.port) {
   console.error('==>     ERROR: No PORT environment variable has been specified');
 }
 
-schedule.scheduleJob('*/5 * * * *', reap);
+schedule.scheduleJob(process.env.REAP_INTERVAL, reap);

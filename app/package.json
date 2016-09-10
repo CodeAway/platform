@@ -43,7 +43,8 @@
         "PORT": 8000,
         "BASEDOMAIN": "imad-stg.hasura-app.io",
         "SCHEME": "http",
-        "REDIRECT_URI": "http://localhost:3000/home"
+        "REDIRECT_URI": "http://localhost:3000/home",
+        "REAP_INTERVAL": "*/1 * * * *"
       }
     }
   },
