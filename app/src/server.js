@@ -1,6 +1,5 @@
 import Express from 'express';
 import path from 'path';
-import PrettyError from 'pretty-error';
 import bodyParser from 'body-parser';
 import http from 'http';
 import morgan from 'morgan';
@@ -8,7 +7,6 @@ import schedule from 'node-schedule';
 import config from './config';
 import routes, {reap} from './routes';
 
-const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
 
@@ -22,18 +20,6 @@ if (global.__DEVELOPMENT__) {
 
 app.use('/static', Express.static(path.join(__dirname, '..', 'static')));
 app.use(bodyParser.json());
-
-app.use((req, res) => {
-  if (req.originalUrl === '/404') {
-    res.status(404).send('Not Found');
-    if (global.__DEVELOPMENT__) {
-      console.error(pretty.render(new Error('Ooh no! /404 asked.')));
-    }
-  } else {
-    res.status(200).send('Works');
-  }
-});
-
 routes(app);
 
 // Listen at the server
