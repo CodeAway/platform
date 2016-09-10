@@ -12,7 +12,6 @@ const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
 
-routes(app);
 
 // Express Logging Middleware
 if (global.__DEVELOPMENT__) {
@@ -34,6 +33,8 @@ app.use((req, res) => {
     res.status(200).send('Works');
   }
 });
+
+routes(app);
 
 // Listen at the server
 if (config.port) {
