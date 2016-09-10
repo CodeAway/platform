@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch';
+import moment from 'moment';
 import cookie from 'cookie';
 import bodyParser from 'body-parser';
 import {k8s, msgFormat} from './k8s';
@@ -414,8 +415,10 @@ const simpleFetch = (url, opts, cb) => {
 };
 
 const reap = () => {
-  // Fetch everything from the db
-  const fiveMinsAgo = (new Date()).toISOString();
+  // Fetch everything from the db that is more than x mins old
+  const fiveMinsAgo = moment().subtract(parseInt(process.env.REAP_INTERVAL, 10), 'minutes').toISOString();
+  console.log(moment().toISOString());
+  console.log(fiveMinsAgo);
   const url = dbUrl + '/api/1/table/logger/select';
   const opts = {
     method: 'POST',
