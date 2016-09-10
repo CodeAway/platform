@@ -3,6 +3,7 @@ import cookie from 'cookie';
 import bodyParser from 'body-parser';
 import {k8s, msgFormat} from './k8s';
 import Endpoints from './Endpoints';
+import Globals from './Globals';
 
 const jsonParser = bodyParser.json();
 
@@ -17,10 +18,10 @@ if (__DEVELOPMENT__) {
   selfUrl = 'http://localhost:8000';
   headers.Authorization = 'Bearer ' + process.env.TOKEN;
 } else {
-  dbUrl = 'http://data.default';
+  dbUrl = `http://data.${Globals.imad.namespace}`;
   headers['X-Hasura-User-Id'] = 1;
   headers['X-Hasura-Role'] = 'admin';
-  selfUrl = 'http://api.default';
+  selfUrl = `http://api.${Globals.imad.namespace}`;
 }
 
 const request = (url, options, res, cb) => {
