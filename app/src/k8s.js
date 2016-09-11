@@ -71,6 +71,101 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
   return promise;
 };
 
+const waitTillDesiredGeneration = (user, desiredGeneration, retries = 0) => (
+  // Make a get request, check if equal, if not, repeat
+  new Promise((resolve, reject) => {
+    console.log('waitTillDesiredGeneration: ' + user + ' retries: ' + retries.toString());
+    makeK8sReq('getDepl', user)
+      .then(
+        (current) => {
+          console.log('DesiredGeneration: ', desiredGeneration, ' CurrentGeneration: ', current.status.observedGeneration, ' Replicas: ', current.spec.replicas);
+          if (current.status.observedGeneration >= desiredGeneration) {
+            resolve(current);
+          } else {
+            setTimeout(() => {
+              waitTillDesiredGeneration(user, desiredGeneration, retries + 1)
+                .then(
+                  (finalDeployment) => {
+                    resolve(finalDeployment);
+                  },
+                  (error) => {
+                    console.error('waitTillDesiredGeneration: setTimeout: ', error);
+                    if (error.stack) { console.log(error.stack); }
+                    reject(error);
+                  })
+                .catch(error => {
+                  console.error('waitTillDesiredGeneration: setTimeout: ', error);
+                  console.log(error.stack);
+                  reject(error);
+                });
+            }, 100);
+          }
+        },
+        (error) => {
+          console.error('waitTillDesiredGeneration: ', error);
+          if (error.stack) { console.log(error.stack); }
+          reject(error);
+        })
+      .catch(error => {
+        console.error('waitTillDesiredGeneration: ', error);
+        console.log(error.stack);
+        reject(error);
+      });
+  })
+);
+
+const stopDeployment = (user) => (
+  new Promise((resolve, reject) => {
+    // Get the deployment
+    makeK8sReq('getDepl', user)
+      .then(
+        (_deployment) => {
+          const deployment = JSON.parse(JSON.stringify(_deployment));
+          deployment.spec.replicas = 0;
+          makeK8sReq('getDepl', user, 'PUT', deployment)
+            .then(
+              (setDeployment) => {
+                const desiredGeneration = setDeployment.status.observedGeneration + 1;
+                waitTillDesiredGeneration(user, desiredGeneration)
+                  .then(
+                    (finalDeployment) => {
+                      resolve(finalDeployment);
+                    },
+                    (error) => {
+                      console.error('stopDeployment > getDepl > putDepl > waitTillDesiredGeneration error', error);
+                      if (error.stack) { console.log(error.stack); }
+                      reject(error);
+                    })
+                  .catch(error => {
+                    console.error('stopDeployment > getDepl > putDepl > waitTillDesiredGeneration error', error);
+                    console.log(error.stack);
+                    reject(error);
+                  });
+              },
+              (error) => {
+                console.error('stopDeployment > getDepl > putDepl error', error);
+                if (error.stack) { console.log(error.stack); }
+                reject(error);
+              })
+            .catch(error => {
+              console.error('stopDeployment > getDepl > putDepl error', error);
+              console.log(error.stack);
+              reject(error);
+            });
+        },
+        (error) => {
+          console.error('stopDeployment > getDepl error', error);
+          if (error.stack) { console.log(error.stack); }
+          reject(error);
+        })
+      .catch(error => {
+        console.error('stopDeployment > getDepl error', error);
+        console.log(error.stack);
+        reject(error);
+      });
+  })
+);
+
 const k8sBody = {
   configmap: (user, data) => ({
     kind: 'ConfigMap',
@@ -277,7 +372,8 @@ const k8s = {
       .then(
         (data) => {
           returnData.message.push(msgFormat('deleteService', true, data));
-          return makeK8sReq('putScale', user, 'PUT', k8sBody.scale(user, 0));
+          // stop deployment
+          return stopDeployment(user);
         },
         (error) => {
           returnData.message.push(msgFormat('deleteService', false, error));
@@ -285,30 +381,30 @@ const k8s = {
         })
       .then(
         (data) => {
-          returnData.message.push(msgFormat('putScale0', true, data));
-          return makeK8sReq('getDepl', user, 'DELETE');
-        },
-        (error) => {
-          returnData.message.push(msgFormat('putScale0', false, error));
-          reject(returnData);
-        })
-      .then(
-        (data) => {
-          returnData.message.push(msgFormat('deleteDeployment', true, data));
+          returnData.message.push(msgFormat('stopDeployment', true, data));
           return makeK8sReq('getRs', user, 'DELETE');
         },
         (error) => {
-          returnData.message.push(msgFormat('deleteDeployment', false, error));
+          returnData.message.push(msgFormat('stopDeployment', false, error));
           reject(returnData);
         })
       .then(
         (data) => {
           returnData.message.push(msgFormat('deleteReplcaSet', true, data));
+          return makeK8sReq('getDepl', user, 'DELETE');
+        },
+        (error) => {
+          returnData.message.push(msgFormat('deleteReplcaSet', false, error));
+          reject(returnData);
+        })
+      .then(
+        (data) => {
+          returnData.message.push(msgFormat('deleteDeployment', true, data));
           returnData.success = true;
           resolve(returnData);
         },
         (error) => {
-          returnData.message.push(msgFormat('deleteReplcaSet', false, error));
+          returnData.message.push(msgFormat('deleteDeployment', false, error));
           reject(returnData);
         }
       );
