@@ -24,7 +24,7 @@ print(response.status_code)
 print(response.text)
 
 if response.status_code == 200:
-  for i in range(0,1):
+  for i in range(0,200):
     logger = {"objects": [{ "username": "bomb" + str(i)}]}
     response = requests.post('http://data.imad-stg.hasura-app.io/api/1/table/logger/insert', headers=headers, data=json.dumps(logger))
     print (response.status_code)
