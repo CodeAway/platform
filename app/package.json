@@ -38,7 +38,8 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
         "PORT": 8080,
-        "BASE_DOMAIN": "imad-stg.hasura-app.io"
+        "BASE_DOMAIN": "imad.hasura.io",
+        "SCHEME": "https"
       }
     },
     "start-dev": {
@@ -47,8 +48,8 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "PORT": 3000,
-        "BASE_DOMAIN": "imad-stg.hasura-app.io",
-        "SCHEME": "http"
+        "BASE_DOMAIN": "imad.hasura.io",
+        "SCHEME": "https"
       }
     },
     "watch-client": {

@@ -6,7 +6,8 @@ const domain = globals.projectDomain;
 const Endpoints = {
   authUrl: scheme + '//auth.' + domain,
   dataUrl: scheme + '//data.' + domain,
-  apiUrl: scheme + '//api.' + domain
+  apiUrl: scheme + '//api.' + domain,
+  ghRedirect: scheme + '//api.' + domain + '/github/authenticate'
 };
 const globalCookiePolicy = 'include';
 
