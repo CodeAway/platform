@@ -272,6 +272,34 @@ const routes = (app) => {
           return;
         }
       }
+      // If the server is started, the started time stamp should be mentioned in the logger table
+      // However, this started timestamp will be refreshed everytime restart is called
+      const selectOpts = {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          columns: ['*'],
+          where: {username: user}
+        })
+      };
+      simpleFetch(dbUrl + '/api/1/table/logger/select', selectOpts, (app) => {
+        if (app.length && app[0].last_seen) {
+          console.log('Not updating server timestamp for: ', JSON.stringify(app));
+        } else {
+          const updateOpts = {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+              $set: {last_seen: (new Date()).toISOString()},
+              where: {username: user}
+            })
+          };
+          simpleFetch(dbUrl + '/api/1/table/logger/update', updateOpts, (result) => {
+            console.log('Updated start-server entry for: ', user, JSON.stringify(result));
+          });
+        }
+      });
+
       k8s.getStatus(user).then(
           (data) => {
             returnData.message.push(msgFormat('getDeployment', true, data));
