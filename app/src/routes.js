@@ -55,6 +55,34 @@ const request = (url, options, res, cb) => {
     });
 };
 
+const simpleFetch = (url, opts, cb) => {
+  fetch(url, opts)
+    .then(
+      (response) => {
+        if (response.ok) {
+          response.text()
+            .then(t => {
+              const data = JSON.parse(t);
+              cb(data);
+            })
+            .catch(e => {
+              console.error(url, e);
+            });
+          return;
+        }
+        response.text().then(t => {
+          console.error(url, t);
+        });
+      },
+      (error) => {
+        console.error(url, error);
+      })
+    .catch(e => {
+      console.error(url, e);
+      console.log(e.stack);
+    });
+};
+
 const getUserInfo = (req) => ({
   id: parseInt(req.get('X-Hasura-User-Id'), 10),
   role: req.get('X-Hasura-Role')
@@ -282,9 +310,9 @@ const routes = (app) => {
           where: {username: user}
         })
       };
-      simpleFetch(dbUrl + '/api/1/table/logger/select', selectOpts, (app) => {
-        if (app.length && app[0].last_seen) {
-          console.log('Not updating server timestamp for: ', JSON.stringify(app));
+      simpleFetch(dbUrl + '/api/1/table/logger/select', selectOpts, (apps) => {
+        if (apps.length && apps[0].last_seen) {
+          console.log('Not updating server timestamp for: ', JSON.stringify(apps));
         } else {
           const updateOpts = {
             method: 'POST',
@@ -411,35 +439,6 @@ const routes = (app) => {
       );
     });
   });
-};
-
-
-const simpleFetch = (url, opts, cb) => {
-  fetch(url, opts)
-    .then(
-      (response) => {
-        if (response.ok) {
-          response.text()
-            .then(t => {
-              const data = JSON.parse(t);
-              cb(data);
-            })
-            .catch(e => {
-              console.error(url, e);
-            });
-          return;
-        }
-        response.text().then(t => {
-          console.error(url, t);
-        });
-      },
-      (error) => {
-        console.error(url, error);
-      })
-    .catch(e => {
-      console.error(url, e);
-      console.log(e.stack);
-    });
 };
 
 const reap = () => {

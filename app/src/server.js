@@ -10,7 +10,6 @@ import routes, {reap} from './routes';
 const app = new Express();
 const server = new http.Server(app);
 
-
 // Express Logging Middleware
 if (global.__DEVELOPMENT__) {
   app.use(morgan('combined'));
