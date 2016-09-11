@@ -7,7 +7,7 @@
 * For development environment, run the commands `npm run start-dev`.
 * For production environment, run the command `npm run start-prod`.
 * For local development, configure package.json and rundevserver.sh
-* For prod development, set env vars in deployment
+* For prod development, set env vars in deployment (preferably using kubectl edit, UI can be scary)
 
 Secret tokens in rundevserver.sh. Never anything in package.json!
 
