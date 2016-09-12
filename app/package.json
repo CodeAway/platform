@@ -30,8 +30,9 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
-        "BASEDOMAIN": "imad-stg.hasura-app.io",
-        "REDIRECT_URI": "http://ui.imad-stg.hasura-app.io/home",
+        "BASE_DOMAIN": "imad.hasura.io",
+        "REDIRECT_URI": "https://cloud.imad.hasura.io/home",
+        "NAMESPACE": "imad",
         "PORT": 8080
       }
     },
@@ -41,9 +42,9 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "PORT": 8000,
-        "BASEDOMAIN": "imad-stg.hasura-app.io",
-        "SCHEME": "http",
-        "REDIRECT_URI": "http://localhost:3000/home",
+        "BASE_DOMAIN": "imad-stg.hasura-app.io",
+        "REDIRECT_URI": "http://ui.imad-stg.hasura-app.io",
+        "NAMESPACE": "imad",
         "REAP_INTERVAL": "5",
         "REAP_CRON": "*/5 * * * *"
       }

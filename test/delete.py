@@ -2,11 +2,12 @@
 import requests
 import time
 import json
+import os, sys
 
 print (os.getenv('TOKEN'))
 if not (os.getenv('TOKEN') and os.getenv('TOKEN').strip() != ''):
   print('Needs env var called TOKEN with hasura admin token')
-  exit(1)
+  sys.exit(1)
 
 headers = {
   'Authorization': 'Bearer ' + os.getenv('TOKEN'),

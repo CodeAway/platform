@@ -8,21 +8,25 @@ import Globals from './Globals';
 
 const jsonParser = bodyParser.json();
 
-let dbUrl;
-let selfUrl;
+let scheme = process.env.SCHEME ? process.env.SCHEME.trim() : '';
+scheme = (scheme === '') ? '' : (scheme + ':');
+
+let dbUrl = `http://data.${Globals.imad.namespace}`;
+let authUrl = `http://auth.${Globals.imad.namespace}`;
+let selfUrl = `http://api.${Globals.imad.namespace}`;
+
 const headers = {
   'Content-Type': 'application/json'
 };
 
 if (__DEVELOPMENT__) {
-  dbUrl = 'http://data.imad-stg.hasura-app.io';
   selfUrl = 'http://localhost:8000';
+  authUrl = scheme + '//auth.' + process.env.BASE_DOMAIN;
+  dbUrl = scheme + '//data.' + process.env.BASE_DOMAIN;
   headers.Authorization = 'Bearer ' + process.env.TOKEN;
 } else {
-  dbUrl = `http://data.${Globals.imad.namespace}`;
   headers['X-Hasura-User-Id'] = 1;
   headers['X-Hasura-Role'] = 'admin';
-  selfUrl = `http://api.${Globals.imad.namespace}`;
 }
 
 const request = (url, options, res, cb) => {
@@ -263,7 +267,7 @@ const routes = (app) => {
       }
     };
 
-    request(Endpoints.auth + '/github/authenticate?code=' + code, options, res, (authData, resObj) => {
+    request(authUrl + '/github/authenticate?code=' + code, options, res, (authData, resObj) => {
       // In case of success extract the API token and redirect to UI
       // Extract the Set-Cookie header and send it to the browser
       // Save this in the database
