@@ -2,6 +2,7 @@
 import requests
 import time
 import json
+import os
 
 print (os.getenv('TOKEN'))
 if not (os.getenv('TOKEN') and os.getenv('TOKEN').strip() != ''):
