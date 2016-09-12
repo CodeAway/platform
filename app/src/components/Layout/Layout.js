@@ -14,11 +14,11 @@ const Layout = ({logoutRequest, loading, dispatch, children}) => {
             Home
           </Link>
         </div>
-        <div className={styles.headerItem}>
+        {/* <div className={styles.headerItem}>
           <Link to="/code">
             Code
           </Link>
-        </div>
+        </div> */}
         <div className={styles.headerItem}>
           <Link to="/docs">
             Help & Docs
