@@ -449,15 +449,19 @@ const k8s = {
   },
   getDeployment: (user) => {
     const promise = new Promise((resolve, reject) => {
-      const messages = [];
+      const returnData = {
+        success: false,
+        message: []
+      };
       makeK8sReq('getDepl', user).then(
         (data) => {
-          messages.push(msgFormat('getDeployment', true, data));
-          resolve(messages);
+          returnData.success = true;
+          returnData.message.push(msgFormat('getDeployment', true, data));
+          resolve(returnData);
         },
         (error) => {
-          messages.push(msgFormat('getDeployment', false, error));
-          reject(messages);
+          returnData.message.push(msgFormat('getDeployment', false, error));
+          reject(returnData);
         }
       );
     });
