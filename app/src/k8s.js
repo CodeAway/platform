@@ -446,6 +446,26 @@ const k8s = {
         );
     });
     return promise;
+  },
+  getDeployment: (user) => {
+    const promise = new Promise((resolve, reject) => {
+      const returnData = {
+        success: false,
+        message: []
+      };
+      makeK8sReq('getDepl', user).then(
+        (data) => {
+          returnData.success = true;
+          returnData.message.push(msgFormat('getDeployment', true, data));
+          resolve(returnData);
+        },
+        (error) => {
+          returnData.message.push(msgFormat('getDeployment', false, error));
+          reject(returnData);
+        }
+      );
+    });
+    return promise;
   }
 };
 

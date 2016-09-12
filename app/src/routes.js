@@ -443,6 +443,31 @@ const routes = (app) => {
       );
     });
   });
+  app.get('/status', (req, res) => {
+    getUserDetails(req, res, (username, hasuraId) => {
+      const returnData = {
+        success: false,
+        message: []
+      };
+      let user = username;
+      if (hasuraId === 1) {
+        user = req.query.user;
+        if (!user) {
+          returnData.message.push(msgFormat('getUserParam', false, 'query param user not found'));
+          res.status(400).send(returnData);
+          return;
+        }
+      }
+      k8s.getDeployment(user).then(
+        (data) => {
+          res.send(data);
+        },
+        (error) => {
+          res.status(500).send(error);
+        }
+      );
+    });
+  });
 };
 
 const reap = () => {
