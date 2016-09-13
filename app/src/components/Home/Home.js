@@ -88,7 +88,7 @@ const Home = ({dispatch, project, user}) => {
           <tbody>
             <tr>
               <td>username@hostname</td>
-              <td>{user.table.username}@imad-dev-ssh.hasura-app.io</td>
+              <td>{user.table.username}@ssh.imad.hasura-app.io</td>
             </tr>
             <tr>
               <td>password</td>
@@ -117,7 +117,10 @@ const Home = ({dispatch, project, user}) => {
 
   const sshGoTo = (
     <span>
-      Go to your <a target="_blank" href="chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html">terminal</a>. (Install
+      Go to your <a target="_blank"
+        href={`chrome-extension://pnhechapfaindjhompbnflcldabbghjo/html/nassh.html#${user.table.username}@ssh.imad.hasura-app.io`}>
+          terminal
+        </a>. (Install
         the <a href="https://chrome.google.com/webstore/detail/secure-shell/pnhechapfaindjhompbnflcldabbghjo?hl=en">chrome plugin</a> first!)
     </span>);
   return (
