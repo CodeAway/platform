@@ -88,7 +88,7 @@ const registerEmail = (email) => {
       ...defaultOptions,
       method: 'POST',
       body: JSON.stringify({
-        $set: {email},
+        $set: {email: email.toLowerCase()},
         where: {hasura_id: getState().user.table.hasura_id}
       })
     };

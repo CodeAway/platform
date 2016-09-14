@@ -9,6 +9,7 @@ const SET_FILE = 'Code/SET_FILE';
 const INITIALISED = 'Code/INITIALISED';
 const SET_CODELOADING = 'Code/LOADING';
 const EDIT_FILE = 'Code/EDIT_FILE';
+const SET_INVALID_FILES = 'Code/SET_INVALID_FILES';
 
 const isValid = (path) => {
   if (path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.html')) {
@@ -40,9 +41,14 @@ const loadRepo = () => {
 
           // const baseFiles = ['server.js', 'ui/index.html', 'ui/style.css', 'ui/main.js'];
           const blobs = {};
+          const invalidFiles = [];
           treeData.tree.map(f => {
-            if (f.type === 'blob' && isValid(f.path)) {
-              blobs[f.path] = f.url;
+            if (f.type === 'blob') {
+              if (isValid(f.path)) {
+                blobs[f.path] = f.url;
+              } else {
+                invalidFiles.push(f.path);
+              }
             }
           });
 
@@ -60,6 +66,9 @@ const loadRepo = () => {
             reject();
             return;
           }
+
+          // Set all the invalid non-editable files
+          dispatch({type: SET_INVALID_FILES, data: invalidFiles});
 
           // Fetch all the files
           Promise.all(allFiles.map(f => {
@@ -196,6 +205,10 @@ const codeReducer = (state = defaultState, action) => {
         files: {...files, [action.data.name]: action.data.content},
         shas: {...shas, [action.data.name]: action.data.sha},
       };
+
+    case SET_INVALID_FILES:
+      return {...state, invalidFiles: action.data};
+
     case INITIALISED:
       const editFiles = {};
       Object.keys(state.files).map(f => {

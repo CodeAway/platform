@@ -14,16 +14,11 @@ const Layout = ({logoutRequest, loading, dispatch, children}) => {
             Home
           </Link>
         </div>
-        {/* <div className={styles.headerItem}>
+        <div className={styles.headerItem}>
           <Link to="/code">
             Code
           </Link>
         </div>
-        <div className={styles.headerItem}>
-          <Link to="/docs">
-            Help & Docs
-          </Link>
-        </div> */}
         <div className={styles.headerItem}>
           <a target="_blank" href="https://discourse.imad.hasura.io">Forum &nbsp;<i className="fa fa-comments-o" aria-hidden="true"></i></a>
         </div>

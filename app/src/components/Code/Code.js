@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import {startApp, commitFiles} from './Actions';
 import Loading from '../Loading/Loading';
 
-const Code = ({files, children, dispatch, editFiles, user, loading}) => {
+const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading}) => {
   const styles = require('./Code.scss');
   const appPrefix = '';
   const fileList = [];
@@ -18,6 +18,16 @@ const Code = ({files, children, dispatch, editFiles, user, loading}) => {
     });
   } else {
     fileList.push((<li key={0} className={styles.file}> <i>Loading...</i></li>));
+  }
+
+  let invalidFileList;
+  if (invalidFiles && invalidFiles.length) {
+    invalidFileList = invalidFiles.map(f => {
+      return (
+        <li className={styles.file}>
+          {f}
+        </li>);
+    });
   }
   const anyDirty = fileNames.some(f => (editFiles[f].dirty));
   return (
@@ -53,6 +63,14 @@ const Code = ({files, children, dispatch, editFiles, user, loading}) => {
             </li>
           </ul>
           <hr/>
+          <ul>
+            <li>
+              Other files (edit/upload on <a href={user.table.github_project.html_url} target="_blank">github <i className="fa fa-external-link"></i></a>)
+              <ul>
+                {invalidFileList}
+              </ul>
+            </li>
+          </ul>
         </div>
         <div className={styles.main}>
           {children}

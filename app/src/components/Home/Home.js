@@ -139,8 +139,8 @@ const Home = ({dispatch, project, user}) => {
                 {projectStatus}
                 {user.table.github_project ?
                   (<span>Go to your <Link to="/code">code console</Link>.</span>) :
-                  (<button disabled="disabled" className="btn btn-success" onClick={() => {
-                    // dispatch(createProject());
+                  (<button className="btn btn-success" onClick={() => {
+                    dispatch(createProject());
                   }}>
                     Create project
                   </button>)}
