@@ -100,9 +100,10 @@ const loadRepo = () => {
 
 const commitFiles = () => {
   return (dispatch, getState) => {
+    dispatch({type: SET_CODELOADING, loading: true});
+
     // Get a list of all the dirty files
     // Save them one by one. For every file that is saved, dispatch SET_FILE, EDIT_FILE
-
     // Get list of dirty files
     const state = getState().code;
     const user = getState().user;
@@ -115,15 +116,21 @@ const commitFiles = () => {
     });
 
     // Promise then functions per file
+    let totalDone = 0;
     const success = (f, resolve) => {
       return (data) => {
         dispatch({type: SET_FILE, data: {name: f, content: newFiles[f], sha: data.content.sha}});
         dispatch({type: EDIT_FILE, data: {fileName: f, content: newFiles[f]}});
         resolve();
+        totalDone += 1;
+        if (totalDone === Object.keys(newFiles).length) {
+          dispatch({type: SET_CODELOADING, loading: false});
+        }
       };
     };
     const abort = (f, reject) => {
       return () => {
+        dispatch({type: SET_CODELOADING, loading: false});
         alert('Commit failed for: ' + f + '. Please try again or contact support if this persists.');
         reject();
       };

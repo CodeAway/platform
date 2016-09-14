@@ -53,13 +53,7 @@ const Home = ({user}) => {
             </p>
             <hr/>
           </div>
-          <hr/>
-          <h3>How this console works</h3>
-          <div className="container">
-            <p>
-              Infographic thingy
-            </p>
-          </div>
+          <br/>
         </div>
       </div>
     </div>
