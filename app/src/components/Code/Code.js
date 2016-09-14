@@ -24,7 +24,7 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
   if (invalidFiles && invalidFiles.length) {
     invalidFileList = invalidFiles.map(f => {
       return (
-        <li className={styles.file}>
+        <li>
           {f}
         </li>);
     });
