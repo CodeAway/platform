@@ -216,7 +216,7 @@ const k8sBody = {
       replicas
     }
   }),
-  deployment: (user) => ({
+  deployment: (user, gitUrl, gitRevision) => ({
     kind: 'Deployment',
     spec: {
       template: {
@@ -227,7 +227,7 @@ const k8sBody = {
               volumeMounts: [
                 {
                   mountPath: '/app',
-                  name: 'file-volume'
+                  name: 'git-volume'
                 }
               ],
               name: user,
@@ -246,10 +246,11 @@ const k8sBody = {
           ],
           volumes: [
             {
-              configMap: {
-                name: user
+              gitRepo: {
+                repository: gitUrl,
+                revision: gitRevision
               },
-              name: 'file-volume'
+              name: 'git-volume'
             }
           ]
         },
@@ -314,43 +315,22 @@ const k8s = {
     });
     return promise;
   },
-  updateConfigmap: (user, configmap) => {
+  updateDeployment: (oldDeployment, gitRevision) => {
     const promise = new Promise((resolve, reject) => {
       const messages = [];
-      makeK8sReq('putConfigmap', user, 'PUT', k8sBody.configmap(user, configmap)).then(
+      const newDeployment = JSON.parse(JSON.stringify(oldDeployment));
+      newDeployment.spec.volumes[0].gitRepo.revision = gitRevision;
+      // The user info is the name of the deployment
+      makeK8sReq('getDeployment', oldDeployment.metadata.name, 'PUT', newDeployment)
+        .then(
           (data) => {
-            messages.push(msgFormat('putConfigMap', true, data));
-            return makeK8sReq('getPods', user, 'GET');
+            messages.push(msgFormat('putDeployment', true, data));
+            resolve();
           },
           (error) => {
-            messages.push(msgFormat('putConfigMap', false, error));
+            messages.push(msgFormat('putDeployment', false, error));
             reject(messages);
-          }
-        ).then(
-          (data) => {
-            let podName = '';
-            if (data.items.length > 0) {
-              podName = data.items[0].metadata.name;
-            } else {
-              reject(data);
-            }
-            messages.push(msgFormat('getPodName', true, podName));
-            return makeK8sReq('deletePod', podName, 'DELETE');
-          },
-          (error) => {
-            messages.push(msgFormat('getPodName', false, error));
-            reject(messages);
-          }
-        ).then(
-          (data) => {
-            messages.push(msgFormat('deletePod', true, data));
-            resolve(messages);
-          },
-          (error) => {
-            messages.push(msgFormat('deletePod', false, error));
-            reject(messages);
-          }
-        );
+          });
     });
     return promise;
   },
@@ -360,70 +340,54 @@ const k8s = {
         success: false,
         message: []
       };
-      makeK8sReq('getConfigmap', user, 'DELETE').then(
-        (data) => {
-          returnData.message.push(msgFormat('deleteConfigMap', true, data));
-          return makeK8sReq('getService', user, 'DELETE');
-        },
-        (error) => {
-          returnData.message.push(msgFormat('deleteConfigMap', false, error));
-          reject(returnData);
-        })
-      .then(
-        (data) => {
-          returnData.message.push(msgFormat('deleteService', true, data));
-          // stop deployment
-          return stopDeployment(user);
-        },
-        (error) => {
-          returnData.message.push(msgFormat('deleteService', false, error));
-          reject(returnData);
-        })
-      .then(
-        (data) => {
-          returnData.message.push(msgFormat('stopDeployment', true, data));
-          return makeK8sReq('getRs', user, 'DELETE');
-        },
-        (error) => {
-          returnData.message.push(msgFormat('stopDeployment', false, error));
-          reject(returnData);
-        })
-      .then(
-        (data) => {
-          returnData.message.push(msgFormat('deleteReplcaSet', true, data));
-          return makeK8sReq('getDepl', user, 'DELETE');
-        },
-        (error) => {
-          returnData.message.push(msgFormat('deleteReplcaSet', false, error));
-          reject(returnData);
-        })
-      .then(
-        (data) => {
-          returnData.message.push(msgFormat('deleteDeployment', true, data));
-          returnData.success = true;
-          resolve(returnData);
-        },
-        (error) => {
-          returnData.message.push(msgFormat('deleteDeployment', false, error));
-          reject(returnData);
-        }
-      );
+      makeK8sReq('getService', user, 'DELETE')
+        .then(
+          (data) => {
+            returnData.message.push(msgFormat('deleteService', true, data));
+            // stop deployment
+            return stopDeployment(user);
+          },
+          (error) => {
+            returnData.message.push(msgFormat('deleteService', false, error));
+            reject(returnData);
+          })
+        .then(
+          (data) => {
+            returnData.message.push(msgFormat('stopDeployment', true, data));
+            return makeK8sReq('getRs', user, 'DELETE');
+          },
+          (error) => {
+            returnData.message.push(msgFormat('stopDeployment', false, error));
+            reject(returnData);
+          })
+        .then(
+          (data) => {
+            returnData.message.push(msgFormat('deleteReplcaSet', true, data));
+            return makeK8sReq('getDepl', user, 'DELETE');
+          },
+          (error) => {
+            returnData.message.push(msgFormat('deleteReplcaSet', false, error));
+            reject(returnData);
+          })
+        .then(
+          (data) => {
+            returnData.message.push(msgFormat('deleteDeployment', true, data));
+            returnData.success = true;
+            resolve(returnData);
+          },
+          (error) => {
+            returnData.message.push(msgFormat('deleteDeployment', false, error));
+            reject(returnData);
+          }
+        );
     });
     return promise;
   },
-  start: (user, configmap) => {
+  start: (user, gitUrl, gitRevision) => {
     const promise = new Promise((resolve, reject) => {
       const messages = [];
-      makeK8sReq('postConfigmap', user, 'POST', k8sBody.configmap(user, configmap)).then(
-          (data) => {
-            messages.push(msgFormat('postConfigMap', true, data));
-            return makeK8sReq('postDepl', user, 'POST', k8sBody.deployment(user));
-          },
-          (error) => {
-            messages.push(msgFormat('postConfigMap', false, error));
-            reject(messages);
-          }
-        ).then(
+      makeK8sReq('postDepl', user, 'POST', k8sBody.deployment(user, gitUrl, gitRevision))
+        .then(
           (data) => {
             messages.push(msgFormat('postDeployment', true, data));
             return makeK8sReq('postService', user, 'POST', k8sBody.service(user));
@@ -432,8 +396,8 @@ const k8s = {
             // revert configmap
             messages.push(msgFormat('postDeployment', false, error));
             reject(messages);
-          }
-        ).then(
+          })
+        .then(
           (data) => {
             messages.push(msgFormat('postService', true, data));
             resolve(messages);
