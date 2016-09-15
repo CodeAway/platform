@@ -139,7 +139,7 @@ const Home = ({dispatch, project, user}) => {
                 {projectStatus}
                 {user.table.github_project ?
                   (<span>Go to your <Link to="/code">code console</Link>.</span>) :
-                  (<button className="btn btn-success" onClick={() => {
+                  (<button disabled="disabled" className="btn btn-success" onClick={() => {
                     dispatch(createProject());
                   }}>
                     Create project
