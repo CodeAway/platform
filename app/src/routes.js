@@ -193,7 +193,7 @@ const routes = (app) => {
 
       console.log('Creating for', username);
       const password = 'db-' + username + '-' + Math.ceil(Math.random() * 100000);
-      const url = Endpoints.ubuntu + '/create-database';
+      const url = Endpoints.dbUbuntu + '/create-database';
       const opts = {
         method: 'POST',
         headers: {
@@ -230,7 +230,7 @@ const routes = (app) => {
       }
 
       const password = 'ssh-' + username + '-' + Math.ceil(Math.random() * 100000);
-      const url = Endpoints.ubuntu + '/create-ssh-user';
+      const url = Endpoints.sshUbuntu + '/create-ssh-user';
       const opts = {
         method: 'POST',
         headers: {
