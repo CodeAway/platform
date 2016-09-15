@@ -289,7 +289,8 @@ const routes = (app) => {
   });
 
   app.post('/restart', jsonParser, (req, res) => {
-    const configmapData = req.body;
+    const gitUrl = req.body.gitUrl;
+    const gitRevision = req.body.gitRevision;
     const returnData = {
       success: false,
       message: []
@@ -335,13 +336,13 @@ const routes = (app) => {
       k8s.getStatus(user).then(
           (data) => {
             returnData.message.push(msgFormat('getDeployment', true, data));
-            // if running, updateconfigmap
-            return k8s.updateConfigmap(user, configmapData);
+            // if running, patch deployment with new revision
+            return k8s.updateDeployment(data, gitRevision);
           },
           (error) => {
             returnData.message.push(msgFormat('getDeployment', false, error));
             // if not running, start
-            return k8s.start(user, configmapData);
+            return k8s.start(user, gitUrl, gitRevision);
           }).then(
             (data) => {
               returnData.success = true;
