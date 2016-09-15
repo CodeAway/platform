@@ -333,7 +333,8 @@ const routes = (app) => {
         }
       });
 
-      k8s.getStatus(user).then(
+      k8s.getStatus(user)
+        .then(
           (data) => {
             returnData.message.push(msgFormat('getDeployment', true, data));
             // if running, patch deployment with new revision
@@ -343,17 +344,23 @@ const routes = (app) => {
             returnData.message.push(msgFormat('getDeployment', false, error));
             // if not running, start
             return k8s.start(user, gitUrl, gitRevision);
-          }).then(
-            (data) => {
-              returnData.success = true;
-              returnData.message.push(...data);
-              res.send(returnData);
-            },
-            (error) => {
-              returnData.message.push.apply(...error);
-              res.status(500).send(returnData);
-            }
-          );
+          })
+        .then(
+          (data) => {
+            returnData.success = true;
+            returnData.message.push(...data);
+            res.send(returnData);
+          },
+          (error) => {
+            console.log(error);
+            returnData.message.push.apply(...error);
+            res.status(500).send(returnData);
+          })
+        .catch(e => {
+          console.log(e);
+          console.log(e.stack);
+          res.status(500).send('Internal error. Exception thrown');
+        });
     });
   });
 
@@ -444,6 +451,7 @@ const routes = (app) => {
       );
     });
   });
+
   app.get('/status', (req, res) => {
     getUserDetails(req, res, (username, hasuraId) => {
       const returnData = {

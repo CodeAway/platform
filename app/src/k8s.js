@@ -61,6 +61,11 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
             }
             return;
           }
+          console.log('makeK8srequest returned non 200');
+          response.text().then(t => {
+            console.log(response.status);
+            console.log(t);
+          });
           reject(`${resourceToUrl[resource]} :: ${user} :: ${response.status.toString()} : ${response.statusText}`);
         },
         (error) => {
@@ -319,9 +324,10 @@ const k8s = {
     const promise = new Promise((resolve, reject) => {
       const messages = [];
       const newDeployment = JSON.parse(JSON.stringify(oldDeployment));
-      newDeployment.spec.volumes[0].gitRepo.revision = gitRevision;
+      console.log(newDeployment.spec.template.spec);
+      newDeployment.spec.template.spec.volumes[0].gitRepo.revision = gitRevision;
       // The user info is the name of the deployment
-      makeK8sReq('getDeployment', oldDeployment.metadata.name, 'PUT', newDeployment)
+      makeK8sReq('getDepl', oldDeployment.metadata.name, 'PUT', newDeployment)
         .then(
           (data) => {
             messages.push(msgFormat('putDeployment', true, data));
@@ -386,6 +392,7 @@ const k8s = {
   start: (user, gitUrl, gitRevision) => {
     const promise = new Promise((resolve, reject) => {
       const messages = [];
+      console.log(k8sBody.deployment(user, gitUrl, gitRevision));
       makeK8sReq('postDepl', user, 'POST', k8sBody.deployment(user, gitUrl, gitRevision))
         .then(
           (data) => {
