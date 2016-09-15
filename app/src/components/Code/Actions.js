@@ -220,7 +220,7 @@ const codeReducer = (state = defaultState, action) => {
       return {...state, latestCommit: action.data};
 
     case SET_TREE:
-      return {...state, gitTree: action.data};
+      return {...state, gitTree: action.data, latestCommit: action.data.sha};
     case SET_FILE:
       const files = state.files ? state.files : {};
       const shas = state.shas ? state.shas : {};
