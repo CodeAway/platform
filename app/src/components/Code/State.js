@@ -4,7 +4,8 @@ const defaultState = {
   invalidFiles: null,
   editFiles: null,
   status: 'loading',
-  loading: false
+  loading: false,
+  latestCommit: null
 };
 
 export default defaultState;

@@ -18,7 +18,6 @@ const Files = ({editFiles, fileName, dispatch}) => {
 
   const _ext = fileName.split('.');
   const extension = _ext[_ext.length - 1];
-  console.log(ftMap[extension]);
 
   const content = editFiles[decodeURIComponent(fileName)].content;
   return (

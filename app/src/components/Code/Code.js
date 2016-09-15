@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import Helmet from 'react-helmet';
-import {startApp, commitFiles} from './Actions';
+import {commitFilesAndRestart} from './Actions';
 import Loading from '../Loading/Loading';
 
 const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading}) => {
@@ -47,11 +47,8 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
           <hr/>
           <ul>
             <li><button className="btn btn-primary" role="button" onClick={() => {
-              dispatch(startApp());
-            }}>Apply changes & Restart</button></li>
-            <li><button className="btn btn-primary" role="button" disabled={anyDirty ? null : 'disabled'} onClick={() => {
-              dispatch(commitFiles());
-            }}>Commit to github</button></li>
+              dispatch(commitFilesAndRestart());
+            }}>{anyDirty ? 'Commit & restart' : 'Restart'}</button></li>
           </ul>
           <hr/>
           <ul>

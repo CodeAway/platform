@@ -10,6 +10,7 @@ const INITIALISED = 'Code/INITIALISED';
 const SET_CODELOADING = 'Code/LOADING';
 const EDIT_FILE = 'Code/EDIT_FILE';
 const SET_INVALID_FILES = 'Code/SET_INVALID_FILES';
+const SET_LATEST_COMMIT = 'Code/SET_LATEST_COMMIT';
 
 const isValid = (path) => {
   if (path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.html')) {
@@ -98,7 +99,38 @@ const loadRepo = () => {
   };
 };
 
-const commitFiles = () => {
+const startApp = () => {
+  return (dispatch, getState) => {
+    dispatch({type: SET_CODELOADING, loading: true});
+    // Create the configmap & make an API request
+    const state = getState().code;
+    // const user = getState().user;
+
+    const url = Endpoints.apiUrl + '/restart'; // + user.table.username;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({
+        gitRevision: state.latestCommit,
+        gitUrl: getState().user.table.github_project.clone_url
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: globalCookiePolicy
+    };
+
+    return dispatch(requestAction(url, options)).then(
+      () => {
+        setTimeout(() => { dispatch({type: SET_CODELOADING, loading: false}); }, 1000);
+      },
+      (error) => {
+        console.error(error);
+        dispatch({type: SET_CODELOADING, loading: false});
+      });
+  };
+};
+
+const commitFilesAndRestart = () => {
   return (dispatch, getState) => {
     dispatch({type: SET_CODELOADING, loading: true});
 
@@ -119,6 +151,8 @@ const commitFiles = () => {
     let totalDone = 0;
     const success = (f, resolve) => {
       return (data) => {
+        // Also set the latest commit
+        dispatch({type: SET_LATEST_COMMIT, data: data.commit.sha});
         dispatch({type: SET_FILE, data: {name: f, content: newFiles[f], sha: data.content.sha}});
         dispatch({type: EDIT_FILE, data: {fileName: f, content: newFiles[f]}});
         resolve();
@@ -153,49 +187,28 @@ const commitFiles = () => {
       credentials: 'omit'
     });
 
-    // Finally, the promise
-    return Promise.all(Object.keys(newFiles).map((f, i) => {
+    if (Object.keys(newFiles).length === 0) {
+      dispatch(startApp());
+      return;
+    }
+
+    // If new files are present then create a promise (haha) to commit all files
+    return Promise.all(Object.keys(newFiles).map((f, i) => {  // eslint-disable-line consistent-return
       return new Promise((resolve, reject) => {
         setTimeout(
           () => {
             dispatch(requestAction(updateUrl(f), options(f))).then(success(f, resolve), abort(f, reject));
           }, i * 500);
       });
-    }));
-  };
-};
-
-const startApp = () => {
-  return (dispatch, getState) => {
-    dispatch({type: SET_CODELOADING, loading: true});
-    // Create the configmap & make an API request
-    const state = getState().code;
-    // const user = getState().user;
-
-    const configmap = {};
-    const files = Object.keys(state.editFiles);
-    files.map(f => {
-      configmap[f] = state.editFiles[f].content;
-    });
-
-    const url = Endpoints.apiUrl + '/restart'; // + user.table.username;
-    const options = {
-      method: 'POST',
-      body: JSON.stringify(configmap),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      credentials: globalCookiePolicy
-    };
-
-    return dispatch(requestAction(url, options)).then(
+    })).then(
       () => {
-        setTimeout(() => { dispatch({type: SET_CODELOADING, loading: false}); }, 1000);
+        dispatch(startApp());
       },
       (error) => {
         console.error(error);
-        dispatch({type: SET_CODELOADING, loading: false});
-      });
+        alert('Failed to commit files. Please try to commit again, or refresh this page to fetch the latest committed files and abandon changes');
+      }
+    );
   };
 };
 
@@ -203,6 +216,9 @@ const startApp = () => {
 
 const codeReducer = (state = defaultState, action) => {
   switch (action.type) {
+    case SET_LATEST_COMMIT:
+      return {...state, latestCommit: action.data};
+
     case SET_TREE:
       return {...state, gitTree: action.data};
     case SET_FILE:
@@ -240,4 +256,4 @@ const codeReducer = (state = defaultState, action) => {
 };
 
 export default codeReducer;
-export {loadRepo, EDIT_FILE, commitFiles, startApp};
+export {loadRepo, EDIT_FILE, commitFilesAndRestart};
