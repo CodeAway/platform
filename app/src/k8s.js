@@ -325,7 +325,7 @@ const k8s = {
         .then(
           (data) => {
             messages.push(msgFormat('putDeployment', true, data));
-            resolve();
+            resolve(messages);
           },
           (error) => {
             messages.push(msgFormat('putDeployment', false, error));
