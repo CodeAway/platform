@@ -130,7 +130,7 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
         hasura_id: authData.hasura_id,
         username: ghData.login,
         name: ghData.name,
-        email: ghData.email,
+        email: null,
         github_token: authData.access_token
       }];
     } else {
