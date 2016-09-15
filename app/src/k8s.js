@@ -198,7 +198,7 @@ const k8sBody = {
       ports: [
         {
           port: 80,
-          targetPort: 80,
+          targetPort: 8080,
           name: 'http'
         }
       ],
@@ -244,7 +244,7 @@ const k8sBody = {
               ],
               ports: [
                 {
-                  containerPort: 80
+                  containerPort: 8080
                 }
               ]
             }
