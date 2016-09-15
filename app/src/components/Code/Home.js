@@ -15,11 +15,11 @@ const Home = ({user}) => {
             <hr/>
             <h4>1. How to write code & test your app</h4>
             <ul>
-              <li>Click on a filename. Edit it's contents.</li>
-              <li>Click on <code>Apply changes & Restart</code>.</li>
+              <li>Click on a filename. Edit its contents.</li>
+              <li>Click on <code>Commit & Restart</code>.</li>
               <li>Click on the <code>Logs</code> link or open it in a new tab to see what is happening to your server process</li>
               <li>Click on the <code>Go to app</code> link, or open it in a new tab</li>
-              <li>Your app is now live and open on this page! (It may take a few minutes before you see your changes applied)</li>
+              <li>Your app is now live! (It may take a few minutes before you see your changes applied)</li>
             </ul>
             <hr/>
             <h4>2. Your source code</h4>
@@ -44,8 +44,8 @@ const Home = ({user}) => {
             <hr/>
             <h4>5. Deploying your app with changes to source code</h4>
             <p>
-              When you click on the <code>Apply changes & restart</code>button on the sidebar, the files in this console are sent
-              to your server machine and your server process is restarted with these new changes. Your server is accessible on a URL
+              When you click on the <code>Commit & restart</code>button on the sidebar, the files in this console are committed
+              to your github project and your server process is restarted with these new changes. Your server is accessible on a URL
               unique to your server: <a href={`http://${user.table.username}.imad.hasura-app.io`}>{user.table.username}.imad.hasura-app.io</a>
               <br/>
               <b>Note:</b>Files that are deployed to the server are files as they are currently on this console. These files may or may not be
