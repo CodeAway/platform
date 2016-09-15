@@ -38,7 +38,7 @@ const loadRepo = () => {
       dispatch(requestAction(treeUrl, options, SET_TREE)).then(
         (treeData) => {
           // Now we have the tree, and we want to fetch our base files
-          const baseFiles = ['server.js', 'index.html', 'style.css', 'main.js'];
+          const baseFiles = ['server.js', 'ui/index.html', 'ui/style.css', 'ui/main.js'];
 
           // const baseFiles = ['server.js', 'ui/index.html', 'ui/style.css', 'ui/main.js'];
           const blobs = {};
