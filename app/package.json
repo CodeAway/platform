@@ -32,7 +32,6 @@
         "NODE_ENV": "production",
         "BASE_DOMAIN": "imad.hasura.io",
         "REDIRECT_URI": "https://cloud.imad.hasura.io/home",
-        "NAMESPACE": "imad",
         "PORT": 8080
       }
     },
@@ -44,7 +43,6 @@
         "PORT": 8000,
         "BASE_DOMAIN": "imad-stg.hasura-app.io",
         "REDIRECT_URI": "http://ui.imad-stg.hasura-app.io",
-        "NAMESPACE": "imad",
         "REAP_INTERVAL": "5",
         "REAP_CRON": "*/5 * * * *"
       }
