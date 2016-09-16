@@ -128,7 +128,7 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
       upsertUrl += 'insert';
       object.objects = [{
         hasura_id: authData.hasura_id,
-        username: ghData.login,
+        username: ghData.login.toLowerCase(),
         name: ghData.name,
         email: null,
         github_token: authData.access_token
