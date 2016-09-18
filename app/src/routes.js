@@ -154,7 +154,7 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
           headers,
           body: JSON.stringify({
             objects: [{
-              username: ghData.login,
+              username: ghData.login.toLowerCase(),
               last_seen: (new Date()).toISOString()
             }]
           }),
