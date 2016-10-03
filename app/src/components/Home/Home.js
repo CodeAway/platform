@@ -1,7 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
-import {createProject, createDB, createSSH} from './ProjectActions'; // eslint-disable-line no-unused-vars
+import {createProject, createDB, createSSH} from './ProjectActions';
 import {Link} from 'react-router';
 
 const Home = ({dispatch, project, user}) => {
@@ -156,10 +156,10 @@ const Home = ({dispatch, project, user}) => {
                 {(user.table.db_pass && user.table.db_pass.trim() !== '') ?
                   (<div>
                      {dbCreds}
-                     <span>Go to your <a target="_blank" href="http://imad-dev-ssh.hasura-app.io/database.php?pgsql=localhost%3A5432">database console.</a></span>
+                     <span>Go to your <a target="_blank" href="http://db.imad.hasura-app.io/database.php?pgsql=localhost%3A5432">database console.</a></span>
                   </div>) :
-                  (<button disabled="disabled" className="btn btn-success" onClick={() => {
-                    // dispatch(createDB());
+                  (<button className="btn btn-success" onClick={() => {
+                    dispatch(createDB());
                   }}>
                     Create database credentials
                   </button>)}
