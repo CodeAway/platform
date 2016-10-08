@@ -298,13 +298,17 @@ const k8s = {
       makeK8sReq('getPods', user).then(
         (data) => {
           let podName = '';
+          let returnVal;
           if (data.items.length > 0) {
             podName = data.items[0].metadata.name;
           }
-          if (podName) {
-            return makeK8sReq('getLogs', {podName, tail});
+          if (!podName) {
+            reject(data);
+            returnVal = Promise.reject();
+          } else {
+            returnVal = makeK8sReq('getLogs', {podName, tail});
           }
-          return reject(data);
+          return returnVal;
         },
         (error) => {
           console.log(error);
