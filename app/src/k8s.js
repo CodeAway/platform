@@ -300,10 +300,10 @@ const k8s = {
           let podName = '';
           if (data.items.length > 0) {
             podName = data.items[0].metadata.name;
+            return makeK8sReq('getLogs', {podName, tail});
           } else {
             reject(data);
           }
-          return makeK8sReq('getLogs', {podName, tail});
         },
         (error) => {
           console.log(error);
