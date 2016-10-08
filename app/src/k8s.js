@@ -224,9 +224,9 @@ const k8sBody = {
   deployment: (user, gitUrl, gitRevision) => ({
     kind: 'Deployment',
     spec: {
+      revisionHistoryLimit: 0,
       template: {
         spec: {
-          revisionHistoryLimit: 0,
           containers: [
             {
               image: globals.imad.simpleNodeAppImage,
