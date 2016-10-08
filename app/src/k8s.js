@@ -226,6 +226,7 @@ const k8sBody = {
     spec: {
       template: {
         spec: {
+          revisionHistoryLimit: 0,
           containers: [
             {
               image: globals.imad.simpleNodeAppImage,
