@@ -26,7 +26,8 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
       postService: `api/v1/namespaces/${globals.k8s.userspace}/services`,
       getService: `api/v1/namespaces/${globals.k8s.userspace}/services/${user}`,
       putScale: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/deployments/${user}/scale`,
-      getRs: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/replicasets?labelSelector=app%3D${user}`
+      getRs: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/replicasets?labelSelector=app%3D${user}`,
+      putRs: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/replicasets/${user}`
     };
     console.log(`request url ---> ${globals.k8s.url}/${resourceToUrl[resource]} via ${reqMethod} using paramns ${user}`);
     fetch(`${globals.k8s.url}/${resourceToUrl[resource]}`,
@@ -76,11 +77,11 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
   return promise;
 };
 
-const waitTillDesiredGeneration = (user, desiredGeneration, retries = 0) => (
+const waitTillDesiredGeneration = (resource, user, desiredGeneration, retries = 0) => (
   // Make a get request, check if equal, if not, repeat
   new Promise((resolve, reject) => {
     console.log('waitTillDesiredGeneration: ' + user + ' retries: ' + retries.toString());
-    makeK8sReq('getDepl', user)
+    makeK8sReq(resource === 'deployment' ? 'getDepl' : 'getRs', user)
       .then(
         (current) => {
           console.log('DesiredGeneration: ', desiredGeneration, ' CurrentGeneration: ', current.status.observedGeneration, ' Replicas: ', current.spec.replicas);
@@ -131,7 +132,7 @@ const stopDeployment = (user) => (
             .then(
               (setDeployment) => {
                 const desiredGeneration = setDeployment.status.observedGeneration + 1;
-                waitTillDesiredGeneration(user, desiredGeneration)
+                waitTillDesiredGeneration('deployment', user, desiredGeneration)
                   .then(
                     (finalDeployment) => {
                       resolve(finalDeployment);
@@ -165,6 +166,60 @@ const stopDeployment = (user) => (
         })
       .catch(error => {
         console.error('stopDeployment > getDepl error', error);
+        console.log(error.stack);
+        reject(error);
+      });
+  })
+);
+
+const stopReplicaset = (user) => (
+  new Promise((resolve, reject) => {
+    // Get the deployment
+    makeK8sReq('getRs', user)
+      .then(
+        (_replicasetList) => {
+          const replicasetList = JSON.parse(JSON.stringify(_replicasetList));
+          const replicaset = replicasetList.items[0];
+          const replicasetName = replicaset.metadata.name;
+          replicaset.spec.replicas = 0;
+          makeK8sReq('putRs', replicasetName, 'PUT', replicaset)
+            .then(
+              (setReplicaset) => {
+                const desiredGeneration = setReplicaset.status.observedGeneration + 1;
+                waitTillDesiredGeneration('replicaset', replicasetName, desiredGeneration)
+                  .then(
+                    (finalReplicaset) => {
+                      resolve(finalReplicaset);
+                    },
+                    (error) => {
+                      console.error('stopReplicaset > getRs > putRs > waitTillDesiredGeneration error', error);
+                      if (error.stack) { console.log(error.stack); }
+                      reject(error);
+                    })
+                  .catch(error => {
+                    console.error('stopReplicaset > getRs > putRs > waitTillDesiredGeneration error', error);
+                    console.log(error.stack);
+                    reject(error);
+                  });
+              },
+              (error) => {
+                console.error('stopReplicaset > getRs > putRs error', error);
+                if (error.stack) { console.log(error.stack); }
+                reject(error);
+              })
+            .catch(error => {
+              console.error('stopReplicaset > getRs > putRs error', error);
+              console.log(error.stack);
+              reject(error);
+            });
+        },
+        (error) => {
+          console.error('stopReplicaset > getRs error', error);
+          if (error.stack) { console.log(error.stack); }
+          reject(error);
+        })
+      .catch(error => {
+        console.error('stopReplicaset > getRs error', error);
         console.log(error.stack);
         reject(error);
       });
@@ -364,12 +419,21 @@ const k8s = {
             reject(returnData);
           })
         .then(
+            (data) => {
+              returnData.message.push(msgFormat('stopDeployment', true, data));
+              return stopReplicaset(user);
+            },
+            (error) => {
+              returnData.message.push(msgFormat('stopDeployment', false, error));
+              reject(returnData);
+            })
+        .then(
           (data) => {
-            returnData.message.push(msgFormat('stopDeployment', true, data));
+            returnData.message.push(msgFormat('stopReplicaset', true, data));
             return makeK8sReq('getRs', user, 'DELETE');
           },
           (error) => {
-            returnData.message.push(msgFormat('stopDeployment', false, error));
+            returnData.message.push(msgFormat('stopReplicaset', false, error));
             reject(returnData);
           })
         .then(
