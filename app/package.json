@@ -43,8 +43,8 @@
         "PORT": 8000,
         "BASE_DOMAIN": "imad-stg.hasura-app.io",
         "REDIRECT_URI": "http://ui.imad-stg.hasura-app.io",
-        "REAP_INTERVAL": "5",
-        "REAP_CRON": "*/5 * * * *"
+        "REAP_INTERVAL": "15",
+        "REAP_CRON": "*/15 * * * *"
       }
     }
   },
