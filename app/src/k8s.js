@@ -84,12 +84,13 @@ const waitTillDesiredGeneration = (resource, user, desiredGeneration, retries = 
     makeK8sReq(resource === 'deployment' ? 'getDepl' : 'getRs', user)
       .then(
         (current) => {
-          console.log('DesiredGeneration: ', desiredGeneration, ' CurrentGeneration: ', current.status.observedGeneration, ' Replicas: ', current.spec.replicas);
-          if (current.status.observedGeneration >= desiredGeneration) {
-            resolve(current);
+          const currentObj = resource === 'deployment' ? current : current.items[0];
+          console.log('DesiredGeneration: ', desiredGeneration, ' CurrentGeneration: ', currentObj.status.observedGeneration, ' Replicas: ', currentObj.spec.replicas);
+          if (currentObj.status.observedGeneration >= desiredGeneration) {
+            resolve(currentObj);
           } else {
             setTimeout(() => {
-              waitTillDesiredGeneration(user, desiredGeneration, retries + 1)
+              waitTillDesiredGeneration(resource, user, desiredGeneration, retries + 1)
                 .then(
                   (finalDeployment) => {
                     resolve(finalDeployment);
