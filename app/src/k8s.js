@@ -77,6 +77,48 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
   return promise;
 };
 
+const waitTillReplicasZero = (user, retries = 0) => (
+  new Promise((resolve, reject) => {
+    console.log('waitTillReplicasZero: ' + user + ' retries: ' + retries.toString());
+    makeK8sReq('putRs', user)
+      .then(
+        (current) => {
+          console.log('current => ', current);
+          if (current.status.replicas === 0) {
+            resolve(current);
+          } else {
+            setTimeout(() => {
+              waitTillReplicasZero(user, retries + 1)
+                .then(
+                  (finalReplicaset) => {
+                    resolve(finalReplicaset);
+                  },
+                  (error) => {
+                    console.error('waitTillReplicasZero: setTimeout: ', error);
+                    if (error.stack) { console.log(error.stack); }
+                    reject(error);
+                  })
+                .catch(error => {
+                  console.error('waitTillReplicasZero: setTimeout: ', error);
+                  console.log(error.stack);
+                  reject(error);
+                });
+            }, 100);
+          }
+        },
+        (error) => {
+          console.error('waitTillReplicasZero: ', error);
+          if (error.stack) { console.log(error.stack); }
+          reject(error);
+        })
+        .catch(error => {
+          console.error('waitTillReplicasZero: ', error);
+          console.log(error.stack);
+          reject(error);
+        });
+  })
+);
+
 const waitTillDesiredGeneration = (resource, user, desiredGeneration, retries = 0) => (
   // Make a get request, check if equal, if not, repeat
   new Promise((resolve, reject) => {
@@ -185,9 +227,8 @@ const stopReplicaset = (user) => (
           replicaset.spec.replicas = 0;
           makeK8sReq('putRs', replicasetName, 'PUT', replicaset)
             .then(
-              (setReplicaset) => {
-                const desiredGeneration = setReplicaset.status.observedGeneration + 1;
-                waitTillDesiredGeneration('replicaset', replicasetName, desiredGeneration)
+              () => {
+                waitTillReplicasZero(replicasetName)
                   .then(
                     (finalReplicaset) => {
                       resolve(finalReplicaset);
