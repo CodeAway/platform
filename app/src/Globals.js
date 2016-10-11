@@ -3,6 +3,7 @@ const globals = {
   k8s: {
     url: process.env.K8S_URL,
     token: process.env.K8S_TOKEN,
+    auth: process.env.K8S_AUTH,
     userspace: process.env.K8S_USERSPACE
   },
   imad: {

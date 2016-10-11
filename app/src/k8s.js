@@ -34,7 +34,7 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
       { method: reqMethod,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${globals.k8s.token}`
+          Authorization: `${globals.k8s.auth}`
         },
         agent: httpsAgent,
         body: JSON.stringify(body)
