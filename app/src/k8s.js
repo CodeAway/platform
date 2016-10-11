@@ -29,7 +29,7 @@ const makeK8sReq = (resource, user, reqMethod = 'GET', body = {}) => {
       getRs: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/replicasets?labelSelector=app%3D${user}`,
       putRs: `apis/extensions/v1beta1/namespaces/${globals.k8s.userspace}/replicasets/${user}`
     };
-    console.log(`request url ---> ${globals.k8s.url}/${resourceToUrl[resource]} via ${reqMethod} using paramns ${user}`);
+    console.log(`request url ---> ${globals.k8s.url}/${resourceToUrl[resource]} via ${reqMethod} using params ${user}`);
     fetch(`${globals.k8s.url}/${resourceToUrl[resource]}`,
       { method: reqMethod,
         headers: {
@@ -83,7 +83,6 @@ const waitTillReplicasZero = (user, retries = 0) => (
     makeK8sReq('putRs', user)
       .then(
         (current) => {
-          console.log('current => ', current);
           if (current.status.replicas === 0) {
             resolve(current);
           } else {
@@ -126,7 +125,6 @@ const waitTillDesiredGeneration = (resource, user, desiredGeneration, retries = 
     makeK8sReq(resource === 'deployment' ? 'getDepl' : 'putRs', user)
       .then(
         (current) => {
-          console.log('current ==> ', current);
           console.log('DesiredGeneration: ', desiredGeneration, ' CurrentGeneration: ', current.status.observedGeneration, ' Replicas: ', current.spec.replicas);
           if (current.status.observedGeneration >= desiredGeneration) {
             resolve(current);
@@ -472,7 +470,7 @@ const k8s = {
         .then(
           (data) => {
             returnData.message.push(msgFormat('stopReplicaset', true, data));
-            return makeK8sReq('getRs', user, 'DELETE');
+            return makeK8sReq('getDepl', user, 'DELETE');
           },
           (error) => {
             returnData.message.push(msgFormat('stopReplicaset', false, error));
@@ -480,24 +478,25 @@ const k8s = {
           })
         .then(
           (data) => {
-            returnData.message.push(msgFormat('deleteReplcaSet', true, data));
-            return makeK8sReq('getDepl', user, 'DELETE');
-          },
-          (error) => {
-            returnData.message.push(msgFormat('deleteReplcaSet', false, error));
-            reject(returnData);
-          })
-        .then(
-          (data) => {
             returnData.message.push(msgFormat('deleteDeployment', true, data));
-            returnData.success = true;
-            resolve(returnData);
+            return makeK8sReq('getRs', user, 'DELETE');
           },
           (error) => {
             returnData.message.push(msgFormat('deleteDeployment', false, error));
             reject(returnData);
+          })
+        .then(
+          (data) => {
+            returnData.message.push(msgFormat('deleteReplcaSet', true, data));
+            returnData.success = true;
+            resolve(returnData);
+          },
+          (error) => {
+            returnData.message.push(msgFormat('deleteReplcaSet', false, error));
+            reject(returnData);
           }
-        );
+        )
+        ;
     });
     return promise;
   },
