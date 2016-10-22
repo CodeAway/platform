@@ -291,6 +291,7 @@ const routes = (app) => {
   app.post('/restart', jsonParser, (req, res) => {
     const gitUrl = req.body.gitUrl;
     const gitRevision = req.body.gitRevision;
+    const vars = req.body.env;
     const returnData = {
       success: false,
       message: []
@@ -343,7 +344,7 @@ const routes = (app) => {
           (error) => {
             returnData.message.push(msgFormat('getDeployment', false, error));
             // if not running, start
-            return k8s.start(user, gitUrl, gitRevision);
+            return k8s.start(user, gitUrl, gitRevision, vars);
           })
         .then(
           (data) => {

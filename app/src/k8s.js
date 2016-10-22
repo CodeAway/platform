@@ -316,7 +316,7 @@ const k8sBody = {
       replicas
     }
   }),
-  deployment: (user, gitUrl, gitRevision) => ({
+  deployment: (user, gitUrl, gitRevision, vars) => ({
     kind: 'Deployment',
     spec: {
       revisionHistoryLimit: 0,
@@ -332,12 +332,12 @@ const k8sBody = {
                 }
               ],
               name: user,
-              env: [
+              env: vars.concat([
                 {
                   name: 'USER',
                   value: user
                 }
-              ],
+              ]),
               ports: [
                 {
                   containerPort: 8080
@@ -500,11 +500,11 @@ const k8s = {
     });
     return promise;
   },
-  start: (user, gitUrl, gitRevision) => {
+  start: (user, gitUrl, gitRevision, vars) => {
     const promise = new Promise((resolve, reject) => {
       const messages = [];
-      console.log(k8sBody.deployment(user, gitUrl, gitRevision));
-      makeK8sReq('postDepl', user, 'POST', k8sBody.deployment(user, gitUrl, gitRevision))
+      console.log(k8sBody.deployment(user, gitUrl, gitRevision, vars));
+      makeK8sReq('postDepl', user, 'POST', k8sBody.deployment(user, gitUrl, gitRevision, vars))
         .then(
           (data) => {
             messages.push(msgFormat('postDeployment', true, data));
