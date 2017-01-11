@@ -36,7 +36,7 @@ const Email = ({dispatch, email}) => {
       </div>
       <div className={styles2.footer}>
         <div className={styles2.course}>
-          Introduction to Modern Appliation Development - <a href="http://imad.tech">imad.tech</a>
+          Introduction to Modern Application Development - <a href="http://imad.tech">imad.tech</a>
         </div>
         Made with &hearts; by <a href="https://hasura.io">Hasura</a>
       </div>

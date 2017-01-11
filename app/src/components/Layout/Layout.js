@@ -42,7 +42,7 @@ const Layout = ({logoutRequest, loading, dispatch, children}) => {
       </div>
       <div className={styles.footer}>
         <div className={styles.course}>
-          Introduction to Modern Appliation Development - <a href="http://imad.tech">imad.tech</a>
+          Introduction to Modern Application Development - <a href="http://imad.tech">imad.tech</a>
         </div>
         Made with &hearts; by <a href="https://hasura.io">Hasura</a>
       </div>
