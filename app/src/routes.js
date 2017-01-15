@@ -295,7 +295,7 @@ const routes = (app) => {
       success: false,
       message: []
     };
-    getUserDetails(req, res, (username, hasuraId) => {
+    getUserDetails(req, res, (username, hasuraId, userData) => {
       let user = username;
       if (hasuraId === 1) {
         user = req.query.user;
@@ -343,7 +343,30 @@ const routes = (app) => {
           (error) => {
             returnData.message.push(msgFormat('getDeployment', false, error));
             // if not running, start
-            return k8s.start(user, gitUrl, gitRevision);
+            const vars = [
+              {
+                name: 'DB_PASSWORD',
+                value: userData.db_pass
+              },
+              {
+                name: 'DB_DATABASE',
+                value: user
+              },
+              {
+                name: 'DB_USERNAME',
+                value: user
+              },
+              {
+                name: 'DB_HOST',
+                value: 'db.imad.hasura-app.io'
+              },
+              {
+                name: 'DB_PORT',
+                value: '5432'
+              }
+            ];
+            return k8s.start(user, gitUrl, gitRevision, vars);
+            return k8s.start(user, gitUrl, gitRevision, vars);
           })
         .then(
           (data) => {
