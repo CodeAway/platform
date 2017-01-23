@@ -4,6 +4,48 @@ metadata:
     name: custom-error-pages 
     namespace: imad-system 
 data:
+    custom504.html: |
+        <html>
+            <head>
+                <title>app crashing | IMAD Hasura</title>
+                <style>
+                    body {
+                        font-family: sans-serif;
+                        background-color: white;
+                        margin-top: 100px;
+                        color: #666;   
+                    }
+                    a:link {
+                        color: #0090bf;
+                    }
+                    a:visited {
+                        color: #0090bf;
+                    }
+                    a:hover {
+                        color: #0090bf;
+                    }
+                    a:active {
+                        color: #0090bf;
+                    }
+                </style>
+            </head>
+            <body>
+                <center>
+                    <h1><span id="app-name"></span>app is crashing</h1>
+                    <p>This could be due to an error in your server.js file. Please check logs on your console to see where the error is.</p>
+                    <br/>
+                    <span style="font-size: 0.7em;">by folks at <a href="https://hasura.io">Hasura</a></span>
+                </center>
+            </body>
+            <script>
+                (function() {
+                    var url = window.location.hostname;
+                    var app = url.split('.')[0];
+                    document.getElementById('app-name').innerHTML = app + "'s ";
+                })();
+            </script>
+        </html>
+
     custom502.html: |
         <html>
             <head>

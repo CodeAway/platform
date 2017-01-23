@@ -74,6 +74,11 @@ data:
                     root /html;
                     internal;
                 }
+                error_page 504 /custom504.html;
+                location = /custom504.html {
+                    root /html;
+                    internal;
+                }
             }
 
         }
