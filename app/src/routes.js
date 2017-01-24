@@ -123,8 +123,9 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
       headers
     };
     const object = {};
-    let username = ghData.login.toLowerCase();
+    let username = '';
     if (ghData) {
+      username = ghData.login.toLowerCase();
       if (!isNaN(parseInt(username, 10))) {
         username = `imad-${username}`;
       }
