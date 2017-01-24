@@ -19,7 +19,7 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-if (__DEVELOPMENT__ && !process.env.API_ENV) {
+if (__DEVELOPMENT__) {
   selfUrl = 'http://localhost:8000';
   authUrl = scheme + '//auth.' + process.env.BASE_DOMAIN;
   dbUrl = scheme + '//data.' + process.env.BASE_DOMAIN;
@@ -98,19 +98,27 @@ const getUserDetails = (req, res, cb) => {
     res.status(401).send('Unauthorized');
     return;
   }
+  if (userInfo.role === 'admin') {
+    cb('admin', 1, {});
+    return;
+  }
   const selectUrl = dbUrl + '/api/1/table/user/select';
   const selectOptions = {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      columns: ['*'],
+      columns: ['username', 'hasura_id'],
       where: {
         hasura_id: userInfo.id
       }
     })
   };
   request(selectUrl, selectOptions, res, (data) => {
-    cb(data[0].username, data[0].hasura_id, data[0]);
+    if (data[0]) {
+      cb(data[0].username, data[0].hasura_id, data[0]);
+    } else {
+      res.status(500).send('No such user');
+    }
     return;
   });
 };
@@ -127,7 +135,7 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
     if (ghData) {
       username = ghData.login.toLowerCase();
       if (!isNaN(parseInt(username, 10))) {
-        username = `imad-${username}`;
+        username = `user-${username}`;
       }
       upsertUrl += 'insert';
       object.objects = [{
@@ -484,6 +492,7 @@ const routes = (app) => {
         success: false,
         message: []
       };
+      console.log(hasuraId);
       let user = username;
       if (hasuraId === 1) {
         user = req.query.user;
