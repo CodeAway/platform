@@ -123,12 +123,15 @@ const upsertAndProceed = (authData, _cookie, res) => { // eslint-disable-line ar
       headers
     };
     const object = {};
-
+    let username = ghData.login.toLowerCase();
     if (ghData) {
+      if (!isNaN(parseInt(username, 10))) {
+        username = `imad-${username}`;
+      }
       upsertUrl += 'insert';
       object.objects = [{
         hasura_id: authData.hasura_id,
-        username: ghData.login.toLowerCase(),
+        username,
         name: ghData.name,
         email: null,
         github_token: authData.access_token
@@ -365,7 +368,6 @@ const routes = (app) => {
                 value: '5432'
               }
             ];
-            return k8s.start(user, gitUrl, gitRevision, vars);
             return k8s.start(user, gitUrl, gitRevision, vars);
           })
         .then(

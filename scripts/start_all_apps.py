@@ -24,7 +24,8 @@ def main():
     'type': 'select',
     'args': {
       'table': 'user',
-      'columns': ['hasura_id', 'username', 'github_token']
+      'columns': ['hasura_id', 'username', 'github_token'],
+      'order_by': '+hasura_id'
     }
   }
   res = requests.post(dbUrl, headers=dbHeaders, data=json.dumps(payload))
@@ -36,9 +37,9 @@ def main():
         print '======> Skip: ', username
         continue
       token = user['github_token']
-      print '======> Executing: ', username
+      print '======> Executing: ', username, user['hasura_id']
       github_url = 'https://github.com/'+ username + '/imad-2016-app.git'
-      github_res_url = 'https://api.github.com/repos/'+username+'/imad-2016-app/git/refs/heads/master?access_token='+token
+      github_res_url = 'https://api.github.com/repos/'+username+'/imad-2016-app/git/refs/heads/master?access_token='+str(token)
       try:
         github_res = requests.get(github_res_url)
         commit_hash = github_res.json()['object']['sha']

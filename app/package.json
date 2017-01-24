@@ -40,11 +40,11 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
-        "PORT": 8000,
+        "PORT": 8080,
         "BASE_DOMAIN": "imad-stg.hasura-app.io",
-        "REDIRECT_URI": "http://ui.imad-stg.hasura-app.io",
-        "REAP_INTERVAL": "15",
-        "REAP_CRON": "*/15 * * * *"
+        "REDIRECT_URI": "https://cloud.imad-stg.hasura-app.io/home",
+        "REAP_INTERVAL": "52600",
+        "REAP_CRON": "0 0 1 10 *"
       }
     }
   },
