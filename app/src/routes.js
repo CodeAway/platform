@@ -13,7 +13,7 @@ scheme = (scheme === '') ? '' : (scheme + ':');
 
 let dbUrl = `http://data.${Globals.imad.namespace}`;
 let authUrl = `http://auth.${Globals.imad.namespace}`;
-let selfUrl = `http://api.${Globals.imad.namespace}`;
+let selfUrl = 'http://api.default';
 
 const headers = {
   'Content-Type': 'application/json'
