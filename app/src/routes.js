@@ -19,7 +19,7 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-if (__DEVELOPMENT__) {
+if (__DEVELOPMENT__ && !process.env.API_ENV) {
   selfUrl = 'http://localhost:8000';
   authUrl = scheme + '//auth.' + process.env.BASE_DOMAIN;
   dbUrl = scheme + '//data.' + process.env.BASE_DOMAIN;
