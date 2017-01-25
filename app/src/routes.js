@@ -107,7 +107,7 @@ const getUserDetails = (req, res, cb) => {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      columns: ['username', 'hasura_id'],
+      columns: ['*'],
       where: {
         hasura_id: userInfo.id
       }
