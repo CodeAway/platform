@@ -1,6 +1,7 @@
 import defaultState from './ProjectState';
 import requestAction from 'utils/requestAction';
 import Endpoints, {globalCookiePolicy} from 'Endpoints';
+import Globals from 'Globals';
 import {SET_USERPROJECT, SET_DBPASS, SET_SSHPASS} from '../User/Actions';
 
 const CREATE_REQUEST = 'Project/CREATE_REQUEST';
@@ -21,7 +22,7 @@ const createProject = () => {
 
     // make a request to create the project
     const user = getState().user;
-    const forkUrl = `https://api.github.com/repos/hasura-imad/imad-2016-app/forks`;
+    const forkUrl = `https://api.github.com/repos/hasura-imad/${Globals.repoName}/forks`;
     const options = {
       method: 'POST',
       headers: {

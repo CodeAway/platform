@@ -39,6 +39,8 @@
         "NODE_ENV": "production",
         "PORT": 8080,
         "BASE_DOMAIN": "imad.hasura.io",
+        "GITHUB_CLIENT_ID": "bcaac3b822c108523d5b",
+        "REPO_NAME": "imad-app-v2",
         "SCHEME": "https"
       }
     },
@@ -48,7 +50,9 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "PORT": 3000,
-        "BASE_DOMAIN": "imad.hasura.io",
+        "BASE_DOMAIN": "imad-stg.hasura-app.io",
+        "GITHUB_CLIENT_ID": "3fd52e6ea165be74d89d",
+        "REPO_NAME": "imad-app-v2",
         "SCHEME": "https"
       }
     },
