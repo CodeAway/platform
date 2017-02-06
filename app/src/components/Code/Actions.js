@@ -19,11 +19,21 @@ const isValid = (path) => {
   return false;
 };
 
+const githubUsername = (username) => {
+  let ghUsername = '';
+  if (username.startsWith('user-')) {
+    ghUsername = username.split('user-')[1];
+  } else {
+    ghUsername = username;
+  }
+  return ghUsername;
+};
+
 const loadRepo = () => {
   return (dispatch, getState) => {
     dispatch(loadingOn());
     const user = getState().user;
-    const treeUrl = `https://api.github.com/repos/${user.table.username}/${Globals.repoName}/git/trees/master?recursive=1`;
+    const treeUrl = `https://api.github.com/repos/${githubUsername(user.table.username)}/${Globals.repoName}/git/trees/master?recursive=1`;
     const options = {
       method: 'GET',
       headers: {
@@ -171,7 +181,7 @@ const commitFilesAndRestart = () => {
     };
 
     // Fetch vars
-    const updateUrl = (file) => (`https://api.github.com/repos/${user.table.username}/${Globals.repoName}/contents/${encodeURIComponent(file)}`);
+    const updateUrl = (file) => (`https://api.github.com/repos/${githubUsername(user.table.username)}/${Globals.repoName}/contents/${encodeURIComponent(file)}`);
     const options = (f) => ({
       method: 'PUT',
       headers: {
