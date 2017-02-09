@@ -1,8 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
-// import {createProject, createDB, createSSH} from './ProjectActions';
-import {createProject, createSSH} from './ProjectActions';
+import {createProject, createDB, createSSH} from './ProjectActions';
 import {Link} from 'react-router';
 
 const Home = ({dispatch, project, user}) => {
@@ -159,8 +158,8 @@ const Home = ({dispatch, project, user}) => {
                      {dbCreds}
                      <span>Go to your <a target="_blank" href="http://db.imad.hasura-app.io/database.php?pgsql=localhost%3A5432">database console.</a></span>
                   </div>) :
-                  (<button disabled className="btn btn-success btn-disabled" onClick={() => {
-                    // dispatch(createDB());
+                  (<button className="btn btn-success" onClick={() => {
+                    dispatch(createDB());
                   }}>
                     Create database credentials
                   </button>)}
