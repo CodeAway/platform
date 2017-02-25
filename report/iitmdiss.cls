@@ -204,11 +204,11 @@
   \vspace*{0.75in}
   %\centerline{\psfig{figure=emblem.ps}}
 %  \centerline{\includegraphics{iitm.eps}}
-  \centerline{\includegraphics[scale=1.]{iitm}}
+  \centerline{\includegraphics[scale=1.]{iitm.eps}}
   \vspace*{-0.15in}
   \begin{center}
     {\bf \large DEPARTMENT OF \@department\par}
-    {\bf \large INDIAN INSTITUTE OF TECHNOLOGY MADRAS.}
+    {\bf \large INDIAN INSTITUTE OF TECHNOLOGY MADRAS}
     \vglue 0.50em
     {\bf \large \@date}\par
   \end{center}
