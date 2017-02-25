@@ -1,0 +1,85 @@
+README
+                      lineno.sty  v3.07
+
+     $Id: README,v 3.5 2001/07/31 02:57:33 stephan Exp $
+
+The LaTeX package lineno.sty provides line numbers on paragraphs.
+After TeX has broken a paragraph into lines there will be line numbers
+attached to them, with the possibility to make references through the
+LaTeX \ref, \pageref cross reference mechanism.
+
+% Copyright 1995--1999 Stephan I. B"ottcher <stephan@nevis1.columbia.edu>
+%
+% This program can be redistributed and/or modified under the terms
+% of the LaTeX Project Public License Distributed from CTAN
+% archives in directory macros/latex/base/lppl.txt; either
+% version 1 of the License, or any later version.
+
+
+Todo:
+
+   ???
+
+Changes:
+
+   2001-07-30 SiB: [hyperref] option obsolete.
+   2001-01-17 SiB: LaTeX class option [twocolumn] support
+   2001-01-04 SiB: LaTeX class option [fleqn] support
+   2000-12-18 SiB: longtable compatibility
+   2000-07-01 SiB: extra \newlabel items, [hyperref] option
+   2000-03-10 SiB: indirect call of \output, to work with multicol.
+   1999-08-28 SiB: fixed the footnote problem using \holdinginserts
+   1999-06-11 SiB: included the extensions into lineno.sty
+   1999-03-02 SIB: Added LPPL License
+
+
+Files:
+
+   README        This file.
+   COPYING       The LPPL header.
+   lineno.sty    The package itself, ready to use.
+   lineno.tex    The source documentation.
+   ulineno.tex   The pathetic attempt of a users manual.
+
+     As of version v3.00, the extension packages for lineno have all been
+     incorporated into lineno.sty itself.  Except for itemrule.sty,
+     which was removed.
+
+Home:
+
+   http://www.nevis.columbia.edu/~stephan/tex
+   CTAN:macros/latex/contrib/supported/lineno
+
+
+Author:
+
+   Stephan I. B"ottcher <Stephan.Boettcher@desy.de>
+
+Compatibility with other packages:
+
+   wrapfig.sty   works since v2.05
+
+   multicol.sty  works partly since 3.02.  
+                 Do NOT use \linelabel.  Do NOT put a multicol in
+                 internal vertical mode {table}, {figure}, etc.
+
+   hyperref.sty  \ref to a \linelabel works since v3.03.
+
+   longtable.sty broke with lineno.sty loaded, but not enabled.  
+                 This is fixed in v3.04.
+
+To print the documented source:
+
+   Take the style-file `lineno.sty', and feed it to a Un*x shell.  (Or
+   download the extracted source documentation `lineno.tex'.)
+
+      csh> source ./lineno.sty
+      sh>  . ./lineno.sty
+
+   (Please ignore the error message at the beginning about the iffalse.)
+
+
+Please have a look at a similar work of Michal Jaegermann and James
+Fortune:
+         CTAN:macros/latex/contrib/supported/numline/
+
