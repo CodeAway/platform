@@ -642,6 +642,18 @@ FUNCTION {make.full.names}
     }
   if$
 }
+FUNCTION {make.title}
+{ type$ "book" =
+type$ "inbook" =
+or
+'author.editor.key.full
+{ type$ "proceedings" =
+'editor.key.full
+'author.key.full
+if$
+}
+if$
+}
 
 FUNCTION {output.bibitem}
 { newline$
@@ -659,6 +671,21 @@ FUNCTION {output.bibitem}
   before.all 'output.state :=
 }
 
+FUNCTION {output.onlinebibitem}
+{ newline$
+"\bibitem[{" write$
+title write$
+"()" make.full.names duplicate$ short.list =
+{ pop$ }
+{ * }
+if$
+"}]{" * write$
+cite$ write$
+"}" write$
+newline$
+""
+before.all 'output.state :=
+}
 FUNCTION {n.dashify}
 {
   't :=
@@ -1184,7 +1211,7 @@ FUNCTION {misc}
 }
 
 FUNCTION {online}
-{ output.bibitem
+{ output.onlinebibitem
 format.btitle output
 new.block
 format.urldate "urlyear" output.check
