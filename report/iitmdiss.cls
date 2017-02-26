@@ -99,6 +99,7 @@
 %%\RequirePackage[hang]{caption2}  -> TeX generates error
 \RequirePackage[hang]{caption}
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Bibliography
 % 

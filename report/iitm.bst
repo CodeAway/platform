@@ -75,6 +75,7 @@ ENTRY
     title
     type
     url
+    urldate
     volume
     year
   }
@@ -150,6 +151,11 @@ FUNCTION {add.blank}
 FUNCTION {date.block}
 {
   new.block
+}
+
+FUNCTION {urldate.block}
+{
+new.block
 }
 
 FUNCTION {not}
@@ -694,6 +700,18 @@ FUNCTION {format.date}
   before.all 'output.state :=
   " (" swap$ * ")" *
 }
+
+FUNCTION {format.urldate}
+{ urldate "urldate" bibinfo.check duplicate$ empty$
+{
+}
+'skip$
+if$
+extra.label *
+before.all 'output.state :=
+" (retrieved: " swap$ * ")" *
+}
+
 FUNCTION {format.btitle}
 { title "title" bibinfo.check
   duplicate$ empty$ 'skip$
@@ -1164,6 +1182,21 @@ FUNCTION {misc}
   format.note output
   fin.entry
 }
+
+FUNCTION {online}
+{ output.bibitem
+format.btitle output
+new.block
+format.urldate "urlyear" output.check
+date.block
+howpublished "howpublished" bibinfo.check output
+new.block
+format.url output
+new.block
+format.note output
+fin.entry
+}
+
 FUNCTION {phdthesis}
 { output.bibitem
   format.authors "author" output.check
@@ -1182,6 +1215,8 @@ FUNCTION {phdthesis}
   format.note output
   fin.entry
 }
+
+
 
 FUNCTION {proceedings}
 { output.bibitem
