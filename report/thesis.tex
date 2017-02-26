@@ -144,7 +144,7 @@ The skill of programming is considered fundamental and very important, making it
 
 But, when the strength of students increase, like in case of a MOOC, where the numbers typically goes into the scale of thousands and lakhs, the traditional way is not the best. Using internet technologies, we have reach to millions of prospective learners. Here, we explore the possibilities to use recent technological advancements and solve the problems of flexibility and scale by building a programming environment in the cloud.
 
-Modern day education sector is using cloud technologies for various aspects like hosting video lectures in YouTube, sharing files using Dropbox and Google Drive, collaborative document editing using Google Docs etc. These cloud based technologies enable access to online services anywhere and promises scalability, enhanced availability and cost savings.
+Modern day education sector is using cloud technologies for various aspects like hosting video lhasura-hauthy2/srcectures in YouTube, sharing files using Dropbox and Google Drive, collaborative document editing using Google Docs etc. These cloud based technologies enable access to online services anywhere and promises scalability, enhanced availability and cost savings.
 
 This project is aimed at creating an online interface where instructors can create environments for various programming languages and users can write code in that environment, execute and view the results. The emphasis is given on flexibility to support any programming language and scalability to handle any number of users, using cloud computing techniques.
 \section{Literature Review}
@@ -160,13 +160,24 @@ Especially at times when many MOOCs are offered online, getting everybody to cod
 
 A student/user should be spending their time on learning the language, its syntax and usages. They should not be wasting time on installing, fixing and configuring tools and environments to run their code. This can have a negative effect on beginners who are just getting into programming. Students could get frustrated and leave the course.
 
+\subsection{Usability}
 This is the primary problem that is being addressed here. There should be an easy to use programming interface that would work the same on every device. Only a web application can be made to work like this through a web browser. Being a web application, the program can be served through internet and be made available anytime anywhere. By leveraging cloud computing along with virtualisation and containerisation technologies, millions of users can write code and run their programs.
 
-The second problem that is being tackled is compatibility with any programming language. 
+\subsection{Flexibility}
+The second problem being tackled is compatibility with any programming language. Course instructors should be able to create any kind of environment for their students to code in, with minimal effort. The platform should not be restrictive in any manner to create preferred environment. Students should be able to code and run their programs against these pre-defined environments. At the same time, if required, students should be able to modify and create their own environments so that the explorer's curiosity is not hindered.
+
+Flexibility also implies that the platform should be able to run on any infrastructure. Public and private clouds, bare metal servers, normal desktop/laptops etc. should be able to host the platform. The only disadvantage of running on a non-cloud infrastructure should be trade-offs with scalability.
+
+\subsection{Scalability}
+Third issue being considered is scalability of the platform. With minimal or preferably no effort, the platform should be scalable to support any number of users. We are targeting a hundred thousand users for the PoC. 
+
+\subsection{Security}
+Each users code should be secure and isolated. Unauthorized access should be prevented. Measures should be taken to prevent attacks like DDoS or MitM.
 
 \chapter{EVALUATION METHODOLOGY}
-Includes how the student intends to tackle the problem, avenues for investigation, possible milestones, options for different architectures, etc. [3-4 pages]
+%Includes how the student intends to tackle the problem, avenues for investigation, possible milestones, options for different architectures, etc. [3-4 pages]
 
+A web application is best served for the purpose, since the only requirement is a web browser and internet connection. 
 \chapter{RESULTS}
 (i) progress made, (ii) results, (iii) sample code, (iv) refinement of the problem statement, and (v) potential work outline for the next 2-3 months. This will count for 25% of the final grade.                
 
