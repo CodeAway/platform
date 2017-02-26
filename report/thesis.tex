@@ -46,19 +46,19 @@ diploma.
 \begin{singlespacing}
 \hspace*{-0.25in}
 \parbox{2.5in}{
-\noindent {\bf Prof.~Gaurav Raina} \\
+\noindent {\bf Dr.~Gaurav~Raina} \\
 \noindent Research Guide \\ 
-\noindent Professor \\
+\noindent Assistant Professor \\
 \noindent Dept. of Electrical Engineering\\
-\noindent IIT-Madras, 600 036 \\
+\noindent IIT Madras, 600036 \\
 } 
 \hspace*{1.0in} 
 \parbox{2.5in}{
-\noindent {\bf Prof.~Asokan Thondiyath} \\
+\noindent {\bf Dr.~Asokan~Thondiyath} \\
 \noindent Research Guide \\ 
 \noindent Professor \\
 \noindent Dept. of Engineering Design\\
-\noindent IIT-Madras, 600 036 \\
+\noindent IIT Madras, 600036 \\
 }  
 \end{singlespacing}
 \vspace*{0.25in}
@@ -70,27 +70,18 @@ Date: 21st May 2017
 % Acknowledgements
 \acknowledgements
 
-Thanks to all those who made \TeX\ and \LaTeX\ what it is today.
+<will update>
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Abstract
 
 \abstract
 
-\noindent KEYWORDS: \hspace*{0.5em} \parbox[t]{4.4in}{\LaTeX ; Thesis;
-  Style files; Format.}
+\noindent KEYWORDS: \hspace*{0.5em} \parbox[t]{4.4in}{Cloud Computing, Virtualisation, Docker, Kubernetes, Education, Programming}
 
 \vspace*{24pt}
 
-\noindent A \LaTeX\ class along with a simple template thesis are
-provided here.  These can be used to easily write a thesis suitable
-for submission at IIT-Madras.  The class provides options to format
-PhD, MS, M.Tech.\ and B.Tech.\ thesis.  It also allows one to write a
-synopsis using the same class file.  Also provided is a BIB\TeX\ style
-file that formats all bibliography entries as per the IITM format.
-
-The formatting is as (as far as the author is aware) per the current
-institute guidelines.
+\noindent The project showcases a scalable online programming platform which can be used to teach computer programming languages to students, by just using a web browser. The underlying architecture and use of virtualisation technology makes the platform infrastructure agnostic and hence can be deployed on to any cloud provider as well as bare metal. Using container runtime environments such as Docker, the platform can be configured to run any programming language and library. Further a PoC was developed and deployed for nearly 1,00,000 users.
 
 \pagebreak
 
@@ -150,74 +141,16 @@ xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 \chapter{INTRODUCTION}
 \label{chap:intro}
 
-This document provides a simple template of how the provided
-\verb+iitmdiss.cls+ \LaTeX\ class is to be used.  Also provided are
-several useful tips to do various things that might be of use when you
-write your thesis.
 
-Before reading any further please note that you are strongly advised
-against changing any of the formatting options used in the class
-provided in this directory, unless you are absolutely sure that it
-does not violate the IITM formatting guidelines.  \emph{Please do not
-  change the margins or the spacing.}  If you do change the formatting
-you are on your own (don't blame me if you need to reprint your entire
-thesis).  In the case that you do change the formatting despite these
-warnings, the least I ask is that you do not redistribute your style
-files to your friends (or enemies).
+%For code inline use \verb+iitmdiss.cls+
+%\begin{verbatim}
+%% dvipdfm -o thesis.pdf thesis.dvi
+%\end{verbatim}
 
-It is also a good idea to take a quick look at the formatting
-guidelines.  Your office or advisor should have a copy.  If they
-don't, pester them, they really should have the formatting guidelines
-readily available somewhere.
-
-To compile your sources run the following from the command line:
-\begin{verbatim}
-% latex thesis.tex
-% bibtex thesis
-% latex thesis.tex
-% latex thesis.tex
-\end{verbatim}
-Modify this suitably for your sources.
-
-To generate PDF's with the links from the \verb+hyperref+ package use
-the following command:
-\begin{verbatim}
-% dvipdfm -o thesis.pdf thesis.dvi
-\end{verbatim}
-
-\section{Package Options}
-
-Use this thesis as a basic template to format your thesis.  The
-\verb+iitmdiss+ class can be used by simply using something like this:
-\begin{verbatim}
-\documentclass[PhD]{iitmdiss}  
-\end{verbatim}
-
-To change the title page for different degrees just change the option
-from \verb+PhD+ to one of \verb+MS+, \verb+MTech+ or \verb+BTech+.
-The dual degree pages are not supported yet but should be quite easy
-to add.  The title page formatting really depends on how large or
-small your thesis title is.  Consequently it might require some hand
-tuning.  Edit your version of \verb+iitmdiss.cls+ suitably to do this.
-I recommend that this be done once your title is final.
-
-To write a synopsis simply use the \verb+synopsis.tex+ file as a
-simple template.  The synopsis option turns this on and can be used as
-shown below.
-\begin{verbatim}
-\documentclass[PhD,synopsis]{iitmdiss}                                
-\end{verbatim}
-
-Once again the title page may require some small amount of fine
-tuning.  This is again easily done by editing the class file.
-
-This sample file uses the \verb+hyperref+ package that makes all
-labels and references clickable in both the generated DVI and PDF
-files.  These are very useful when reading the document online and do
-not affect the output when the files are printed.
+\section{Literature Review}
 
 
-\section{Example Figures and tables}
+\section{Outline of the Problem}
 
 Fig.~\ref{fig:iitm} shows a simple figure for illustration along with
 a long caption.  The formatting of the caption text is automatically
