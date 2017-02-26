@@ -146,6 +146,7 @@ But, when the strength of students increase, like in case of a MOOC, where the n
 
 Modern day education sector is using cloud technologies for various aspects like hosting video lectures in YouTube, sharing files using Dropbox and Google Drive, collaborative document editing using Google Docs etc. These cloud based technologies enable access to online services anywhere and promises scalability, enhanced availability and cost savings.
 
+This project is aimed at creating an online interface where instructors can create environments for various programming languages and users can write code in that environment, execute and view the results. The emphasis is given on flexibility to support any programming language and scalability to handle any number of users, using cloud computing techniques.
 \section{Literature Review}
 A state-of-the-art survey paper by \cite{gonzalez-martinez_cloud_2015} on cloud computing and education reviewed 112 works relevant to the field discuss various innovations, opportunities, shortcomings and risks.
 
@@ -155,7 +156,13 @@ While there are services like \cite{codeanywhere} which offers an IDE on the bro
 
 While there are plenty of programming languages and environments available, setting them up can be bit of a hurdle, especially in an educational institution environment where the class strengths are very high. If we look at the scenario of a typical introductory programming course at an undergraduate university, most of the students attending will be programming for the first time. When class strength is huge, it is not easy to have the infrastructure or the man power to manage computer labs. 
 
-Especially at times when many MOOCs are offered online, getting everybody to code in a computer lab is not possible. Most of the students have their own devices, which can access internet.
+Especially at times when many MOOCs are offered online, getting everybody to code in a computer lab is not possible. Most of the students have their own devices, which can access internet. If we go with traditional way of installing environment to write, compile or interpret and run programs, this will prove to be quite tedious. First of all, all users might not be aware or comfortable with the tools or background knowledge required to install these programs. On top of that, considering the wide variety of devices and their operating systems, like Windows, Linux (which in-turn has many distributions), MacOS, Android, iOS, ChromeOS etc., providing instructions for everyone is very difficult for the instructor. Also, if user is on a mobile OS, like a tablet, there is absolutely no way of them installing programs that let them code. Finally, everyone's device and the environment is different. If there are some dependency errors etc, fixing them would take precious time for learning.
+
+A student/user should be spending their time on learning the language, its syntax and usages. They should not be wasting time on installing, fixing and configuring tools and environments to run their code. This can have a negative effect on beginners who are just getting into programming. Students could get frustrated and leave the course.
+
+This is the primary problem that is being addressed here. There should be an easy to use programming interface that would work the same on every device. Only a web application can be made to work like this through a web browser. Being a web application, the program can be served through internet and be made available anytime anywhere. By leveraging cloud computing along with virtualisation and containerisation technologies, millions of users can write code and run their programs.
+
+The second problem that is being tackled is compatibility with any programming language. 
 
 \chapter{EVALUATION METHODOLOGY}
 Includes how the student intends to tackle the problem, avenues for investigation, possible milestones, options for different architectures, etc. [3-4 pages]
