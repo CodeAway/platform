@@ -190,7 +190,14 @@ Choosing the correct container runtime is important to make the platform user fr
 
 When containers are used to deploy applications, there is a requirement of certain orchestration tools which takes care of sheduling, resource allocation and availability. Popular container orchestration tools include Kubernetes, Docker Swarm, Mesosphere Marathon, Cloud Foundry Diego etc. Since all of them are open source projects, if we look at the number of stars on their GitHub repositories, Kubernetes turns out to be the most popular with 20964 stars at the time of writing \citep{github_stars_comparison}. Also, \cite{google_trends_kubernetes_docker_swarm} indicate the same.
 
-For simplicity in implementation, it was decided to build a proof of concept with support for JavaScript applications and test the feasibilty.
+For simplicity in implementation, it was decided to build a proof of concept with support for JavaScript applications and test the feasibilty. Fig.~\ref{fig:userflow} gives an overall view of the architecture.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{img/user_flow}
+\caption[Overall flow diagram for the system]{Overall flow diagram for the system from user perspective}
+\label{fig:userflow}
+\end{figure}
 
 \chapter{RESULTS}
 %(i) progress made, (ii) results, (iii) sample code, (iv) refinement of the problem statement, and (v) potential work outline for the next 2-3 months. This will count for 25% of the final grade.                
