@@ -190,21 +190,13 @@ Choosing the correct container runtime is important to make the platform user fr
 
 When containers are used to deploy applications, there is a requirement of certain orchestration tools which takes care of sheduling, resource allocation and availability. Popular container orchestration tools include Kubernetes, Docker Swarm, Mesosphere Marathon, Cloud Foundry Diego etc. Since all of them are open source projects, if we look at the number of stars on their GitHub repositories, Kubernetes turns out to be the most popular with 20964 stars at the time of writing \citep{github_stars_comparison}. Also, \cite{google_trends_kubernetes_docker_swarm} indicate the same.
 
-For simplicity in implementation, it was decided to build a proof of concept with support for JavaScript applications and test the feasibilty. Fig.~\ref{fig:userflow} gives an overall view of the architecture.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{img/user_flow}
-\caption[Overall flow diagram for the system]{Overall flow diagram for the system from user perspective}
-\label{fig:userflow}
-\end{figure}
-
+For simplicity in implementation, it was decided to build a proof of concept with support for JavaScript applications and test the feasibilty. 
 \chapter{RESULTS}
 %(i) progress made, (ii) results, (iii) sample code, (iv) refinement of the problem statement, and (v) potential work outline for the next 2-3 months. This will count for 25% of the final grade.                
 
 %Upgrade the report of Stage 1, and add another chapter say called Results, which includes progress made, and the potential work outline for the next 2-3 months
 
-After considering all the options, it was decided to build the platform using following technologies:
+After considering all the options, it was decided to build the platform using following technologies. Everything except GitHub are open source softwares. But, all the major open source activities in the world is carried out on GitHub.
 \begin{itemize}
 	\item \textbf{React}\footnote{\url{https://facebook.github.io/react/}} for user facing code console on browser
 	\item \textbf{GitHub}\footnote{\label{github_website}\url{https://github.com/}} for storing all template environments as well as user code
@@ -213,9 +205,27 @@ After considering all the options, it was decided to build the platform using fo
 	\item \textbf{Nginx}\footnote{\url{http://nginx.org/}} for reverse proxying urls to containers
 \end{itemize}
 
-Everything except GitHub are open source softwares. But, all the major open source activities in the world is carried out on GitHub.
 
-For simplicity in the implementation
+Fig.~\ref{fig:userflow} gives an overall view of the architecture. From a user perspective the flow is as follows:
+\begin{enumerate}
+	\item User opens the console by going to the link created by adminisrators
+	\item User logs on to the console using GitHub credentials. This will link the user's GitHub account to the console
+	\item All editable files are shown to the user on a side panel. In order to add more files, user goes to GitHub website and carry out necessary action
+	\item User selects the file that has to be edited
+	\item File is shown inside a code editor window where user can make any changes required
+	\item Once the file is edited, user clicks on Commit \& Restart button
+	\item User is shown a web link where the code's output (a webpage in this case) is shown
+	\item User can view logs for the code by clicking on the logs button
+	
+\end{enumerate}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/user_flow}
+	\caption[Overall flow diagram for the system]{Overall flow diagram for the system from user perspective}
+	\label{fig:userflow}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices.
 
@@ -224,6 +234,12 @@ For simplicity in the implementation
 \chapter{SOURCE CODE}
 
 All source code is present in GitHub. Links are given here.
+\begin{enumerate}
+	\item User console\footnote{\url{https://github.com/hasura-imad/console}}
+	\item API Server\footnote{\url{https://github.com/hasura-imad/api}}
+	\item Nginx reverse proxy and gateway\footnote{\url{https://github.com/hasura-imad/gateway}}
+	\item Base template for JavaScript environment\footnote{\url{https://github.com/hasura-imad/imad-app-v2}}
+\end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography.
