@@ -20,3 +20,18 @@
 	urldate = {2017-02-26},
 	journal = {Codeanywhere}
 }
+@inproceedings{ruan_performance_2016,
+	title = {A {Performance} {Study} of {Containers} in {Cloud} {Environment}},
+	url = {https://link.springer.com/chapter/10.1007/978-3-319-49178-3_27},
+	abstract = {Container technology has gained great popularity since containers could provide near-native performance in cloud environment. According to different design purposes and underlying implementations, containers could be classified into application containers (e.g., Docker) and system containers (e.g., LXC). The diversity of containers may lead to a confusing choice about which kind of container is suitable for different usage scenarios. Meanwhile, the architectures of public container services are quite controversial because cloud platforms tend to run containers in virtual machines. From the perspective of performance, an extra virtual machine layer between the bare metal and containers probably brings in unnecessary performance overhead. In this paper, we carry out a performance study to explore the appropriate way to use containers from different perspectives. We first conduct a series of experiments to measure performance differences between application containers and system containers, then evaluate the overhead of extra virtual machine layer between the bare metal and containers, and finally inspect the service quality of ECS (Amazon EC2 Container Service) and GKE (Google Container Engine). Our results show that system containers are more suitable to sustain I/O-bound workload than application containers, because application containers will suffer high I/O latency due to layered filesystem. Running containers in virtual machine would result in severe disk I/O performance degradation up to 42.7 \% and network latency up to 233 \%. We also find out ECS offers better performance than GKE, and cloud platforms could acquire better performance by running containers directly on the bare metal.},
+	language = {en},
+	urldate = {2017-02-27},
+	booktitle = {Advances in {Services} {Computing}},
+	publisher = {Springer, Cham},
+	author = {Ruan, Bowen and Huang, Hang and Wu, Song and Jin, Hai},
+	month = nov,
+	year = {2016},
+	note = {DOI: 10.1007/978-3-319-49178-3\_27},
+	pages = {343--356},
+	file = {APSCC16(Ruan).pdf:/home/shahidh/.zotero/zotero/3f7i83sm.default/zotero/storage/2R6HJHG3/APSCC16(Ruan).pdf:application/pdf;Snapshot:/home/shahidh/.zotero/zotero/3f7i83sm.default/zotero/storage/FWK7EADC/978-3-319-49178-3_27.html:text/html}
+}
