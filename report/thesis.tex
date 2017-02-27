@@ -177,11 +177,16 @@ Each user's code should be secure and isolated. Unauthorized access should be pr
 \chapter{EVALUATION METHODOLOGY}
 %Includes how the student intends to tackle the problem, avenues for investigation, possible milestones, options for different architectures, etc. [3-4 pages]
 
-A web application is best served for the purpose, since the only requirement is a web browser and internet connection. This will very well serve the usability requirement since a common interface is exposed throug a web browser and all modern cosumer devices support web browsers. Flexibility to create any programming environment can be attained using containers. LXC, Docker and Rocket are some of the popular container runtime environments. Even though there are performance tradeoffs by using containers \citep{ruan_performance_2016}, the flexibility and esiness to create any evnironment will surpass it.
+A web application is best served for the purpose, since the only requirement is a web browser and internet connection. This will very well serve the usability requirement since a common interface is exposed through a web browser and all modern consumer devices support web browsers. Flexibility to create any programming environment can be attained using containers. LXC, Docker and Rocket are some of the popular container runtime environments. Even though there are performance trade-off by using containers \citep{ruan_performance_2016}, the flexibility and easiness to create any environment will surpass it.
 
+Choosing the correct container runtime is important to make the platform user friendly. Popular runtimes tend to have more documentation and support for all kinds of programs. In order to determine popularity, tech firms in the computer science industry were consulted and by word of mouth Docker emerged to be a clear winner. In order to further back this up, a Google Trends analysis carried out between Docker, LXC and Rocket \citep{google_trends_docker_lxc_rkt} is shown in Fig.~\ref{fig:google_trends_docker_rkt_lxc}. 
 
-Choosing the correct container runtime is important to make the platform user friendly. Popular runtimes tend to have more documentation and support for all kinds of programs. In order to determine popularity, tech firms in the computer science industry were consulted and by word of mouth Docker emerged to be a clear winner. In order to further back this up, a Google Trends analysis carried out between Docker, LXC and Rocket \citep{google_trends_docker_lxc_rkt} is shown in 
-
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{img/google_trends_docker_rkt_lxc}
+\caption[Google Trends for docker, rkt, lxc]{Google Trends for docker, rkt, lxc - wordwide, past 5 years, retrieved on 2017-02-27}
+\label{fig:google_trends_docker_rkt_lxc}
+\end{figure}
 
 
 \chapter{RESULTS}
