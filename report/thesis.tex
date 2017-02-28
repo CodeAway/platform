@@ -109,6 +109,10 @@ xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 \textbf{IITM}   \> Indian Institute of Technology, Madras \\
 \textbf{MOOC} \> Massive Online Open Course \\
 \textbf{K8S} \> Kubernetes \\
+\textbf{VM} \> Virtual Machine \\
+\textbf{GCE} \> Google Compute Engine \\
+\textbf{GKE} \> Google Container Engine \\
+\textbf{IP} \> Internet Protocol \\
 \end{tabbing}
 
 \pagebreak
@@ -184,7 +188,7 @@ Choosing the correct container runtime is important to make the platform user fr
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{img/google_trends_docker_rkt_lxc}
+\includegraphics[width=0.9\linewidth]{img/google_trends_docker_rkt_lxc}
 \caption[Google Trends for docker, rkt, lxc]{Google Trends for docker, rkt, lxc - wordwide, past 5 years, retrieved on 2017-02-27}
 \label{fig:google_trends_docker_rkt_lxc}
 \end{figure}
@@ -208,7 +212,7 @@ After considering all the options, it was decided to build the platform using fo
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.7\linewidth]{img/user_flow}
+	\includegraphics[width=0.9\linewidth]{img/user_flow}
 	\caption[Overall flow diagram for the system]{Overall flow diagram for the system from user perspective}
 	\label{fig:userflow}
 \end{figure}
@@ -227,12 +231,22 @@ Fig.~\ref{fig:userflow} gives an overall view of the system. From a user perspec
 \end{enumerate}
 
 \section{System Architecture}
-The console and user applications are deployed on a cloud platform, Google Cloud\footnote{\url{https://cloud.google.com/}} in this case, as docker containers managed by Kubernetes (K8S) on a cluster of Virtual Machines (VM). 
+The console and user applications are deployed to a cloud platform, Google Cloud\footnote{\url{https://cloud.google.com/}} in this case, as docker containers managed by Kubernetes (K8S) on a cluster of Virtual Machines (VM) running Container Linux OS\footnote{\url{https://coreos.com/}}. While the console is exposed as a web server where user logs in at \textit{console.domain.com}, all user application are exposed as \textit{user.app.domain.com}. Whenever a user issues command to run the code, the API server picks up corresponding code from GitHub and creates K8S objects, a service and deployment, on the cluster. K8S will put the code inside the pre-defined environment and starts a container. When a user visits \textit{user.app.domain.com}, the Nginx gateway, programmed using Lua, running on the cluster infers \textit{user} from the hostname and directs the connection to the right container. Inside the cluster, the containers are identified by internal, DNS lookups. Each container is assigned a hostname matching the user's name. A DNS server keeps track of these hostnames and resolves them to container IP addresses when necessary. 
 
+The cluster where user appications are run comprises of many virtual machines. There is one master machine and many worker machines. They are all linked together using a private network and external access is through a loadbalancer which is guarded by a firewall. Only port 80 is exposed on the public IP address of the loadbalancer. On recieving a request, the loadbalancer delegates it to one of the worker machines using a round-robin algorithm. On each worker, a copy of Nginx gateway is running. This architecture is illustrated in Fig.~\ref{fig:systemarch}. 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\linewidth]{img/system_arch}
+\caption[System architecture]{Platform architecture indicating how a user interacts with main server, github and the application cluster}
+\label{fig:systemarch}
+\end{figure}
 
 \section{Components}
-Talk about components
 
+The 
+\subsection{Kubernetes}
+Talk about K8S
 \subsection{User Interface}
 talk about the interface
 \subsection{API Server}
