@@ -188,9 +188,9 @@ Choosing the correct container runtime is important to make the platform user fr
 \label{fig:google_trends_docker_rkt_lxc}
 \end{figure}
 
-When containers are used to deploy applications, there is a requirement of certain orchestration tools which takes care of sheduling, resource allocation and availability. Popular container orchestration tools include Kubernetes, Docker Swarm, Mesosphere Marathon, Cloud Foundry Diego etc. Since all of them are open source projects, if we look at the number of stars on their GitHub repositories, Kubernetes turns out to be the most popular with 20964 stars at the time of writing \citep{github_stars_comparison}. Also, \cite{google_trends_kubernetes_docker_swarm} indicate the same.
+When containers are used to deploy applications, there is a requirement of certain orchestration tools which takes care of scheduling, resource allocation and availability. Popular container orchestration tools include Kubernetes, Docker Swarm, Mesosphere Marathon, Cloud Foundry Diego etc. Since all of them are open source projects, if we look at the number of stars on their GitHub repositories, Kubernetes turns out to be the most popular with 20964 stars at the time of writing \citep{github_stars_comparison}. Also, \cite{google_trends_kubernetes_docker_swarm} indicate the same.
 
-For simplicity in implementation, it was decided to build a proof of concept with support for JavaScript applications and test the feasibilty. 
+For simplicity in implementation, it was decided to build a proof of concept with support for JavaScript applications and test the feasibility. 
 \chapter{RESULTS}
 %(i) progress made, (ii) results, (iii) sample code, (iv) refinement of the problem statement, and (v) potential work outline for the next 2-3 months. This will count for 25% of the final grade.                
 
@@ -205,10 +205,16 @@ After considering all the options, it was decided to build the platform using fo
 	\item \textbf{Nginx}\footnote{\url{http://nginx.org/}} for reverse proxying urls to containers
 \end{itemize}
 
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{img/user_flow}
+	\caption[Overall flow diagram for the system]{Overall flow diagram for the system from user perspective}
+	\label{fig:userflow}
+\end{figure}
 
 Fig.~\ref{fig:userflow} gives an overall view of the architecture. From a user perspective the flow is as follows:
 \begin{enumerate}
-	\item User opens the console by going to the link created by adminisrators
+	\item User opens the console by going to the link created by administrators
 	\item User logs on to the console using GitHub credentials. This will link the user's GitHub account to the console
 	\item All editable files are shown to the user on a side panel. In order to add more files, user goes to GitHub website and carry out necessary action
 	\item User selects the file that has to be edited
@@ -219,12 +225,20 @@ Fig.~\ref{fig:userflow} gives an overall view of the architecture. From a user p
 	
 \end{enumerate}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\linewidth]{img/user_flow}
-	\caption[Overall flow diagram for the system]{Overall flow diagram for the system from user perspective}
-	\label{fig:userflow}
-\end{figure}
+\section{System Architecture}
+Explain the architecture
+
+\section{Components}
+Talk about components
+
+\subsection{User Interface}
+talk about the interface
+\subsection{API Server}
+talk about API server
+\subsection{Gateway and Reverse Proxy}
+talk about gateway
+\subsection{Programming Environment}
+talk about env
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices.
