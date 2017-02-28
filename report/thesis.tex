@@ -243,10 +243,10 @@ The cluster where user appications are run comprises of many virtual machines. T
 \end{figure}
 
 \section{Components}
+Micoservices architecture \citep{dragoni_microservices:_2016} is adopted for the design and enigineering of components in the platform. This is in contrast to the typical monolithic software engineering practices that has been followed by the communinty and industy for a long time. Advantages fo a microservices architecture includes the ability to use multiple programming languages together and scale them individually without affecting other parts. Each microservice is deployed as a docker container, managed by K8S. Even the core K8S components are microservices which again run inside containers.
 
-The 
 \subsection{Kubernetes}
-Talk about K8S
+Kubernetes is an open source cluster container management tool originally developed by Google \citep{burns_borg_2016} and later moved to Cloud Native Computing Foundation\footnote{\url{https://www.cncf.io/}}. It defines a set of primitives that collectively provide mechanisms for deploying maintaining and scaling applications through the use of containers. Docker conatiners are natively supported with K8S and support for rkt and lxc is under development.
 \subsection{User Interface}
 talk about the interface
 \subsection{API Server}
