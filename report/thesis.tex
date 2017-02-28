@@ -270,14 +270,14 @@ Whenever an object is created or a change is made to an object, K8S logs it into
 \subsection{User Interface}
 The React/Redux based user interface which runs on a web browser defines how a user interacts with the platform. The interface is designed to be simple and clutter free to direct focus on to the code only. A screenshot of the inteface is included in Fig.~\ref{fig:codeinterface} for clarity. Main components are a side bar where navigation and command controls are present and a main window where user and see and edit code. Links to view logs and lauch applicaitons are given on the top of sidebar. The main action button which says Commit \& Restart saves the changes to GitHub and refresh user application with new code. Below that, all editable files are shown, on which the user can click and it's content is shown available for editing on the right side. An open source code editor called ACE Editor\footnote{\url{https://ace.c9.io/}} is used for providing the coding interface. It supports syntax highlighting for a variety of languages as well as simple error highlighting.
 
-Non-editable or non-code files are shown as Other files. Updating them or adding new files can be done through GitHub website. This is deliberatly done so as to reduce the complexity of the user interface.
-
 \begin{figure}
-\centering
-\includegraphics[width=0.9\linewidth]{img/code_interface}
-\caption[User interface to code]{The user interface of web app that a user uses to write and mange code}
-\label{fig:codeinterface}
+	\centering
+	\includegraphics[width=0.9\linewidth]{img/code_interface}
+	\caption[User interface]{The user interface of web app that is used to write and mange code}
+	\label{fig:codeinterface}
 \end{figure}
+
+Non-editable or non-code files are shown as Other files. Updating them or adding new files can be done through GitHub website. This is deliberatly done so as to reduce complexity of the user interface. All edits to files are stored locally and saved directly to GitHub using GitHub API v3 \footnote{\url{https://developer.github.com/v3/}}
 
 \subsection{API Server}
 talk about API server
