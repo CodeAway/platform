@@ -295,13 +295,13 @@ The user interface communicates to an API server to carry out actions like start
 \end{itemize}
 
 \subsection{Gateway and Reverse Proxy}
-talk about gateway
+User's applications are running inside docker containers each having individual IP address. But, inorder to make it human-fiendly, DNS labels are attached to each container, internally and externally. A gateway and reverse proxy should be present to route incoming requests in the form of \textit{user.app.domain.com} to the corresponding container. Nginx was the logical solution since it supported reverse proxying out of the box. The fact that it can be scripted using Lua to extend functionality with Openresty\footnote{\url{https://openresty.org/en/}} made a compelling argument.
 
 \subsection{Programming Environment}
 talk about env
 
 \section{Issues and Solutions}
-logging via gateway, username issue
+logging via gateway, reaping, username issue
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices.
 
