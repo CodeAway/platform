@@ -121,6 +121,7 @@ xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 \textbf{DNS} \> Domain Name Service \\
 \textbf{API} \> Application Programming Inerface \\
 \textbf{REST} \> Representational State Transfer \\
+\textbf{JSON} \> JavaScript Object Notation \\
 \end{tabbing}
 
 \pagebreak
@@ -280,14 +281,24 @@ The React/Redux based user interface which runs on a web browser defines how a u
 Non-editable or non-code files are shown as Other files. Updating them or adding new files can be done through GitHub website. This is deliberatly done so as to reduce complexity of the user interface. All edits to files are stored locally and saved directly to GitHub using GitHub API v3 \footnote{\url{https://developer.github.com/v3/}}.
 
 \subsection{API Server}
-The user interface communicates to an API server to carry out actions like starting or updating code of the user application, getting logs etc. API server is written using Node.js\footnote{\url{https://nodejs.org/en/}} and communicates with the K8S cluster via K8S API.
+The user interface communicates to an API server to carry out actions like starting or updating code of the user application, getting logs etc. API server is written using Node.js\footnote{\url{https://nodejs.org/en/}} and communicates with the K8S cluster via K8S API. All requsets return JSON and all post requests requires JSON body. Below are few APIs and their description:
+\begin{itemize}
+	\item \verb|GET /status| \\
+		returns information about whether the logged in user's application is currently running or not
+	\item \verb|POST /restart| \\
+		takes current commit and repository url as input and starts user app if it is not running, otherwise update the running app
+	\item \verb|POST /stop| \\
+		stops a running application, if the app is not running, does nothing
+	\item \verb|GET /logs| \\
+		get logs for the current running app
+\end{itemize}
 \subsection{Gateway and Reverse Proxy}
 talk about gateway
 \subsection{Programming Environment}
 talk about env
 
 \section{Issues and Solutions}
-
+logging via gateway, username issue
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices.
 
