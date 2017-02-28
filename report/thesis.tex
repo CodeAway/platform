@@ -111,12 +111,16 @@ Date: 21st May 2017
 \begin{tabbing}
 xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 \textbf{IITM}   \> Indian Institute of Technology Madras \\
-\textbf{MOOC} \> Massive Online Open Course \\
+\textbf{MOOC} \> Massive Open Online Course \\
 \textbf{K8S} \> Kubernetes \\
 \textbf{VM} \> Virtual Machine \\
 \textbf{GCE} \> Google Compute Engine \\
 \textbf{GKE} \> Google Container Engine \\
 \textbf{IP} \> Internet Protocol \\
+\textbf{HTTP} \> Hyper Text Transfer Protocol \\
+\textbf{DNS} \> Domain Name Service \\
+\textbf{API} \> Application Programming Inerface \\
+\textbf{REST} \> Representational State Transfer \\
 \end{tabbing}
 
 \pagebreak
@@ -250,9 +254,9 @@ The cluster where user appications are run comprises of many virtual machines. T
 Micoservices architecture \citep{dragoni_microservices:_2016} is adopted for the design and enigineering of components in the platform. This is in contrast to the typical monolithic software engineering practices that has been followed by the communinty and industy for a long time. Advantages fo a microservices architecture includes the ability to use multiple programming languages together and scale them individually without affecting other parts. Each microservice is deployed as a docker container, managed by K8S. Even the core K8S components are microservices which again run inside containers.
 
 \subsection{Kubernetes}
-Kubernetes is an open source cluster container management tool originally developed by Google \citep{burns_borg_2016} and later moved to Cloud Native Computing Foundation\footnote{\url{https://www.cncf.io/}}. It defines a set of primitives that collectively provide mechanisms for deploying maintaining and scaling applications through the use of containers. Docker conatiners are natively supported with K8S and support for rkt and lxc is under development.
+Kubernetes is an open source cluster container management tool originally developed by Google \citep{burns_borg_2016} and later moved to Cloud Native Computing Foundation\footnote{\url{https://www.cncf.io/}}. It defines a set of primitives that collectively provide mechanisms for deploying maintaining and scaling applications through the use of containers. Docker conatiners are natively supported by K8S and support for rkt and lxc is under development.
 
-The architecture of Kubernetes follows a master-slave layout. The key components can be divided to those manage each node and those reside in the master controller space. Fig.~\ref{fig:systeminternalarch} shows a brief overview of K8S architecure exploited for the current application.
+The architecture of Kubernetes follows a master-slave layout. The key components can be divided to those manage each node and those reside in the master controller space. Fig.~\ref{fig:systeminternalarch} shows a brief overview of K8S architecure exploited for the current application. The key feature used here are \textit{\cite{deployments}} and \textit{\cite{services}} objects. Whenever a \textit{Deployment} object is created with required configuration, K8S starts a docker container with the given image name. The \textit{Service} object gives HTTP access to the container over a specified port and registers itself with DNS server. Objects are created over REST calls to the K8S API.
 
 \begin{figure}
 \centering
