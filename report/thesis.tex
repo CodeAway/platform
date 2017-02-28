@@ -1,10 +1,6 @@
-%\documentclass[PhD]{iitmdiss}
-%\documentclass[MS]{iitmdiss}
-%\documentclass[MTech]{iitmdiss}
-%\documentclass[BTech]{iitmdiss}
 \documentclass[DD]{iitmdiss}
 \usepackage{times}
- \usepackage{t1enc}
+\usepackage{t1enc}
 
 \usepackage{graphicx}
 %\usepackage{epstopdf}
@@ -14,6 +10,7 @@
 	pdfkeywords={IITM,Dual Degree,Report}
 }
 \usepackage{amsmath} % easier math formulae, align, subequations \ldots
+\hyphenation{Hasura}
 
 \begin{document}
 
@@ -163,9 +160,11 @@ Modern day education sector is using cloud technologies for various aspects like
 
 This project is aimed at creating an online interface where instructors can create environments for various programming languages and users can write code in that environment, execute and view the results. The emphasis is given on flexibility to support any programming language and scalability to handle any number of users, using cloud computing techniques.
 \section{Literature Review}
-A state-of-the-art survey paper by \cite{gonzalez-martinez_cloud_2015} on cloud computing and education reviewed 112 works relevant to the field discuss various innovations, opportunities, shortcomings and risks.
+A state-of-the-art survey paper by \cite{gonzalez-martinez_cloud_2015} on cloud computing and education reviewed 112 works relevant to the field. They discuss various innovations, opportunities, shortcomings and risks associated with using cloud computing in educational institutions, especially those dealing with computer science. The paper says that availability of a wide variety of cloud services like wikis, blogs, cloud storage, collaborative documents, virtual classrooms like Moodle\footnote{\url{https://moodle.org/}} Blackboard\footnote{\url{http://anz.blackboard.com/}} etc. has already become popular among educators and students (\cite{dmitriev_cloud_2012}, \cite{tan_cloud_2011}, \cite{wood_collaborative_2011}). 
 
-While there are services like \cite{codeanywhere} which offers an IDE on the browser, none of them are open source and are not available for free.
+While many researchers have proposed and implemented  
+
+While there are services like \textit{Codeanywhere}\footnote{\url{https://codeanywhere.com/}} which offers an IDE on the browser, none of them are open source and are not available for free.
 
 \section{Outline of the Problem}
 
@@ -194,7 +193,7 @@ Each user's code should be secure and isolated. Unauthorized access should be pr
 
 A web application is best served for the purpose, since the only requirement is a web browser and internet connection. This will very well serve the usability requirement since a common interface is exposed through a web browser and all modern consumer devices support web browsers. Flexibility to create any programming environment can be attained using containers. LXC, Docker and Rocket are some of the popular container runtime environments. Even though there are performance trade-off by using containers \citep{ruan_performance_2016}, the flexibility and easiness to create any environment will surpass it.
 
-Choosing the correct container runtime is important to make the platform user friendly. Popular runtimes tend to have more documentation and support for all kinds of programs. In order to determine popularity, tech firms in the computer science industry were consulted and by word of mouth, Docker emerged to be a clear winner. In order to further back this up, a Google Trends analysis carried out between Docker, LXC and Rocket \citep{google_trends_docker_lxc_rkt} is shown in Fig.~\ref{fig:google_trends_docker_rkt_lxc}. 
+Choosing the correct container runtime is important to make the platform user friendly. Popular runtimes tend to have more documentation and support for all kinds of programs. In order to determine popularity, tech firms in the computer science industry were consulted and by word of mouth, Docker emerged to be a clear winner. In order to further back this up, a Google Trends analysis carried out between Docker, LXC and Rocket based on last 5 year's data\footnote{\url{https://goo.gl/Ifg2SD}} is shown in Fig.~\ref{fig:google_trends_docker_rkt_lxc}. 
 
 \begin{figure}
 \centering
@@ -203,7 +202,7 @@ Choosing the correct container runtime is important to make the platform user fr
 \label{fig:google_trends_docker_rkt_lxc}
 \end{figure}
 
-When containers are used to deploy applications, there is a requirement of certain orchestration tools which takes care of scheduling, resource allocation and availability. Popular container orchestration tools include Kubernetes, Docker Swarm, Mesosphere Marathon, Cloud Foundry Diego etc. Since all of them are open source projects, if we look at the number of stars on their GitHub repositories, Kubernetes turns out to be the most popular with 20964 stars at the time of writing \citep{github_stars_comparison}. Also, \cite{google_trends_kubernetes_docker_swarm} indicate the same.
+When containers are used to deploy applications, there is a requirement of certain orchestration tools which takes care of scheduling, resource allocation and availability. Popular container orchestration tools include Kubernetes, Docker Swarm, Mesosphere Marathon, Cloud Foundry Diego etc. Since all of them are open source projects, if we look at the number of stars on their GitHub repositories, Kubernetes turns out to be the most popular with 20964 stars at the time of writing\footnote{\url{https://goo.gl/tZmbXp}}. Also, Google Trends for kubernetes, docker swarm, mesosphere marathon, cloud foundry diego - Worldwide, 1/2/13 - 2/27/17 \footnote{\url{https://g.co/trends/s0aOm}} indicate the same.
 
 For simplicity in implementation, it was decided to build a proof of concept with support for JavaScript applications and test the feasibility. 
 \chapter{RESULTS}
@@ -258,7 +257,7 @@ Microservices architecture \citep{dragoni_microservices:_2016} is adopted for th
 \subsection{Kubernetes}
 Kubernetes is an open source cluster container management tool originally developed by Google \citep{burns_borg_2016} and later moved to Cloud Native Computing Foundation\footnote{\url{https://www.cncf.io/}}. It defines a set of primitives that collectively provide mechanisms for deploying maintaining and scaling applications through the use of containers. Docker containers are natively supported by K8S and support for rkt and lxc is under development.
 
-The architecture of Kubernetes follows a master-slave layout. The key components can be divided to those manage each node and those reside in the master controller space. Fig.~\ref{fig:systeminternalarch} shows a brief overview of K8S architecture exploited for the current application. The key feature used here are \textit{\cite{deployments}} and \textit{\cite{services}} objects. Whenever a \textit{Deployment} object is created with required configuration, K8S starts a docker container with the given image name. The \textit{Service} object gives HTTP access to the container over a specified port and registers itself with DNS server. Objects are created over REST calls to the K8S API.
+The architecture of Kubernetes follows a master-slave layout. The key components can be divided to those manage each node and those reside in the master controller space. Fig.~\ref{fig:systeminternalarch} shows a brief overview of K8S architecture exploited for the current application. The key feature used here are \textit{Deployments}\footnote{\url{http://kubernetes.io/docs/user-guide/deployments/}} and \textit{Services}\footnote{\url{http://kubernetes.io/docs/user-guide/services/}} objects. Whenever a \textit{Deployment} object is created with required configuration, K8S starts a docker container with the given image name. The \textit{Service} object gives HTTP access to the container over a specified port and registers itself with DNS server. Objects are created over REST calls to the K8S API.
 
 \begin{figure}
 	\centering
@@ -297,11 +296,45 @@ The user interface communicates to an API server to carry out actions like start
 \subsection{Gateway and Reverse Proxy}
 User's applications are running inside docker containers each having individual IP address. But, in order to make it human-friendly, DNS labels are attached to each container, internally and externally. A gateway and reverse proxy should be present to route incoming requests in the form of \textit{user.app.domain.com} to the corresponding container. Nginx was the logical solution since it supported reverse proxying out of the box. The fact that it can be scripted using Lua to extend functionality with Openresty\footnote{\url{https://openresty.org/en/}} made a compelling argument.
 
+Nginx is also run inside a container on each node in the cluster via a K8S \textit{DaemonSet} object. It listens on port 80 for HTTP requests. A script is written in \textit{Lua} intercepts requests and dynamically detect the user's name from hostname. The corresponding user's container IP address is resolved using K8S DNS server and the request is proxied on to the container after adding necessary HTTP headers. 
+
+Further, when a container is not running and a user request for it, a custom error page is rendered asking the user to restart it from the console. If the container is encountering any errors, another error page sis rendered  asking user to check the logs.
+
 \subsection{Programming Environment}
-talk about env
+A major advantage of using docker containers for application deployment is that the anyone can create any kind of environment by writing what is called a \textit{Dockerfile}\footnote{\url{https://docs.docker.com/engine/reference/builder/}}. Inside this file, all the commands that you would execute to create the environment in a local unix system is written line by line. Docker can infer this file and build a \textit{docker image} which can be run on any host to reproduce the exact environment. For languages which do not need compilation of code to run, we just need to change the files in this container. Otherwise, a basic image can be built and on top of it, compilation can be carried out.
+
+For the current phase, a \textit{docker image} has been made for running \textit{Node.js} applications written is \textit{JavaScript}. Creating new \textit{Dockerfile} for other environments and languages are fairly straightforward.
 
 \section{Issues and Solutions}
-logging via gateway, reaping, username issue
+%logging via gateway, reaping, username issue
+On course of implementing the platform, a couple of issues were faced and they were solved. Some of these issues which are worth mentioning are being given here.
+
+\subsection{Optimum Resource Utilisation}
+When a user is editing their code, it is important to immediately see the result. But, when they are done for the day, nobody is looking at their applications and running them was wasting resources, which will ultimately end up as cost. Applications which are not being accesses for a while had to be shut down. But, this information is not available anywhere organically. Initial idea was to keep track of who us using the console. But, this is not reliable since the app in question is a web-app. Users might have given links to their app to friends, family etc., for them to see. In other cases, if the app has to be submitted for evaluation, user should no be logged in. In short, when a third part need to access the app, deciding whether to run the app just by looking at access to console is not feasible.
+
+The next option was to process the logs of gateway to decide which apps were accessed recently and keep track of the time when a certain app is last accessed. But, this will require separate processing module to crunch through the gateway logs, which means one more component to worry about.
+
+Since the gateway can be scripted, a more niche way of doing this is by using the gateway to make an API call to API server and store the time when the call was made. This will affect the response time, but in a negligible amounts as the API Server is co-located with the gateway instances.  The require script was written in \textit{Lua} and deployed to gateway, and it works reliably.
+
+A small piece of code is run at every minute which will read all last-accessed times from the database and stops applications which were not accessed for a set interval of time. This ensures that the resource utilisation is optimal.
+
+\subsection{Username Pattern}
+When users started using the platform, we noticed failures in K8S API for certain groups, especially those who has their usernames starting with a number. As per the K8S API specifications, all object names should match with the regular expression \verb|[a-zA-Z_][a-zA-Z0-9_-]|, which means they should not start with a number. 
+
+Obvious solution was to append a string to the beginning at the time of sign-up if the username starts with a number. \verb|user-| was added to the beginning in all those cases. For e.g., if a user's GitHub username is \verb|123githubuser|, it is modified and stored as \verb|user-123githubuser|.
+
+\section{PoC Deployment}
+The proof-of-concept was deployed for an online course called IMAD\footnote{\url{http://imad.tech/}} (Introduction to Modern Application Development) conducted by NPTEL\footnote{\url{https://onlinecourses.nptel.ac.in/}} , IIT Madras\footnote{\url{https://www.iitm.ac.in/}} and Hasura\footnote{\url{https://hasura.io/}}. 57545 students participated in the course for the first edition and 25192 for the second edition. Participants used this platform\footnote{\url{https://cloud.imad.hasura.io/}} deployed on Google Container Engine\footnote{\url{https://cloud.google.com/container-engine/}} and Microsoft Azure\footnote{\url{https://azure.microsoft.com/en-in/}} for building their own web application throughout the course. A programming environment with JavaScript is configured to use in this deployment. So far, platform is holding good against the workloads.
+
+\section{Future Work}
+\begin{enumerate}
+	\item Integrate configurable programming environments
+	\item Provide feature to run and see output of non-web-server applications
+	\item Abstract settings like name, default environment to a configurable format
+	\item Add features for one-click deployment to major cloud platforms
+	\item Write proper documentation for code as well as usage
+	\item Benchmark against different workloads
+\end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices.
 
@@ -314,14 +347,14 @@ All source code is present in GitHub. Links are given here.
 	\item User console\footnote{\url{https://github.com/hasura-imad/console}}
 	\item API Server\footnote{\url{https://github.com/hasura-imad/api}}
 	\item Nginx reverse proxy and gateway\footnote{\url{https://github.com/hasura-imad/gateway}}
-	\item Base template for JavaScript environment\footnote{\url{https://github.com/hasura-imad/imad-app-v2}}
+	\item Base template for JavaScript environment\footnote{\url{https://github.com/hasura-imad/simple-node-web-app}}
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Bibliography.
 
 \begin{singlespace}
-	\bibliography{refs}
+	\bibliography{zotero_refs}
 \end{singlespace}
 
 
