@@ -258,6 +258,8 @@ Kubernetes is an open source cluster container management tool originally develo
 
 The architecture of Kubernetes follows a master-slave layout. The key components can be divided to those manage each node and those reside in the master controller space. Fig.~\ref{fig:systeminternalarch} shows a brief overview of K8S architecure exploited for the current application. The key feature used here are \textit{\cite{deployments}} and \textit{\cite{services}} objects. Whenever a \textit{Deployment} object is created with required configuration, K8S starts a docker container with the given image name. The \textit{Service} object gives HTTP access to the container over a specified port and registers itself with DNS server. Objects are created over REST calls to the K8S API.
 
+Whenever an object is created or a change is made to an object, K8S logs it into its distributed storage system called \textit{etcd}\footnote{\url{https://coreos.com/etcd/}}. Another component called \textit{Controller Manager} is watching changes to \textit{etcd}. When a change is detected, it calculates the difference between the current state with desired state using a diff algorithm. Based on the output of these calculations, \textit{controller managers} executes actions through K8S API that will drive the system to desired state. This process is carried out in a loop such that $observe \rightarrow diff \rightarrow act$ cycles continue to happen forever and eventually drives the system to consistancy \citep{vogels_eventually_2009}.
+
 \begin{figure}
 \centering
 \includegraphics[width=0.9\linewidth]{img/system_internal_arch}
