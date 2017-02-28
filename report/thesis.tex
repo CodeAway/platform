@@ -114,12 +114,14 @@ xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 \textbf{VM} \> Virtual Machine \\
 \textbf{GCE} \> Google Compute Engine \\
 \textbf{GKE} \> Google Container Engine \\
+\textbf{AWS} \> Amazon Web Services \\
 \textbf{IP} \> Internet Protocol \\
 \textbf{HTTP} \> Hyper Text Transfer Protocol \\
 \textbf{DNS} \> Domain Name Service \\
 \textbf{API} \> Application Programming Inerface \\
 \textbf{REST} \> Representational State Transfer \\
 \textbf{JSON} \> JavaScript Object Notation \\
+\textbf{OS} \> Operating System \\
 \end{tabbing}
 
 \pagebreak
@@ -160,9 +162,15 @@ Modern day education sector is using cloud technologies for various aspects like
 
 This project is aimed at creating an online interface where instructors can create environments for various programming languages and users can write code in that environment, execute and view the results. The emphasis is given on flexibility to support any programming language and scalability to handle any number of users, using cloud computing techniques.
 \section{Literature Review}
-A state-of-the-art survey paper by \cite{gonzalez-martinez_cloud_2015} on cloud computing and education reviewed 112 works relevant to the field. They discuss various innovations, opportunities, shortcomings and risks associated with using cloud computing in educational institutions, especially those dealing with computer science. The paper says that availability of a wide variety of cloud services like wikis, blogs, cloud storage, collaborative documents, virtual classrooms like Moodle\footnote{\url{https://moodle.org/}} Blackboard\footnote{\url{http://anz.blackboard.com/}} etc. has already become popular among educators and students (\cite{dmitriev_cloud_2012}, \cite{tan_cloud_2011}, \cite{wood_collaborative_2011}). 
+Cloud Computing and Education: A state-of-the-art survey paper by \cite{gonzalez-martinez_cloud_2015} reviewed 112 works relevant to the field and discuss various innovations, opportunities, shortcomings and risks associated with using cloud computing in educational institutions, especially those dealing with computer science. The paper mentions that of a wide variety of cloud services like wikis, blogs, cloud storage, collaborative documents, virtual classrooms like Moodle\footnote{\url{https://moodle.org/}} Blackboard\footnote{\url{http://anz.blackboard.com/}} etc. has already become popular among educators and students (\cite{dmitriev_cloud_2012}, \cite{tan_cloud_2011}, \cite{wood_collaborative_2011}).
 
-While many researchers have proposed and implemented  
+Uses of pre-built virtual machine images for easy setup of environments by provisioning new machines for students have been demonstrated  by Massachusetts Institute of Technology (MIT) \citep{ivica_starhpcteaching_2009} for a parallel programming course. Similar reusable environments have been employed by \cite{vaquero_educloud:_2011} and \cite{yuan_developing_2011}. Hence important time can be spend for learning the course rather than concerning about configuration issues \citep{ivica_starhpcteaching_2009}. There is also less management overhead and technicians can focus on critical business tasks instead of maintenance duties \citep{aljenaa_towards_2011}. \cite{chine_learning_2010} presents a preconfigured VM for students with mathematical and statistical tools.
+
+Specific application to computer science education has been shown where teachers can preconfigure and provision bare resources to start programming assignments from scratch. \cite{rajaei_cloud_2012} proposes to use virtual databases created on Microsoft Azure and AWS VMs to teach certain courses. In another instance, \cite{doelitzscher_private_2011} report that students of Business Informatics and Computer Science faculties had two practical, semester-long projects on designing software architectures, evaluating network and programming techniques. The private cloud they implemented reserve VMs to students on demand just for the duration of laboratory or project at hand. Usual errors due to the case of OS misconfiguration or missing dependencies were also avoided. \cite{gomez-folgar_cloud_2012} configures virtual lclusters for parallel programming assignmets and \cite{yuan_developing_2011} built and IP telephony lab with call servers on private cloud. \cite{yokoyama_edubase_2012} and \cite{yokoyama_cloud_2012} utilise edubaseCloud, a private infrastructure to deploy other clouds to deploy courses on cloud computing.
+
+Computer science teachers have taken up public clouds like Google App Engine (GAE) or Microsoft Azure for their assignments due to convenience of using a predefined development and execution environment. A few examples are \cite{bhattacharya_cloud-based_2011} and \cite{hollingsworth_teaching_2010} who ran programming courses where students used GAE to develop applications. 
+
+While many researchers have proposed and implemented solutions using virtual machines in public and private clouds, a thorough search of the relevant literature yielded no results for a flexible, configurable and scalable implementation using container technologies. Also, none of these systems have been tested beyond a classroom or a university. Another limitation with most of the above implementations are that they were built for a specific purpose, not for a generalised usage. 
 
 While there are services like \textit{Codeanywhere}\footnote{\url{https://codeanywhere.com/}} which offers an IDE on the browser, none of them are open source and are not available for free.
 
