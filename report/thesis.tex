@@ -108,6 +108,7 @@ Date: 21st May 2017
 xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 \textbf{IITM}   \> Indian Institute of Technology, Madras \\
 \textbf{MOOC} \> Massive Online Open Course \\
+\textbf{K8S} \> Kubernetes \\
 \end{tabbing}
 
 \pagebreak
@@ -212,21 +213,22 @@ After considering all the options, it was decided to build the platform using fo
 	\label{fig:userflow}
 \end{figure}
 
-Fig.~\ref{fig:userflow} gives an overall view of the architecture. From a user perspective the flow is as follows:
+Fig.~\ref{fig:userflow} gives an overall view of the system. From a user perspective, the flow is as follows:
 \begin{enumerate}
-	\item User opens the console by going to the link created by administrators
+	\item User opens the console by going to the link created by administrators (say \textit{console.domain.com})
 	\item User logs on to the console using GitHub credentials. This will link the user's GitHub account to the console
 	\item All editable files are shown to the user on a side panel. In order to add more files, user goes to GitHub website and carry out necessary action
 	\item User selects the file that has to be edited
 	\item File is shown inside a code editor window where user can make any changes required
 	\item Once the file is edited, user clicks on Commit \& Restart button
-	\item User is shown a web link where the code's output (a webpage in this case) is shown
+	\item User is shown a web link where the code's output (a webpage in this case) is displayed. This link is available on the internet (say \textit{user.app.domain.com})
 	\item User can view logs for the code by clicking on the logs button
 	
 \end{enumerate}
 
 \section{System Architecture}
-Explain the architecture
+The console and user applications are deployed on a cloud platform, Google Cloud\footnote{\url{https://cloud.google.com/}} in this case, as docker containers managed by Kubernetes (K8S) on a cluster of Virtual Machines (VM). 
+
 
 \section{Components}
 Talk about components
