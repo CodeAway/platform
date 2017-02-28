@@ -110,7 +110,7 @@
 \bibliographystyle{iitm}
 
 \newcommand{\bibstyle@iitm}{\bibpunct{(}{)}{;}{a}{,}{,}%
-     \gdef\NAT@biblabel##1{##1. }}
+     \gdef\NAT@biblabel##1{[##1] }}
 %
 \setlength{\bibhang}{0pt}
 \citestyle{iitm}
