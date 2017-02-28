@@ -277,14 +277,16 @@ The React/Redux based user interface which runs on a web browser defines how a u
 	\label{fig:codeinterface}
 \end{figure}
 
-Non-editable or non-code files are shown as Other files. Updating them or adding new files can be done through GitHub website. This is deliberatly done so as to reduce complexity of the user interface. All edits to files are stored locally and saved directly to GitHub using GitHub API v3 \footnote{\url{https://developer.github.com/v3/}}
+Non-editable or non-code files are shown as Other files. Updating them or adding new files can be done through GitHub website. This is deliberatly done so as to reduce complexity of the user interface. All edits to files are stored locally and saved directly to GitHub using GitHub API v3 \footnote{\url{https://developer.github.com/v3/}}.
 
 \subsection{API Server}
-talk about API server
+The user interface communicates to an API server to carry out actions like starting or updating code of the user application, getting logs etc. API server is written using Node.js\footnote{\url{https://nodejs.org/en/}} and communicates with the K8S cluster via K8S API.
 \subsection{Gateway and Reverse Proxy}
 talk about gateway
 \subsection{Programming Environment}
 talk about env
+
+\section{Issues and Solutions}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendices.
