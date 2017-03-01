@@ -83,7 +83,7 @@ Date: 21st May 2017
 
 \vspace*{24pt}
 
-\noindent The project showcases a scalable online programming platform which can be used to teach computer programming languages to students, by just using a web browser. The underlying architecture and use of virtualisation technology makes the platform infrastructure agnostic and hence can be deployed on to any cloud provider as well as bare metal. Using container runtime environments such as Docker, the platform can be configured to run any programming language and library. Further a PoC was developed and deployed for nearly 1,00,000 users for India's biggest MOOC (Massive Online Open Course) - IMAD (Introduction to Modern Application Development).
+\noindent The project showcases a scalable online programming platform which can be used to teach computer programming languages to students, by just using a web browser. The underlying architecture and use of virtualisation technology makes the platform infrastructure agnostic and hence can be deployed on to any cloud provider as well as bare metal. Using container runtime environments such as Docker, the platform can be configured to run any programming language and library. Further a PoC was developed and deployed for nearly 75,000 users for India's largest MOOC (Massive Online Open Course) - IMAD (Introduction to Modern Application Development).
 
 \pagebreak
 
@@ -172,7 +172,7 @@ Computer science teachers have taken up public clouds like Google App Engine (GA
 
 While many researchers have proposed and implemented solutions using virtual machines in public and private clouds, a thorough search of the relevant literature yielded no results for a flexible, configurable and scalable implementation using container technologies. Also, none of these systems have been tested beyond a classroom or a university. Another limitation with most of the above implementations are that they were built for a specific purpose, not for a generalised usage. 
 
-While there are services like \textit{Codeanywhere}\footnote{\url{https://codeanywhere.com/}} which offers an IDE on the browser, none of them are open source and are not available for free.
+Even though there are services like \textit{Codeanywhere}\footnote{\url{https://codeanywhere.com/}} which offers an IDE on the browser, none of them are open source and are not available for free usage or installation on own infrastructure. Their technologies are kept proprietary.
 
 \section{Outline of the Problem}
 
@@ -203,14 +203,22 @@ A web application is best served for the purpose, since the only requirement is 
 
 Choosing the correct container runtime is important to make the platform user friendly. Popular runtimes tend to have more documentation and support for all kinds of programs. In order to determine popularity, tech firms in the computer science industry were consulted and by word of mouth, Docker emerged to be a clear winner. In order to further back this up, a Google Trends analysis carried out between Docker, LXC and Rocket based on last 5 year's data\footnote{\url{https://goo.gl/Ifg2SD}} is shown in Fig.~\ref{fig:google_trends_docker_rkt_lxc}. 
 
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=0.9\linewidth]{img/google_trends_docker_rkt_lxc}
-\caption[Google Trends for docker, rkt, lxc]{Google Trends for docker, rkt, lxc - wordwide, past 5 years, retrieved on 2017-02-27}
+\caption[Google trends for Docker and others]{Google Trends for docker, rkt, lxc - wordwide, past 5 years, retrieved on 2017-02-27}
 \label{fig:google_trends_docker_rkt_lxc}
 \end{figure}
 
 When containers are used to deploy applications, there is a requirement of certain orchestration tools which takes care of scheduling, resource allocation and availability. Popular container orchestration tools include Kubernetes, Docker Swarm, Mesosphere Marathon, Cloud Foundry Diego etc. Since all of them are open source projects, if we look at the number of stars on their GitHub repositories, Kubernetes turns out to be the most popular with 20964 stars at the time of writing\footnote{\url{https://goo.gl/tZmbXp}}. Also, Google Trends for kubernetes, docker swarm, mesosphere marathon, cloud foundry diego - Worldwide, 1/2/13 - 2/27/17 \footnote{\url{https://g.co/trends/s0aOm}} indicate the same.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.9\linewidth]{img/k8s_swarm_mesosphere}
+\caption[Google trends for Kubernetes and others]{Google Trends graph for Kubernetes, Docker Swarm, Cloud Foundry Diego, Mesosphere Marathin for the last 3 years}
+\label{fig:k8s_swarm_mesosphere}
+\end{figure}
+
 
 For simplicity in implementation, it was decided to build a proof of concept with support for JavaScript applications and test the feasibility. 
 \chapter{RESULTS}
