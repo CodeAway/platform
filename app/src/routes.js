@@ -98,10 +98,6 @@ const getUserDetails = (req, res, cb) => {
     res.status(401).send('Unauthorized');
     return;
   }
-  if (userInfo.role === 'admin') {
-    cb('admin', 1, {});
-    return;
-  }
   const selectUrl = dbUrl + '/api/1/table/user/select';
   const selectOptions = {
     method: 'POST',
