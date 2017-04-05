@@ -27,7 +27,7 @@ const Email = ({dispatch, email}) => {
           }}>
             {alertTxt}
             <div className="form-group">
-              <label htmlFor="inputEmail">Your NPTEL registered email address:</label>
+              <label htmlFor="inputEmail">Your email address:</label>
               <input ref={(n) => (emailInput = n)} type="email" className="form-control" id="inputEmail" placeholder="Email" />
             </div>
             <input type="submit" className="btn btn-primary" role="button" value={btnText} />
