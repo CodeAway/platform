@@ -1,0 +1,23 @@
+
+.card {
+    background: #f0f0f0;
+    border: 1px solid #aaa;
+    margin-bottom: 20px;
+    border-radius: 3px;
+    max-width: 430px;
+    padding: 10px 20px;
+}
+
+.card:hover {
+    border: 1px solid #517a8b;
+}
+
+.rightCol, .leftImg {
+    width: 50%;
+}
+
+@media only screen and (max-width: 992px) {
+    .rightCol {
+        width: auto;
+    }
+}

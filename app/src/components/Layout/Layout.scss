@@ -1,0 +1,72 @@
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+
+.container {
+  position: relative;
+}
+
+.noTop {
+  margin-top: 0;
+}
+
+.heightContainer {
+    display: flex;
+    min-height: calc(100vh - 140px);
+    align-items: center;
+    justify-content: center;
+}
+
+.header {
+  background: none;
+  // color: $navbar-inverse-color;
+  top: 0;
+  left: 0;
+  right: 0;
+  min-height: 70px;
+  text-align: center;
+  padding: 0;
+  padding-right: 15px;
+  img {
+    height: 50px;
+    float: left;
+  }
+  .headerItem {
+    display: inline-block;
+    // color: $navbar-inverse-color;
+    line-height: 15px;
+    font-size: 15px;
+    padding: 27.5px 25px;
+    cursor: pointer;
+  }
+  .headerItem:hover {
+    display: inline-block;
+    // color: $navbar-inverse-link-hover-color;
+    transition: 0.5s;
+  }
+  .headerItem:hover * {
+    // color: $navbar-inverse-link-hover-color;
+    transition: 0.5s;
+  }
+  .headerItem * {
+    // color: $navbar-inverse-color;
+  }
+}
+
+.footer {
+  background: #333;
+  color: #aaa;
+  min-height: 50px;
+  line-height: 15px;
+  font-size: 15px;
+  padding: 17.5px 25px;
+  text-align: right;
+  a {
+    color: $navbar-inverse-color;
+  }
+  a:hover, a:visited {
+    color: $navbar-inverse-link-hover-color;
+  }
+}
+
+.course {
+  float: left;
+}
