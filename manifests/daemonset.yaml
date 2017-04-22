@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet 
+metadata:
+    name: nginx
+    namespace: imad-system
+spec:
+    template:
+        metadata:
+            labels:
+                app: nginx 
+        spec:
+            containers:
+            -   name: nginx
+                image: hasura/imad-nginx:latest 
+                env:
+                -   name: LOGGER_URL
+                    valueFrom:
+                        configMapKeyRef:
+                            name: nginx 
+                            key: logger.url
+                -   name: LOGGER_TOKEN
+                    valueFrom:
+                        configMapKeyRef:
+                            name: nginx 
+                            key: logger.token
+                ports:
+                -   containerPort: 80
+                volumeMounts:
+                -   name: config-volume
+                    mountPath: /opt/openresty/nginx/conf/
+                -   name: custom-error-pages-volume
+                    mountPath: /html
+            volumes:
+            -   name: config-volume
+                configMap:
+                    name: nginx
+            -   name: custom-error-pages-volume
+                configMap:
+                    name: custom-error-pages 

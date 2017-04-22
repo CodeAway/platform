@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>app loading / not running | IMAD Hasura</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                background-color: white;
+                margin-top: 100px;
+                color: #666;   
+            }
+            a:link {
+                color: #0090bf;
+            }
+            a:visited {
+                color: #0090bf;
+            }
+            a:hover {
+                color: #0090bf;
+            }
+            a:active {
+                color: #0090bf;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <h1><span id="app-name"></span>app is loading / not running</h1>
+            <p>If you've just clicked "Restart" on the console, please wait for 2-5 mins for your app to load.<br/> Keep hitting <a href="javascript:location.reload()">refresh</a> to see the latest status. </p>
+            <p>If you have not opened this page for a while, please login to the <a href="https://cloud.imad.hasura.io/code" target="_blank">IMAD console</a> and start the app.<br/>It could have been suspended due to inactivity.</p>
+            <hr/>
+            <p>If you are seeing this message even after trying multiple times, please tweet to us <a id="imad-tweet-link" href="https://twitter.com/home?status=%40imad_mooc%20%3A%20app%20%3Cusername%3E%20is%20not%20running%20even%20after%20trying%20multiple%20times" target="_blank">@imad_mooc</a></p>
+            <br/>
+            <span style="font-size: 0.7em;">by folks at <a href="https://hasura.io">Hasura</a></span>
+        </center>
+    </body>
+    <script>
+        (function() {
+            var url = window.location.hostname;
+            var app = url.split('.')[0];
+            document.getElementById('app-name').innerHTML = app + "'s ";
+            document.getElementById('imad-tweet-link').href = "https://twitter.com/home?status=%40imad_mooc%20%3A%20app%20" + app + "%20is%20not%20running%20even%20after%20trying%20multiple%20times";
+        })();
+    </script>
+</html>

@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: nginx 
+    namespace: imad-system 
+data:
+    logger.url: $URL 
+    logger.token: $TOKEN    
+    nginx.conf: |-
+        worker_processes 2;
+        env LOGGER_URL;
+        env LOGGER_TOKEN;
+
+        events {
+            worker_connections 1024;
+        }
+
+        http {
+            log_format upstream_time '$remote_addr - [$time_local] '
+                                     '"$request" $status $body_bytes_sent '
+                                     '"$http_referer" '
+                                     'rt=$request_time uct="$upstream_connect_time" uht="$upstream_header_time" urt="$upstream_response_time"';
+            access_log /dev/stdout upstream_time;
+            lua_package_path "$prefix/lualib/?.lua;;";
+
+        
+            resolver 10.3.0.10;
+            map $http_host $project {
+                default     "default";
+                ~^((?<svc>.+)\.)?((?<projectn>.+)\.)hasura-app\.io(:)?(0-9+)?$ $projectn;
+            }
+
+            map $http_host $service {
+                default     "ui";
+                ~^((?<svc>.+)\.)?((?<projectn>.+)\.)hasura-app\.io(:)?(0-9+)?$ $svc;
+            }
+
+            server {
+                listen 80; 
+                resolver 10.3.0.10;
+                server_name ~^(?<svc>.+)\.(?<namespace>.+)\.hasura-app\.io$;
+
+                location /.well-known/acme-challenge {
+                    set $letsencrypt "letsencrypt";
+                    proxy_pass http://${letsencrypt}.hasura-system.svc.cluster.local;
+                }
+
+                location = /hasura_test {
+                    content_by_lua_block {
+                        ngx.say(ngx.req.get_headers())
+                    }
+                }
+
+                location / {
+                    resolver 10.3.0.10;
+                    access_by_lua_block {
+                        local http = require "resty.http"
+                        local httpc = http.new()
+                        local token = os.getenv("LOGGER_TOKEN")
+                        local url = os.getenv("LOGGER_URL") .. "/?username=" .. ngx.var.service .. "&token=" .. token
+                        local res, err = httpc:request_uri(url, {
+                            method = "GET"
+                        }) 
+                    }
+                    proxy_pass http://$service.$project.svc.cluster.local;
+                    proxy_set_header Host $http_host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto $scheme;
+                    proxy_set_header X-Forwarded-By "imad-gateway";
+                }
+                error_page 502 /custom502.html;
+                location = /custom502.html {
+                    root /html;
+                    internal;
+                }
+                error_page 504 /custom504.html;
+                location = /custom504.html {
+                    root /html;
+                    internal;
+                }
+            }
+
+        }

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+docker run \
+  -e LOGGER_URL=http://example.com  
+  -e LOGGER_TOKEN=random
+  --rm -it \
+  -v "$(pwd)/nginx/conf":/opt/openresty/nginx/conf \
+  -v "$(pwd)/nginx/lualib":/opt/openresty/nginx/lualib \
+  -p 8080:80 \
+  ficusio/openresty:1.9
