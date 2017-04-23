@@ -1,2 +1,3 @@
 #!/bin/sh
-cd /src && node server.js
+cd /src 
+exec node server.js
