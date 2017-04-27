@@ -14,8 +14,30 @@ import CodeHome from './components/Code/Home';
 import Files from './components/Files/Files';
 import {loadUser} from './components/User/Actions';
 import {loadRepo} from './components/Code/Actions';
+import {loadProjects, loadEnvironments} from './components/Projects/Actions';
 
 const createRoutes = (store) => {
+  const requireProjects = (nextState, replaceState, cb) => {
+    const state = store.getState();
+    if (!state.projects || !state.projects.list) {
+      const dispatch = store.dispatch;
+      dispatch(loadProjects()).then(
+        () => {
+          return dispatch(loadEnvironments());
+        },
+        () => {
+          cb();
+        }).then(
+        () => {
+          cb();
+        },
+        () => {
+          cb();
+        });
+    } else {
+      cb();
+    }
+  };
   const requireUser = (nextState, replaceState, cb) => {
     const state = store.getState();
     if (!state.user || !state.user.auth || !state.user.table) {
@@ -85,7 +107,7 @@ const createRoutes = (store) => {
         <Route path="/email" component={Email} onEnter={requireUser} />
         <Route path="/" component={Layout} onEnter={requireUserEmail}>
           <IndexRedirect to="home" />
-          <Route path="home" component={Home} />
+          <Route path="home" component={Home} onEnter={requireProjects} />
           <Route path="docs" component={Docs} />
         </Route>
         <Route path="/" component={LayoutNoNav} onEnter={requireUserEmail}>
