@@ -16,8 +16,9 @@ const CREATE_SSH_REQUEST = 'Project/CREATE_SSH_REQUEST';
 const CREATE_SSH_ERROR = 'Project/CREATE_SSH_ERROR';
 const SET_SSH = 'Project/SET_SSH';
 
-const createProject = () => {
+const createProject = (envId) => {
   return (dispatch, getState) => {
+    console.log(envId);
     dispatch({type: CREATE_REQUEST});
 
     // make a request to create the project

@@ -32,7 +32,8 @@ const githubUsername = (username) => {
 const loadRepo = () => {
   return (dispatch, getState) => {
     dispatch(loadingOn());
-    const user = getState().user;
+    const state = getState();
+    const user = state.user;
     const treeUrl = `https://api.github.com/repos/${githubUsername(user.table.username)}/${Globals.repoName}/git/trees/master?recursive=1`;
     const options = {
       method: 'GET',

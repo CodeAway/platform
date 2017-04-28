@@ -1,13 +1,14 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
-import {createProject} from './ProjectActions';
+import {createProject, SET_NEW_ENV_ID} from '../Projects/Actions';
 import {Link} from 'react-router';
 
 const Home = ({dispatch, project, projects, user}) => {
   const styles = require('./Home.scss');
   const styles2 = require('../Layout/Layout.scss');
   const madi = require('./madi.png');
+
   const projectItems = projects.list.map((proj) =>
     <li key={proj.id}>{proj.name}</li>
   );
@@ -18,7 +19,7 @@ const Home = ({dispatch, project, projects, user}) => {
   );
 
   let projectStatus = null;
-  if (!user.table.github_project) {
+  if ( !user.table.github_project) {
     if (project.create.status === 'ongoing') {
       projectStatus = (
         <div className="alert alert-warning" role="alert">
@@ -41,6 +42,10 @@ const Home = ({dispatch, project, projects, user}) => {
     }
   }
 
+  const environments = projects.environments.map( (env) =>
+    <option key={env.id} value={env.id}>{env.name}</option>
+  );
+
   return (
       <div className={styles2.heightContainer}>
         <Helmet title="Home | IMAD console" />
@@ -53,12 +58,27 @@ const Home = ({dispatch, project, projects, user}) => {
           <div className={styles.card + ' '}>
             <div className="">
               {projectStatus}
-
-              <button className="btn btn-success" onClick={() => {
-                dispatch(createProject());
-              }}>
-                Create a new project
-              </button>
+              <h4>Create a new project</h4>
+              <div className="row">
+                <div className="col-md-8">
+                <select className="form-control" onChange={
+                    (e)=>{
+                      e.preventDefault();
+                      dispatch({type: SET_NEW_ENV_ID, data: parseInt(e.target.value, 10)});
+                    }
+                  }>
+                  <option key="0" value="0">--- Select an environment ---</option>
+                  {environments}
+                </select>
+                </div>
+                <div className="col-md-4">
+                <button className="btn btn-success" onClick={() => {
+                  dispatch(createProject());
+                }}>
+                  Create
+                </button>
+                </div>
+              </div>
               <h4>Your projects</h4>
               {projectsList}
               <p>
