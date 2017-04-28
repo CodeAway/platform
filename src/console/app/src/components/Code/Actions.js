@@ -16,7 +16,7 @@ const isValid = (path) => {
   if (path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.html')) {
     return true;
   }
-  return false;
+  return true;
 };
 
 const githubUsername = (username) => {
@@ -51,7 +51,7 @@ const loadRepo = () => {
       dispatch(requestAction(treeUrl, options, SET_TREE)).then(
         (treeData) => {
           // Now we have the tree, and we want to fetch our base files
-          const baseFiles = ['server.js', 'ui/index.html', 'ui/style.css', 'ui/main.js'];
+          // const baseFiles = ['server.js', 'ui/index.html', 'ui/style.css', 'ui/main.js'];
 
           // const baseFiles = ['server.js', 'ui/index.html', 'ui/style.css', 'ui/main.js'];
           const blobs = {};
@@ -67,22 +67,22 @@ const loadRepo = () => {
           });
 
           // Check for all base files
-          let noBaseFiles = 0;
+          // let noBaseFiles = 0;
           const allFiles = Object.keys(blobs);
-          baseFiles.map(f => {
-            if (allFiles.indexOf(f) > -1 ) {
-              noBaseFiles += 1;
-            }
-          });
-          if (noBaseFiles !== 4) {
-            alert('Could not find one of (server.js, index.html, style.css, main.js) in the repo. Please contact support for help.');
-            dispatch(loadingOff());
-            reject();
-            return;
-          }
+          // baseFiles.map(f => {
+          //   if (allFiles.indexOf(f) > -1 ) {
+          //     noBaseFiles += 1;
+          //   }
+          // });
+          // if (noBaseFiles !== 4) {
+          //   alert('Could not find one of (server.js, index.html, style.css, main.js) in the repo. Please contact support for help.');
+          //   dispatch(loadingOff());
+          //   reject();
+          //   return;
+          // }
 
-          // Set all the invalid non-editable files
-          dispatch({type: SET_INVALID_FILES, data: invalidFiles});
+          // // Set all the invalid non-editable files
+          // dispatch({type: SET_INVALID_FILES, data: invalidFiles});
 
           // Fetch all the files
           Promise.all(allFiles.map(f => {

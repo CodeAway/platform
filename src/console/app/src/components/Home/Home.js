@@ -12,11 +12,19 @@ const Home = ({dispatch, projects, user}) => {
   const projectItems = projects.list.map((proj) =>
     <li key={proj.id}><Link to={`/code/${proj.id}`}>{proj.name}</Link></li>
   );
-  const projectsList = (
-    <div>
-      <ul>{projectItems}</ul>
-    </div>
-  );
+
+  let projectsList = null;
+  console.log(projectItems);
+
+  if (projectItems.length) {
+    projectsList = (
+      <div>
+        <ul>{projectItems}</ul>
+      </div>
+    );
+  } else {
+    projectsList = (<span>You don't have any projects yet. Create one!</span>);
+  }
 
   let projectStatus = null;
   if ( !user.table.github_project) {
@@ -81,10 +89,6 @@ const Home = ({dispatch, projects, user}) => {
               </div>
               <h4>Your projects</h4>
               {projectsList}
-              <p>
-                <span>Go to your <Link to="/code">code console</Link>.</span>
-
-              </p>
             </div>
           </div>
 

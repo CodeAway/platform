@@ -56,7 +56,8 @@ const createProject = () => {
                 project: data,
                 name: newEnv.name
               }],
-              returning: ['id',
+              returning: [
+                'id',
                 'project',
                 'created_at',
                 'name'
@@ -125,16 +126,12 @@ const loadProjects = (projectId = 0) => {
       const p = new Promise((resolve, reject) => {
         dispatch(requestAction(queryUrl, options)).then(
           (data) => {
-            if (data.length) {
-              if (projectId) {
-                dispatch({type: SET_CURRENT_PROJECT, data: data[0]});
-              } else {
-                dispatch({type: SET_PROJECTS, data: data});
-              }
-              resolve();
+            if (projectId && data.length) {
+              dispatch({type: SET_CURRENT_PROJECT, data: data[0]});
             } else {
-              reject();
+              dispatch({type: SET_PROJECTS, data: data});
             }
+            resolve();
           },
           () => {
             reject();
@@ -191,7 +188,7 @@ const projectsReducer = (state = defaultState, action) => {
     case SET_NEW_ENV_ID:
       return {...state, newEnvId: action.data};
     case SET_CURRENT_PROJECT:
-      return {...state, current: action.data};
+      return {...state, list: [...state.list, action.data], current: action.data};
     case CREATE_REQUEST:
       return {...state, create: {status: 'ongoing', error: null}};
     case CREATE_ERROR:
