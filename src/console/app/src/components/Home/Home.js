@@ -4,13 +4,13 @@ import {connect} from 'react-redux';
 import {createProject, SET_NEW_ENV_ID} from '../Projects/Actions';
 import {Link} from 'react-router';
 
-const Home = ({dispatch, project, projects, user}) => {
+const Home = ({dispatch, projects, user}) => {
   const styles = require('./Home.scss');
   const styles2 = require('../Layout/Layout.scss');
   const madi = require('./madi.png');
 
   const projectItems = projects.list.map((proj) =>
-    <li key={proj.id}>{proj.name}</li>
+    <li key={proj.id}><Link to={`/code/${proj.id}`}>{proj.name}</Link></li>
   );
   const projectsList = (
     <div>
@@ -20,20 +20,20 @@ const Home = ({dispatch, project, projects, user}) => {
 
   let projectStatus = null;
   if ( !user.table.github_project) {
-    if (project.create.status === 'ongoing') {
+    if (projects.create.status === 'ongoing') {
       projectStatus = (
         <div className="alert alert-warning" role="alert">
           Creating project...
         </div>);
-    } else if (project.create.status === 'error') {
+    } else if (projects.create.status === 'error') {
       projectStatus = (
         <div className="alert alert-error" role="alert">
           Error in creating project. Please contact support immediately and mention the error message below.<br/>
-          Error: {JSON.stringify(project.create.error)}
+          Error: {JSON.stringify(projects.create.error)}
         </div>);
     }
   } else {
-    if (project.pleaseWait) {
+    if (projects.pleaseWait) {
       projectStatus = (
         <div className="alert alert-warning" role="alert">
           Please wait for up to 5 minutes for your project files to get ready.
@@ -95,7 +95,6 @@ const Home = ({dispatch, project, projects, user}) => {
 
 const mapStateToProps = (state) => {
   return {
-    project: state.project,
     projects: state.projects,
     user: state.user
   };

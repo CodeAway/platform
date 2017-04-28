@@ -34,7 +34,8 @@ const loadRepo = () => {
     dispatch(loadingOn());
     const state = getState();
     const user = state.user;
-    const treeUrl = `https://api.github.com/repos/${githubUsername(user.table.username)}/${Globals.repoName}/git/trees/master?recursive=1`;
+    const project = state.projects.current;
+    const treeUrl = project.project.trees_url.split('{')[0] + '/master?recursive=1';
     const options = {
       method: 'GET',
       headers: {
@@ -43,6 +44,7 @@ const loadRepo = () => {
       },
       credentials: 'omit'
     };
+
 
     // Load all files from github
     return new Promise((resolve, reject) => {

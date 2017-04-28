@@ -19,7 +19,7 @@ import {loadProjects, loadEnvironments} from './components/Projects/Actions';
 const createRoutes = (store) => {
   const requireProjects = (nextState, replaceState, cb) => {
     const state = store.getState();
-    if (!state.projects || !state.projects.list) {
+    if (!state.projects || !state.projects.list || !state.projects.environments) {
       const dispatch = store.dispatch;
       dispatch(loadProjects()).then(
         () => {
@@ -84,16 +84,23 @@ const createRoutes = (store) => {
 
   const requireFiles = (nextState, replaceState, cb) => {
     const state = store.getState();
+    const projectId = nextState.params.projectId;
     if (!state.code || !state.code.gitTree || !state.code.files) {
       const dispatch = store.dispatch;
-      dispatch(loadRepo()).then(
+      dispatch(loadProjects(projectId)).then(
         () => {
-          cb();
+          return dispatch(loadRepo());
         },
         () => {
-          replaceState('/home');
           cb();
-        });
+        }).then(
+          () => {
+            cb();
+          },
+          () => {
+            replaceState('/home');
+            cb();
+          });
     } else {
       cb();
     }
@@ -111,7 +118,7 @@ const createRoutes = (store) => {
           <Route path="docs" component={Docs} />
         </Route>
         <Route path="/" component={LayoutNoNav} onEnter={requireUserEmail}>
-          <Route path="code" component={Code} onEnter={requireFiles}>
+          <Route path="code/:projectId" component={Code} onEnter={requireFiles}>
             <IndexRedirect to="home" />
             <Route path="logs" component={Logs} />
             <Route path="home" component={CodeHome} />

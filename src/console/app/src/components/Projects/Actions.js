@@ -28,12 +28,10 @@ const createProject = () => {
     const state = getState();
     // make a request to create the project
     const user = state.user;
-    const newEnv = state.projects.environments.filter((env) => {
-      if (env.id === state.projects.newEnvId) {
-        return env;
-      }
-    });
-    const forkUrl = `${newEnv.repo}/forks`;
+    console.log('envs', state.projects.environments);
+    const newEnv = state.projects.environments.filter((env) => env.id === state.projects.newEnvId)[0];
+    console.log('newEnv', newEnv);
+    const forkUrl = `https://api.github.com/repos/${newEnv.repo}/forks`;
     const options = {
       method: 'POST',
       headers: {
@@ -57,7 +55,12 @@ const createProject = () => {
                 environment_id: newEnv.id,
                 project: data,
                 name: newEnv.name
-              }]
+              }],
+              returning: ['id',
+                'project',
+                'created_at',
+                'name'
+              ]
             }
           }),
           headers: {
@@ -66,12 +69,12 @@ const createProject = () => {
           credentials: globalCookiePolicy
         };
         dispatch(requestAction(saveUrl, saveOptions)).then(
-          () => {
+          (hasuraData) => {
             // Update the user's project state
             dispatch({type: WAIT_NOTIFICATION, data: true});
             setTimeout(() => (dispatch({type: WAIT_NOTIFICATION, data: false})), 10000);
             dispatch({type: SET_USERPROJECT, data: data});
-            dispatch({type: SET_CURRENT_PROJECT, data: data});
+            dispatch({type: SET_CURRENT_PROJECT, data: hasuraData.returning[0] });
             dispatch({type: SET_PROJECT});
             // dispatch(push('/code'));
           },
@@ -87,13 +90,13 @@ const createProject = () => {
   };
 };
 
-const loadProjects = () => {
+const loadProjects = (projectId = 0) => {
   return (dispatch, getState) => {
     const queryUrl = Endpoints.dataUrl + '/v1/query';
-    const options = {
+    let options = {
       ...defaultOptions,
       method: 'POST',
-      body: JSON.stringify({
+      body: {
         type: 'select',
         args: {
           table: 'project',
@@ -101,19 +104,33 @@ const loadProjects = () => {
             'id',
             'project',
             'name',
-            'created_at',
-            'environment_id'
+            'created_at'
           ]
         }
-      })
+      }
     };
+    options = options;
+    if (projectId) {
+      options.body.args.where = {
+        id: parseInt(projectId, 10)
+      };
+      options.body.args.columns.push({
+        name: 'environment',
+        columns: ['*']
+      });
+    }
+    options.body = JSON.stringify(options.body);
 
-    if (!getState().projects || !getState().projects.list) {
+    if (projectId || !getState().projects || !getState().projects.list) {
       const p = new Promise((resolve, reject) => {
         dispatch(requestAction(queryUrl, options)).then(
           (data) => {
             if (data.length) {
-              dispatch({type: SET_PROJECTS, data: data});
+              if (projectId) {
+                dispatch({type: SET_CURRENT_PROJECT, data: data[0]});
+              } else {
+                dispatch({type: SET_PROJECTS, data: data});
+              }
               resolve();
             } else {
               reject();
@@ -190,4 +207,4 @@ const projectsReducer = (state = defaultState, action) => {
 };
 
 export default projectsReducer;
-export {createProject, loadEnvironments, loadProjects};
+export {createProject, loadEnvironments, loadProjects, SET_NEW_ENV_ID};
