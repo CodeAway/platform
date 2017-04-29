@@ -124,7 +124,7 @@ const startApp = () => {
       body: JSON.stringify({
         gitRevision: state.latestCommit,
         gitUrl: getState().projects.current.project.clone_url,
-        envronment: getState().projects.current.environment
+        environment: getState().projects.current.environment
       }),
       headers: {
         'Content-Type': 'application/json'
