@@ -349,7 +349,8 @@ const k8sBody = {
             {
               gitRepo: {
                 repository: gitUrl,
-                revision: gitRevision
+                revision: gitRevision,
+                directory: '.'
               },
               name: 'git-volume'
             }
