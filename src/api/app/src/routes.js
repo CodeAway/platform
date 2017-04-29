@@ -299,6 +299,7 @@ const routes = (app) => {
   app.post('/restart', jsonParser, (req, res) => {
     const gitUrl = req.body.gitUrl;
     const gitRevision = req.body.gitRevision;
+    const environment = req.body.environment;
     const returnData = {
       success: false,
       message: []
@@ -346,7 +347,7 @@ const routes = (app) => {
           (data) => {
             returnData.message.push(msgFormat('getDeployment', true, data));
             // if running, patch deployment with new revision
-            return k8s.updateDeployment(data, gitRevision);
+            return k8s.updateDeployment(data, gitUrl, gitRevision, environment);
           },
           (error) => {
             returnData.message.push(msgFormat('getDeployment', false, error));
@@ -373,7 +374,7 @@ const routes = (app) => {
                 value: '5432'
               }
             ];
-            return k8s.start(user, gitUrl, gitRevision, vars);
+            return k8s.start(user, gitUrl, gitRevision, vars, environment);
           })
         .then(
           (data) => {

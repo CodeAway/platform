@@ -316,7 +316,7 @@ const k8sBody = {
       replicas
     }
   }),
-  deployment: (user, gitUrl, gitRevision, vars) => ({
+  deployment: (user, gitUrl, gitRevision, vars, environment) => ({
     kind: 'Deployment',
     spec: {
       revisionHistoryLimit: 0,
@@ -324,7 +324,7 @@ const k8sBody = {
         spec: {
           containers: [
             {
-              image: globals.imad.simpleNodeAppImage,
+              image: environment.image,
               volumeMounts: [
                 {
                   mountPath: '/app',
@@ -421,12 +421,14 @@ const k8s = {
     });
     return promise;
   },
-  updateDeployment: (oldDeployment, gitRevision) => {
+  updateDeployment: (oldDeployment, gitUrl, gitRevision, environment) => {
     const promise = new Promise((resolve, reject) => {
       const messages = [];
       const newDeployment = JSON.parse(JSON.stringify(oldDeployment));
       console.log(newDeployment.spec.template.spec);
       newDeployment.spec.template.spec.volumes[0].gitRepo.revision = gitRevision;
+      newDeployment.spec.template.spec.volumes[0].gitRepo.repository = gitUrl;
+      newDeployment.spec.template.spec.containers[0].image = environment.image;
       // The user info is the name of the deployment
       makeK8sReq('getDepl', oldDeployment.metadata.name, 'PUT', newDeployment)
         .then(
@@ -500,11 +502,12 @@ const k8s = {
     });
     return promise;
   },
-  start: (user, gitUrl, gitRevision, vars) => {
+  start: (user, gitUrl, gitRevision, vars, environment) => {
     const promise = new Promise((resolve, reject) => {
       const messages = [];
-      console.log(k8sBody.deployment(user, gitUrl, gitRevision, vars));
-      makeK8sReq('postDepl', user, 'POST', k8sBody.deployment(user, gitUrl, gitRevision, vars))
+      console.log(k8sBody.deployment(user, gitUrl, gitRevision, vars, environment));
+      // enviroment
+      makeK8sReq('postDepl', user, 'POST', k8sBody.deployment(user, gitUrl, gitRevision, vars, environment))
         .then(
           (data) => {
             messages.push(msgFormat('postDeployment', true, data));
@@ -551,4 +554,4 @@ const k8s = {
   }
 };
 
-export default {k8s, msgFormat} ;
+export default {k8s, msgFormat};

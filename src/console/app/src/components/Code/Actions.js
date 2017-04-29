@@ -1,6 +1,5 @@
 import defaultState from './State';
 import requestAction from 'utils/requestAction';
-import Globals from 'Globals';
 import Endpoints, {globalCookiePolicy} from 'Endpoints';
 import {loadingOn, loadingOff} from '../Layout/Actions';
 
@@ -13,21 +12,21 @@ const SET_INVALID_FILES = 'Code/SET_INVALID_FILES';
 const SET_LATEST_COMMIT = 'Code/SET_LATEST_COMMIT';
 
 const isValid = (path) => {
-  if (path.endsWith('.js') || path.endsWith('.css') || path.endsWith('.html')) {
+  if (path.startsWith('src/')) {
     return true;
   }
-  return true;
+  return false;
 };
 
-const githubUsername = (username) => {
-  let ghUsername = '';
-  if (username.startsWith('user-')) {
-    ghUsername = username.split('user-')[1];
-  } else {
-    ghUsername = username;
-  }
-  return ghUsername;
-};
+// const githubUsername = (username) => {
+//   let ghUsername = '';
+//   if (username.startsWith('user-')) {
+//     ghUsername = username.split('user-')[1];
+//   } else {
+//     ghUsername = username;
+//   }
+//   return ghUsername;
+// };
 
 const loadRepo = () => {
   return (dispatch, getState) => {
@@ -35,7 +34,7 @@ const loadRepo = () => {
     const state = getState();
     const user = state.user;
     const project = state.projects.current;
-    const treeUrl = project.project.trees_url.split('{')[0] + '/master?recursive=1';
+    const treeUrl = project.project.url + '/git/trees/master?recursive=1';
     const options = {
       method: 'GET',
       headers: {
@@ -82,7 +81,7 @@ const loadRepo = () => {
           // }
 
           // // Set all the invalid non-editable files
-          // dispatch({type: SET_INVALID_FILES, data: invalidFiles});
+          dispatch({type: SET_INVALID_FILES, data: invalidFiles});
 
           // Fetch all the files
           Promise.all(allFiles.map(f => {
@@ -118,19 +117,21 @@ const startApp = () => {
     // Create the configmap & make an API request
     const state = getState().code;
     // const user = getState().user;
-
     const url = Endpoints.apiUrl + '/restart'; // + user.table.username;
+    console.log(url);
     const options = {
       method: 'POST',
       body: JSON.stringify({
         gitRevision: state.latestCommit,
-        gitUrl: getState().projects.current.project.clone_url
+        gitUrl: getState().projects.current.project.clone_url,
+        envronment: getState().projects.current.environment
       }),
       headers: {
         'Content-Type': 'application/json'
       },
       credentials: globalCookiePolicy
     };
+    console.log(options);
 
     return dispatch(requestAction(url, options)).then(
       () => {
@@ -153,6 +154,7 @@ const commitFilesAndRestart = () => {
     const state = getState().code;
     const user = getState().user;
     const files = Object.keys(state.files);
+    const project = getState().projects.current;
     const newFiles = {};
     files.map(f => {
       if (state.editFiles[f].dirty) {
@@ -184,7 +186,7 @@ const commitFilesAndRestart = () => {
     };
 
     // Fetch vars
-    const updateUrl = (file) => (`https://api.github.com/repos/${githubUsername(user.table.username)}/${Globals.repoName}/contents/${encodeURIComponent(file)}`);
+    const updateUrl = (file) => (`${project.project.url}/contents/${encodeURIComponent(file)}`);
     const options = (f) => ({
       method: 'PUT',
       headers: {
@@ -194,7 +196,7 @@ const commitFilesAndRestart = () => {
       body: JSON.stringify({
         path: f,
         content: window.btoa(newFiles[f]),
-        message: '[imad-console] Updates ' + f,
+        message: '[codeaway-console] Updates ' + f,
         sha: state.shas[f]
       }),
       credentials: 'omit'
