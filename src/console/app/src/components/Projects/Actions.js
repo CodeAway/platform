@@ -92,7 +92,8 @@ const createProject = () => {
 };
 
 const loadProjects = (projectId = 0) => {
-  return (dispatch, getState) => {
+  // return (dispatch, getState) => {
+  return (dispatch) => {
     const queryUrl = Endpoints.dataUrl + '/v1/query';
     let options = {
       ...defaultOptions,
@@ -122,24 +123,24 @@ const loadProjects = (projectId = 0) => {
     }
     options.body = JSON.stringify(options.body);
 
-    if (projectId || !getState().projects || !getState().projects.list) {
-      const p = new Promise((resolve, reject) => {
-        dispatch(requestAction(queryUrl, options)).then(
-          (data) => {
-            if (projectId && data.length) {
-              dispatch({type: SET_CURRENT_PROJECT, data: data[0]});
-            } else {
-              dispatch({type: SET_PROJECTS, data: data});
-            }
-            resolve();
-          },
-          () => {
-            reject();
-          });
-      });
+    // if ((projectId && !getState().projects.current) || !getState().projects || !getState().projects.list) {
+    const p = new Promise((resolve, reject) => {
+      dispatch(requestAction(queryUrl, options)).then(
+        (data) => {
+          if (projectId && data.length) {
+            dispatch({type: SET_CURRENT_PROJECT, data: data[0]});
+          } else {
+            dispatch({type: SET_PROJECTS, data: data});
+          }
+          resolve();
+        },
+        () => {
+          reject();
+        });
+    });
 
-      return p;
-    }
+    return p;
+    // }
   };
 };
 

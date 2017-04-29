@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import {commitFilesAndRestart} from './Actions';
 import Loading from '../Loading/Loading';
 
-const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading, projectId}) => {
+const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading, project}) => {
   const styles = require('./Code.scss');
   const appPrefix = '';
   const fileList = [];
@@ -13,7 +13,7 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
   if (files) {
     fileNames.map((f, i) => {
       fileList.push((<li className={styles.file}>
-        <Link key={i} to={appPrefix + '/code/' + projectId + '/files/' + encodeURIComponent(f)}> {f}{editFiles[f].dirty ? '*' : ''} </Link>
+        <Link key={i} to={appPrefix + '/code/' + project.id + '/files/' + encodeURIComponent(f)}> {f}{editFiles[f].dirty ? '*' : ''} </Link>
       </li>));
     });
   } else {
@@ -36,12 +36,12 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
         <div className={styles.sidebar}>
           <div className={styles.title}>
             <h4>
-              <i title="Code" className="fa fa-code" aria-hidden="true"></i> &nbsp; <Link to="/home"><u>Home</u></Link> / <Link to="/code/home">Code</Link>
+              <i title="Code" className="fa fa-code" aria-hidden="true"></i> &nbsp; <Link to="/home"><u>Home</u></Link> / <Link to={`/code/${project.id}/home`}>Code</Link>
             </h4>
           </div>
           <hr/>
           <ul>
-            <li><Link to={appPrefix + '/code/logs'}>Logs</Link></li>
+            <li><Link to={`${appPrefix}/code/${project.id}/logs`}>Logs</Link></li>
             <li><a href={`http://${user.table.username}.imad.hasura-app.io`} target="_blank">Go to app</a></li>
           </ul>
           <hr/>
@@ -62,7 +62,7 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
           <hr/>
           <ul>
             <li>
-              Other files (edit/upload on <a href={user.table.github_project.html_url} target="_blank">github <i className="fa fa-external-link"></i></a>)
+              Other files (edit/upload on <a href={project.project.html_url} target="_blank">github <i className="fa fa-external-link"></i></a>)
               <ul>
                 {invalidFileList}
               </ul>
@@ -76,11 +76,11 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
       </div>
   );
 };
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     ...state.code,
     user: state.user,
-    projectId: ownProps.params.projectId
+    project: state.projects.current,
   };
 };
 

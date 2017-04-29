@@ -124,7 +124,7 @@ const startApp = () => {
       method: 'POST',
       body: JSON.stringify({
         gitRevision: state.latestCommit,
-        gitUrl: getState().user.table.github_project.clone_url
+        gitUrl: getState().projects.current.project.clone_url
       }),
       headers: {
         'Content-Type': 'application/json'

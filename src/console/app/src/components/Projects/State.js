@@ -3,7 +3,7 @@ const defaultState = {
     status: '',
     error: null
   },
-  list: null,
+  list: [],
   environments: null,
   newEnvId: null,
   current: null
