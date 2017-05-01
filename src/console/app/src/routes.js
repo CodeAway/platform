@@ -85,11 +85,17 @@ const createRoutes = (store) => {
   const requireFiles = (nextState, replaceState, cb) => {
     const state = store.getState();
     const projectId = nextState.params.projectId;
-    if (!state.code || !state.code.gitTree || !state.code.files) {
+    let refresh = true;
+    if (state.projects.current) {
+      refresh = state.projects.current.id === parseInt(projectId, 10);
+    }
+    if (!refresh || !state.code || !state.code.gitTree || !state.code.files) {
       const dispatch = store.dispatch;
+      let clear = false;
+      if (!refresh) {clear = true;}
       dispatch(loadProjects(projectId)).then(
         () => {
-          return dispatch(loadRepo());
+          return dispatch(loadRepo(clear));
         },
         () => {
           cb();

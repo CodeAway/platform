@@ -10,6 +10,7 @@ const SET_CODELOADING = 'Code/LOADING';
 const EDIT_FILE = 'Code/EDIT_FILE';
 const SET_INVALID_FILES = 'Code/SET_INVALID_FILES';
 const SET_LATEST_COMMIT = 'Code/SET_LATEST_COMMIT';
+const SET_DEFAULT = 'Code/SET_DEFAULT';
 
 const isValid = (path) => {
   if (path.startsWith('src/')) {
@@ -28,9 +29,10 @@ const isValid = (path) => {
 //   return ghUsername;
 // };
 
-const loadRepo = () => {
+const loadRepo = (clear = false) => {
   return (dispatch, getState) => {
     dispatch(loadingOn());
+    if (clear) {dispatch({type: SET_DEFAULT});}
     const state = getState();
     const user = state.user;
     const project = state.projects.current;
@@ -264,6 +266,9 @@ const codeReducer = (state = defaultState, action) => {
 
     case SET_CODELOADING:
       return {...state, loading: action.loading};
+
+    case SET_DEFAULT:
+      return defaultState;
 
     default:
       return state;

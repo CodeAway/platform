@@ -10,7 +10,7 @@ const Home = ({dispatch, projects, user}) => {
   const madi = require('./madi.png');
 
   const projectItems = projects.list.map((proj) =>
-    <li key={proj.id}><Link to={`/code/${proj.id}`}>{proj.name}</Link></li>
+    <li key={proj.id}><Link key={proj.id} to={`/code/${proj.id}`}>{proj.name}</Link></li>
   );
 
   let projectsList = null;
