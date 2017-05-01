@@ -38,8 +38,6 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
         "PORT": 8080,
-        "BASE_DOMAIN": "imad.hasura.io",
-        "GITHUB_CLIENT_ID": "bcaac3b822c108523d5b",
         "REPO_NAME": "imad-app-v2",
         "SCHEME": "https"
       }
@@ -59,7 +57,7 @@
     "watch-client": {
       "command": "node webpack/webpack-dev-server.js",
       "env": {
-        "UV_THREADPOOL_SIZE": 100,
+        "UV_THREADPOOL_SIZE": 4,
         "NODE_PATH": "./src"
       }
     }
