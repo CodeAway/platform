@@ -31,7 +31,7 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
   }
   const anyDirty = fileNames.some(f => (editFiles[f].dirty));
   let goToAppLink = null;
-  let logsLink = (<li><Link to={`${appPrefix}/code/${project.id}/logs`}>Logs</Link></li>);
+  let logsLink = (<li><Link to={`${appPrefix}/code/${project.id}/logs`}>Output</Link></li>);
   if (project.environment.is_server) {
     goToAppLink = (<li><a href={`http://${user.table.username}.imad.hasura-app.io`} target="_blank">Go to app</a></li>);
     logsLink = (<li><a href={`${appPrefix}/code/${project.id}/logs`} target="_blank">Logs</a></li>);
@@ -55,7 +55,7 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
           <ul>
             <li><button className="btn btn-primary" role="button" onClick={() => {
               dispatch(commitFilesAndRestart());
-            }}>{anyDirty ? 'Commit & restart' : 'Restart'}</button></li>
+            }}>{anyDirty ? 'Save & Run' : 'Run'}</button></li>
           </ul>
           <hr/>
           <ul>

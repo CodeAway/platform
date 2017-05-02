@@ -30,8 +30,6 @@
       "env": {
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
-        "BASE_DOMAIN": "imad.hasura.io",
-        "REDIRECT_URI": "https://cloud.imad.hasura.io/home",
         "PORT": 8080
       }
     },
