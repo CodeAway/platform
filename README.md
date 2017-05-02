@@ -1,2 +1,2 @@
-# ddp
-Report and all other documentation files for Dual Degree Project
+# CodeAway Platform 
+Kubernetes and Docker based platform for programming education
