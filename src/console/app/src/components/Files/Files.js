@@ -6,6 +6,12 @@ import 'brace/theme/solarized_light';
 import 'brace/mode/javascript';
 import 'brace/mode/css';
 import 'brace/mode/html';
+import 'brace/mode/python';
+import 'brace/mode/c_cpp';
+import 'brace/mode/java';
+import 'brace/mode/json';
+import 'brace/mode/golang';
+import 'brace/mode/ruby';
 import 'brace/ext/language_tools';
 
 const Files = ({editFiles, fileName, dispatch}) => {
@@ -13,7 +19,18 @@ const Files = ({editFiles, fileName, dispatch}) => {
   const ftMap = {
     js: 'javascript',
     html: 'html',
-    css: 'css'
+    css: 'css',
+    py: 'python',
+    java: 'java',
+    xml: 'xml',
+    rb: 'ruby',
+    scss: 'sass',
+    md: 'markdown',
+    markdown: 'markdown',
+    json: 'json',
+    go: 'golang',
+    c: 'c_cpp',
+    cpp: 'c_cpp'
   };
 
   const _ext = fileName.split('.');
@@ -30,6 +47,7 @@ const Files = ({editFiles, fileName, dispatch}) => {
           minLines={8}
           maxLines={40}
           width="90%"
+          fontSize={14}
           setOptions={{
             wrap: true
           }}
