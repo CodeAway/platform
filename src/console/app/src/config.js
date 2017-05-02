@@ -20,7 +20,7 @@ module.exports = Object.assign({
   apiHost: process.env.APIHOST || 'localhost',
   apiPort: process.env.APIPORT,
   app: {
-    title: 'IMAD Console',
+    title: 'CodeAway Console',
     description: ''
   },
   hasuradbEnpoint: ''

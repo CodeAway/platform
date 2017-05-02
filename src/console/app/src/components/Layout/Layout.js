@@ -15,14 +15,6 @@ const Layout = ({logoutRequest, loading, dispatch, children}) => {
           </Link>
         </div>
         <div className={styles.headerItem}>
-          <Link to="/code">
-            Code
-          </Link>
-        </div>
-        <div className={styles.headerItem}>
-          <a target="_blank" href="https://discourse.imad.hasura.io">Forum &nbsp;<i className="fa fa-comments-o" aria-hidden="true"></i></a>
-        </div>
-        <div className={styles.headerItem}>
           <a href="" onClick={(e) => (e.preventDefault())}>
             <span onClick={(e) => {
               e.preventDefault();
@@ -42,9 +34,9 @@ const Layout = ({logoutRequest, loading, dispatch, children}) => {
       </div>
       <div className={styles.footer}>
         <div className={styles.course}>
-          Introduction to Modern Application Development - <a href="http://imad.tech">imad.tech</a>
+          <a href="https://github.com/CodeAway">CodeAway Platform</a>
         </div>
-        Made with &hearts; by <a href="https://hasura.io">Hasura</a>
+        Made with &hearts; by <a href="https://github.com/shahidhk">shahidhk</a> &amp; <a href="https://github.com/coco98">coco98</a>
       </div>
       <Loading loading={loading} />
     </div>

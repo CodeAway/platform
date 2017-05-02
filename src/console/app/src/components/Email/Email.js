@@ -19,7 +19,7 @@ const Email = ({dispatch, email}) => {
   return (
     <div>
       <div className={styles.container}>
-        <Helmet title="Register email | IMAD console" />
+        <Helmet title="Register email | CodeAway console" />
         <div className={styles.centerBox}>
           <form onSubmit={(e) => {
             e.preventDefault();
@@ -36,9 +36,9 @@ const Email = ({dispatch, email}) => {
       </div>
       <div className={styles2.footer}>
         <div className={styles2.course}>
-          Introduction to Modern Application Development - <a href="http://imad.tech">imad.tech</a>
+          <a href="https://github.com/CodeAway">CodeAway Platform</a>
         </div>
-        Made with &hearts; by <a href="https://hasura.io">Hasura</a>
+        Made with &hearts; by <a href="https://github.com/shahidhk">shahidhk</a> &amp; <a href="https://github.com/coco98">coco98</a>
       </div>
     </div>
   );

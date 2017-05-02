@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 import Helmet from 'react-helmet';
 import {commitFilesAndRestart} from './Actions';
 import Loading from '../Loading/Loading';
+import globals from '../../Globals';
 
 const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading, project}) => {
   const styles = require('./Code.scss');
@@ -33,13 +34,13 @@ const Code = ({files, invalidFiles, children, dispatch, editFiles, user, loading
   let goToAppLink = null;
   let logsLink = (<li><Link to={`${appPrefix}/code/${project.id}/logs`}>Output</Link></li>);
   if (project.environment.is_server) {
-    goToAppLink = (<li><a href={`http://${user.table.username}.imad.hasura-app.io`} target="_blank">Go to app</a></li>);
+    goToAppLink = (<li><a href={`http://${user.table.username}.app.${globals.projectDomain}`} target="_blank">Go to app</a></li>);
     logsLink = (<li><a href={`${appPrefix}/code/${project.id}/logs`} target="_blank">Logs</a></li>);
   }
 
   return (
       <div className={styles.container}>
-        <Helmet title="Code | IMAD console" />
+        <Helmet title="Code | CodeAway console" />
         <div className={styles.sidebar}>
           <div className={styles.title}>
             <h4>

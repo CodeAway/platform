@@ -56,7 +56,7 @@ const Home = ({dispatch, projects, user}) => {
 
   return (
       <div className={styles2.heightContainer}>
-        <Helmet title="Home | IMAD console" />
+        <Helmet title="Home | CodeAway console" />
 
         <div className={styles.leftImg + ' hidden-xs hidden-sm'}>
           <img src={madi} className="img img-responsive" />

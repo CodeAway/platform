@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import globals from '../../Globals';
 
 const Home = ({user}) => {
   return (
@@ -16,8 +17,8 @@ const Home = ({user}) => {
             <h4>1. How to write code & test your app</h4>
             <ul>
               <li>Click on a filename. Edit its contents.</li>
-              <li>Click on <code>Commit & Restart</code>.</li>
-              <li>Click on the <code>Logs</code> link or open it in a new tab to see what is happening to your server process</li>
+              <li>Click on <code>Save & Run</code>.</li>
+              <li>Click on the <code>Output</code> link or open it in a new tab to see what is happening to your server process</li>
               <li>Click on the <code>Go to app</code> link, or open it in a new tab</li>
               <li>Your app is now live! (It may take a few minutes before you see your changes applied)</li>
             </ul>
@@ -39,14 +40,14 @@ const Home = ({user}) => {
             <h4>4. Saving your files to github</h4>
             <p>
               After you make changes to your file, any unsaved changes will be noticed and a <code>*</code> will appear
-              next to the filename. If you the <code>Commit to github</code> button, these files will be saved to your github repo.
+              next to the filename. If you click the <code>Run</code> button, these files will be saved to your github repo.
             </p>
             <hr/>
             <h4>5. Deploying your app with changes to source code</h4>
             <p>
-              When you click on the <code>Commit & restart</code>button on the sidebar, the files in this console are committed
+              When you click on the <code>Save & Run</code>button on the sidebar, the files in this console are committed
               to your github project and your server process is restarted with these new changes. Your server is accessible on a URL
-              unique to your server: <a href={`http://${user.table.username}.imad.hasura-app.io`}>{user.table.username}.imad.hasura-app.io</a>
+              unique to your server: <a href={`http://${user.table.username}.app.${globals.projectDomain}`}>{user.table.username}.app.{globals.projectDomain}</a>
               <br/>
               <b>Note:</b>Files that are deployed to the server are files as they are currently on this console. These files may or may not be
               saved to your github repo.

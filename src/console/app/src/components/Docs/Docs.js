@@ -5,7 +5,7 @@ const Docs = () => {
   const styles2 = require('../Layout/Layout.scss');
   return (
     <div className={styles2.heightContainer}>
-      <Helmet title="Help & Docs | IMAD console" />
+      <Helmet title="Help & Docs | CodeAway console" />
       <div>
         <h2>Documentation & Tutorials (coming soon)</h2>
         <div>
