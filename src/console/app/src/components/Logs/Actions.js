@@ -47,4 +47,4 @@ const logReducer = (state = defaultState, action) => {
 };
 
 export default logReducer;
-export {startLogging, stopLogging};
+export {startLogging, stopLogging, SET_LOGS};

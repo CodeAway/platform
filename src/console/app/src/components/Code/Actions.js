@@ -2,6 +2,7 @@ import defaultState from './State';
 import requestAction from 'utils/requestAction';
 import Endpoints, {globalCookiePolicy} from 'Endpoints';
 import {loadingOn, loadingOff} from '../Layout/Actions';
+import {SET_LOGS} from '../Logs/Actions';
 
 const SET_TREE = 'Code/SET_TREE';
 const SET_FILE = 'Code/SET_FILE';
@@ -116,6 +117,8 @@ const loadRepo = (clear = false) => {
 const startApp = () => {
   return (dispatch, getState) => {
     dispatch({type: SET_CODELOADING, loading: true});
+    console.log('before clear');
+    dispatch({type: SET_LOGS, data: {data: 'Waiting for logs...'}});
     // Create the configmap & make an API request
     const state = getState().code;
     // const user = getState().user;
@@ -149,6 +152,7 @@ const startApp = () => {
 const commitFilesAndRestart = () => {
   return (dispatch, getState) => {
     dispatch({type: SET_CODELOADING, loading: true});
+    dispatch({type: SET_LOGS, data: {data: 'Waiting for logs...'}});
 
     // Get a list of all the dirty files
     // Save them one by one. For every file that is saved, dispatch SET_FILE, EDIT_FILE
